@@ -1,5 +1,6 @@
 package compose.project.chesstwo
 
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 
@@ -10,12 +11,16 @@ import androidx.compose.ui.Modifier
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.unit.IntSize
@@ -69,9 +74,13 @@ fun setupPieces(){
     piecesPositions[Pair(7,7)] = Rook(7,7,Res.drawable.rookW,0)
 
     for (i in 0 until 8){
-        piecesPositions[Pair(i,1)] = Pawn(i,1,Res.drawable.pawnB,1)
-        piecesPositions[Pair(i,6)] = Pawn(i,6,Res.drawable.pawnW,0)
+        //piecesPositions[Pair(i,1)] = Pawn(i,1,Res.drawable.pawnB,1)
+        //piecesPositions[Pair(i,6)] = Pawn(i,6,Res.drawable.pawnW,0)
     }
+
+}
+
+fun displayAttackedSquares(moves : List<Pair<Int,Int>>){
 
 }
 
@@ -79,7 +88,10 @@ fun setupPieces(){
 @Composable
 fun ChessBoard() {
     //var size by remember { mutableStateOf(IntSize(400,400)) }
-
+    var attackedSquares = remember {mutableStateListOf<Pair<Int,Int>>()}
+    var selectedPieceX = remember { mutableIntStateOf(-1) }
+    var selectedPieceY = remember { mutableIntStateOf(-1) }
+    var isPieceSelected = remember { mutableStateOf(false) }
     Box( modifier = Modifier
         //.height(size.height.dp)
         //.width(size.width.dp)
@@ -110,13 +122,31 @@ fun ChessBoard() {
                             ) {
                                 if (Pair(col, row) in piecesPositions.keys) {
                                     Image(
-                                        painterResource(
+                                        painter = painterResource(
                                             piecesPositions[Pair(
                                                 col,
                                                 row
                                             )]!!.texture
-                                        ), null
+                                        ),
+                                        contentDescription = null,
+                                        modifier = Modifier.clickable { attackedSquares.clear(); attackedSquares.addAll(piecesPositions[Pair(
+                                            col,
+                                            row
+                                        )]!!.getMoves(piecesPositions));
+                                            if(selectedPieceX.value==col && selectedPieceY.value==row && isPieceSelected.value){
+                                                isPieceSelected.value=false
+                                            }
+                                            else{
+                                                selectedPieceX.value=col;selectedPieceY.value=row;isPieceSelected.value=true;
+                                            }
+                                        }
+
                                     )
+                                }
+                                if (isPieceSelected.value && Pair(col,row) in attackedSquares.toList()){
+                                    Canvas(modifier = Modifier.size(50.dp).align(Alignment.Center), onDraw = {
+                                        drawCircle(color = Color.Green, alpha = 0.5f)
+                                    })
                                 }
 
                             }

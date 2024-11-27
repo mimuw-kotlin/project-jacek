@@ -8,4 +8,7 @@ class Pawn(
     override var texture: DrawableResource,
     override var color: Int
 ) : Piece {
+    override fun getMoves(board: MutableMap<Pair<Int, Int>, Piece>): List<Pair<Int, Int>> {
+        TODO("Not yet implemented")
+    }
 }

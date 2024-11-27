@@ -7,4 +7,5 @@ interface Piece {
     public var posY : Int
     public var texture : DrawableResource
     public var color : Int
+    public fun getMoves(board : MutableMap<Pair<Int,Int>,Piece>) : List<Pair<Int,Int>>
 }
