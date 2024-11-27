@@ -12,7 +12,13 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.unit.IntSize
 
 import androidx.compose.ui.unit.dp
 
@@ -72,21 +78,48 @@ fun setupPieces(){
 
 @Composable
 fun ChessBoard() {
-    Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize().background(Color(0xff89d0e8))){
-        Column {
-            for (row in 0 until 8) {
-                Row {
-                    for (col in 0 until 8) {
-                        Box(
-                            modifier = Modifier
-                                .size(50.dp)
-                                .background(if ((row + col) % 2 == 0) Color(0xffe0e0e0) else Color(0xffc7a25a))
+    //var size by remember { mutableStateOf(IntSize(400,400)) }
 
-                        ){
-                            if(Pair(col,row) in piecesPositions.keys){
-                                Image(painterResource(piecesPositions[Pair(col,row)]!!.texture), null)
+    Box( modifier = Modifier
+        //.height(size.height.dp)
+        //.width(size.width.dp)
+        //.padding(10.dp)
+        //.aspectRatio(1.0f)
+        .background(Color(0xff89d0e8)).fillMaxSize()
+        //.onSizeChanged {
+        //    size = it
+        //}
+    ){
+        Box(modifier = Modifier.align(Alignment.CenterStart).padding(horizontal = 50.dp)) {
+
+
+            Column {
+                for (row in 0 until 8) {
+                    Row {
+                        for (col in 0 until 8) {
+                            Box(
+                                modifier = Modifier
+                                    //.size(width = (size.width/8).dp,height = (size.height/8).dp)
+                                    .size(100.dp)
+                                    .background(
+                                        if ((row + col) % 2 == 0) Color(0xffe0e0e0) else Color(
+                                            0xffc7a25a
+                                        )
+                                    )
+
+                            ) {
+                                if (Pair(col, row) in piecesPositions.keys) {
+                                    Image(
+                                        painterResource(
+                                            piecesPositions[Pair(
+                                                col,
+                                                row
+                                            )]!!.texture
+                                        ), null
+                                    )
+                                }
+
                             }
-
                         }
                     }
                 }
