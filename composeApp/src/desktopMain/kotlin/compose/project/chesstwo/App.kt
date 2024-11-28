@@ -13,6 +13,7 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.onClick
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -26,7 +27,7 @@ import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.unit.IntSize
 
 import androidx.compose.ui.unit.dp
-
+import compose.project.chesstwo.Board
 import chesstwo.composeapp.generated.resources.Res
 
 import chesstwo.composeapp.generated.resources.kingW
@@ -50,43 +51,10 @@ import compose.project.chesstwo.pieces.Queen
 import compose.project.chesstwo.pieces.Rook
 
 
-val piecesPositions = mutableMapOf<Pair<Int,Int>, Piece>()
-
-
-
-fun setupPieces(){
-    piecesPositions[Pair(0,0)] = Rook(0,0,Res.drawable.rookB,1)
-    piecesPositions[Pair(1,0)] = Knight(1,0,Res.drawable.knightB,1)
-    piecesPositions[Pair(2,0)] = Bishop(2,0,Res.drawable.bishopB,1)
-    piecesPositions[Pair(3,0)] = Queen(3,0,Res.drawable.queenB,1)
-    piecesPositions[Pair(4,0)] = King(4,0,Res.drawable.kingB,1)
-    piecesPositions[Pair(5,0)] = Bishop(5,0,Res.drawable.bishopB,1)
-    piecesPositions[Pair(6,0)] = Knight(6,0,Res.drawable.knightB,1)
-    piecesPositions[Pair(7,0)] = Rook(7,0,Res.drawable.rookB,1)
-
-    piecesPositions[Pair(0,7)] = Rook(0,7,Res.drawable.rookW,0)
-    piecesPositions[Pair(1,7)] = Knight(1,7,Res.drawable.knightW,0)
-    piecesPositions[Pair(2,7)] = Bishop(2,7,Res.drawable.bishopW,0)
-    piecesPositions[Pair(3,7)] = Queen(3,7,Res.drawable.queenW,0)
-    piecesPositions[Pair(4,7)] = King(4,7,Res.drawable.kingW,0)
-    piecesPositions[Pair(5,7)] = Bishop(5,7,Res.drawable.bishopW,0)
-    piecesPositions[Pair(6,7)] = Knight(6,7,Res.drawable.knightW,0)
-    piecesPositions[Pair(7,7)] = Rook(7,7,Res.drawable.rookW,0)
-
-    for (i in 0 until 8){
-        //piecesPositions[Pair(i,1)] = Pawn(i,1,Res.drawable.pawnB,1)
-        //piecesPositions[Pair(i,6)] = Pawn(i,6,Res.drawable.pawnW,0)
-    }
-
-}
-
-fun displayAttackedSquares(moves : List<Pair<Int,Int>>){
-
-}
 
 
 @Composable
-fun ChessBoard() {
+fun ChessBoard(board : Board) {
     //var size by remember { mutableStateOf(IntSize(400,400)) }
     var attackedSquares = remember {mutableStateListOf<Pair<Int,Int>>()}
     var selectedPieceX = remember { mutableIntStateOf(-1) }
@@ -118,26 +86,41 @@ fun ChessBoard() {
                                             0xffc7a25a
                                         )
                                     )
+                                    .clickable { if(isPieceSelected.value && Pair(col,row) in attackedSquares.toList()){
+                                        board.move(selectedPieceX.value,selectedPieceY.value,col,row)
+                                        isPieceSelected.value=false
+
+                                    } }
 
                             ) {
-                                if (Pair(col, row) in piecesPositions.keys) {
+                                if (Pair(col, row) in board.piecesPositions.keys) {
                                     Image(
                                         painter = painterResource(
-                                            piecesPositions[Pair(
+                                            board.piecesPositions[Pair(
                                                 col,
                                                 row
                                             )]!!.texture
                                         ),
                                         contentDescription = null,
-                                        modifier = Modifier.clickable { attackedSquares.clear(); attackedSquares.addAll(piecesPositions[Pair(
-                                            col,
-                                            row
-                                        )]!!.getMoves(piecesPositions));
-                                            if(selectedPieceX.value==col && selectedPieceY.value==row && isPieceSelected.value){
+                                        modifier = Modifier.clickable {
+                                            if(isPieceSelected.value && Pair(col,row) in attackedSquares.toList()){
+                                                board.move(selectedPieceX.value,selectedPieceY.value,col,row)
                                                 isPieceSelected.value=false
+
                                             }
-                                            else{
-                                                selectedPieceX.value=col;selectedPieceY.value=row;isPieceSelected.value=true;
+                                            else {
+                                                attackedSquares.clear();
+                                                attackedSquares.addAll(
+                                                    board.piecesPositions[Pair(col, row)]!!
+                                                        .getMoves(board.piecesPositions)
+                                                );
+                                                if (selectedPieceX.value == col && selectedPieceY.value == row && isPieceSelected.value) {
+                                                    isPieceSelected.value = false
+                                                } else {
+                                                    selectedPieceX.value =
+                                                        col;selectedPieceY.value =
+                                                        row;isPieceSelected.value = true;
+                                                }
                                             }
                                         }
 
@@ -162,8 +145,9 @@ fun ChessBoard() {
 @Composable
 @Preview
 fun App() {
-    setupPieces()
+    var board = Board()
+    board.setupPieces()
     MaterialTheme {
-        ChessBoard()
+        ChessBoard(board)
     }
 }
