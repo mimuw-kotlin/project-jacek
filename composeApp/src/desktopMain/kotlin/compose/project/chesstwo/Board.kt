@@ -23,7 +23,7 @@ import compose.project.chesstwo.pieces.Rook
 
 class Board {
     public val piecesPositions = mutableMapOf<Pair<Int,Int>, Piece>()
-
+    public var turn = 0
     public fun setupPieces(){
         piecesPositions[Pair(0,0)] = Rook(0,0, Res.drawable.rookB,1)
         piecesPositions[Pair(1,0)] = Knight(1,0, Res.drawable.knightB,1)
@@ -55,5 +55,6 @@ class Board {
         piecesPositions.remove(Pair(startX,startY))
         piecesPositions[Pair(endX,endY)]!!.posX  = endX
         piecesPositions[Pair(endX,endY)]!!.posY  = endY
+        turn = (turn+1)%2
     }
 }

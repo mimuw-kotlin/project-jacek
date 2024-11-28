@@ -86,8 +86,10 @@ fun ChessBoard(board : Board) {
                                             0xffc7a25a
                                         )
                                     )
-                                    .clickable { if(isPieceSelected.value && Pair(col,row) in attackedSquares.toList()){
-                                        board.move(selectedPieceX.value,selectedPieceY.value,col,row)
+                                    .clickable { if(isPieceSelected.value){
+                                        if (Pair(col,row) in attackedSquares.toList()){
+                                            board.move(selectedPieceX.value,selectedPieceY.value,col,row)
+                                        }
                                         isPieceSelected.value=false
 
                                     } }
@@ -108,7 +110,8 @@ fun ChessBoard(board : Board) {
                                                 isPieceSelected.value=false
 
                                             }
-                                            else {
+
+                                            else if(board.piecesPositions[Pair(col, row)]!!.color==board.turn) {
                                                 attackedSquares.clear();
                                                 attackedSquares.addAll(
                                                     board.piecesPositions[Pair(col, row)]!!
