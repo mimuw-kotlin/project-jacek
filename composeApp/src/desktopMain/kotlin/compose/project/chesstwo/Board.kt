@@ -24,6 +24,8 @@ import compose.project.chesstwo.pieces.Rook
 class Board {
     public val piecesPositions = mutableMapOf<Pair<Int,Int>, Piece>()
     public var turn = 0
+    public var possibleMoves = mutableListOf<Move>()
+
     public fun setupPieces(){
         piecesPositions[Pair(0,0)] = Rook(0,0, Res.drawable.rookB,1)
         piecesPositions[Pair(1,0)] = Knight(1,0, Res.drawable.knightB,1)
@@ -51,10 +53,40 @@ class Board {
     }
 
     public fun move(startX : Int, startY : Int, endX : Int, endY : Int){
+
+        var playedMove : Move = possibleMoves[0]
+        for (m in possibleMoves){
+            if(m.endX==endX && m.endY==endY){
+                playedMove = m
+                break
+            }
+        }
+
+        if(playedMove.isEnPassant){ //En passant
+            piecesPositions.remove(Pair(endX,startY))
+        }
         piecesPositions[Pair(endX,endY)] = piecesPositions[Pair(startX,startY)]!!
         piecesPositions.remove(Pair(startX,startY))
-        piecesPositions[Pair(endX,endY)]!!.posX  = endX
-        piecesPositions[Pair(endX,endY)]!!.posY  = endY
-        turn = (turn+1)%2
+
+        //if(piecesPositions)
+
+        piecesPositions[Pair(endX,endY)]!!.move(endX,endY,this)
+        turn += 1
+    }
+    /*public fun addNewMoves(attackedSquares : List<Pair<Int,Int>>, startX : Int, startY : Int){
+        possibleMoves.clear()
+        attackedSquares.forEach {
+            possibleMoves.addLast(Move(startX,startY,it.first,it.second))
+        }
+    }*/
+    fun getAttackedSquares() : List<Pair<Int,Int>>{
+        val ret = mutableListOf<Pair<Int,Int>>()
+        possibleMoves.forEach{
+            ret.addLast(Pair(it.endX,it.endY))
+        }
+        return ret
+    }
+    fun inBounds(x:Int,y:Int):Boolean{
+        return x in 0..7 && y in 0..7
     }
 }

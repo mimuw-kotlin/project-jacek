@@ -105,31 +105,34 @@ fun ChessBoard(board : Board) {
                                         ),
                                         contentDescription = null,
                                         modifier = Modifier.clickable {
+
                                             if(isPieceSelected.value && Pair(col,row) in attackedSquares.toList()){
                                                 board.move(selectedPieceX.value,selectedPieceY.value,col,row)
                                                 isPieceSelected.value=false
 
                                             }
 
-                                            else if(board.piecesPositions[Pair(col, row)]!!.color==board.turn) {
-                                                attackedSquares.clear();
-                                                attackedSquares.addAll(
+                                            else if(board.piecesPositions[Pair(col, row)]!!.color==(board.turn)%2) {
+
+                                                isPieceSelected.value = false
+                                                board.possibleMoves.clear()
+                                                board.possibleMoves.addAll(
                                                     board.piecesPositions[Pair(col, row)]!!
-                                                        .getMoves(board.piecesPositions)
-                                                );
-                                                if (selectedPieceX.value == col && selectedPieceY.value == row && isPieceSelected.value) {
-                                                    isPieceSelected.value = false
-                                                } else {
-                                                    selectedPieceX.value =
-                                                        col;selectedPieceY.value =
-                                                        row;isPieceSelected.value = true;
-                                                }
+                                                        .getMoves(board)
+                                                )
+                                                attackedSquares.clear()
+                                                attackedSquares.addAll(board.getAttackedSquares())
+                                                if (selectedPieceX.value != col || selectedPieceY.value != row || !isPieceSelected.value) {
+                                                    selectedPieceX.value = col;
+                                                    selectedPieceY.value = row;
+                                                    isPieceSelected.value = true;
+
                                             }
                                         }
 
                                     )
                                 }
-                                if (isPieceSelected.value && Pair(col,row) in attackedSquares.toList()){
+                                if (isPieceSelected.value && Pair(col,row) in board.getAttackedSquares()){
                                     Canvas(modifier = Modifier.size(50.dp).align(Alignment.Center), onDraw = {
                                         drawCircle(color = Color.Green, alpha = 0.5f)
                                     })
