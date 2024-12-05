@@ -65,6 +65,13 @@ class Board {
         if(playedMove.isEnPassant){ //En passant
             piecesPositions.remove(Pair(endX,startY))
         }
+        if(playedMove.isCastling){
+            val rookEndX = (endX+startX)/2
+            val rookStartX = if (endX < startX) 0 else 7
+            piecesPositions[Pair(rookEndX,endY)] = piecesPositions[Pair(rookStartX,endY)]!!
+            piecesPositions.remove(Pair(rookStartX,endY))
+            piecesPositions[Pair(rookEndX,endY)]!!.move(rookEndX,endY,this)
+        }
         piecesPositions[Pair(endX,endY)] = piecesPositions[Pair(startX,startY)]!!
         piecesPositions.remove(Pair(startX,startY))
 

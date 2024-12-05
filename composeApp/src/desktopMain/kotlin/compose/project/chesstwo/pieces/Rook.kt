@@ -8,7 +8,8 @@ class Rook(
     override var posX: Int,
     override var posY: Int,
     override var texture: DrawableResource,
-    override var color: Int
+    override var color: Int,
+    var moved: Boolean = false
 ) : Piece {
     override fun getMoves(board: Board): List<Move> {
         val directions = listOf(Pair(0,1),Pair(0,-1),Pair(1,0),Pair(-1,0))
@@ -29,5 +30,10 @@ class Rook(
             }
         }
         return moves
+    }
+
+    override fun move(endX: Int, endY: Int, board: Board) {
+        super.move(endX, endY, board)
+        moved=true
     }
 }
