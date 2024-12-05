@@ -127,6 +127,7 @@ fun ChessBoard(board : Board) {
                                                     selectedPieceY.value = row;
                                                     isPieceSelected.value = true;
 
+                                                }
                                             }
                                         }
 
