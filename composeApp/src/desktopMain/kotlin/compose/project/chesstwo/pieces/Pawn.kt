@@ -22,12 +22,12 @@ class Pawn(
         for (d in listOf(-1,1)){
             //Attacking on diagonal
             if (board.inBounds(posX+d,nextRow) && Pair(posX+d,nextRow) in board.piecesPositions.keys && board.piecesPositions[Pair(posX+d,nextRow)]!!.color!=color){
-                moves.add(Move(posX,posY,posX+d,nextRow))
+                moves.add(Move(posX,posY,posX+d,nextRow, attacking = true))
             }
             //En passant
             if(board.inBounds(posX+d,nextRow) && Pair(posX+d,posY) in board.piecesPositions.keys && board.piecesPositions[Pair(posX+d,posY)]!!.color!=color &&
                 board.piecesPositions[Pair(posX+d,posY)]!! is Pawn && (board.piecesPositions[Pair(posX+d,posY)]!! as Pawn).turnOfDoubleMove==board.turn-1){
-                moves.add(Move(posX,posY,posX+d,nextRow,true))
+                moves.add(Move(posX,posY,posX+d,nextRow,true, attacking = true))
             }
         }
 

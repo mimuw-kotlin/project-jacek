@@ -25,6 +25,7 @@ class Board {
     public val piecesPositions = mutableMapOf<Pair<Int,Int>, Piece>()
     public var turn = 0
     public var possibleMoves = mutableListOf<Move>()
+    public val allAttackedSquares = listOf<MutableList<Pair<Int,Int>>>(mutableListOf(), mutableListOf())
 
     public fun setupPieces(){
         piecesPositions[Pair(0,0)] = Rook(0,0, Res.drawable.rookB,1)
@@ -50,6 +51,18 @@ class Board {
             piecesPositions[Pair(i,6)] = Pawn(i,6, Res.drawable.pawnW,0)
         }
 
+    }
+
+    private fun getAllAttackedSquares(){
+        allAttackedSquares.forEach{it.clear()}
+        piecesPositions.forEach { (pos, piece) ->
+            piece.getMoves(this).forEach {
+                /*if(it.isEnPassant){
+                    allAttackedSquares[piece.color].addLast(Pair())
+                }*/
+                allAttackedSquares[piece.color].addLast(Pair(it.endX,it.endY))
+            }
+        }
     }
 
     public fun move(startX : Int, startY : Int, endX : Int, endY : Int){
@@ -78,7 +91,11 @@ class Board {
         //if(piecesPositions)
 
         piecesPositions[Pair(endX,endY)]!!.move(endX,endY,this)
+
+        getAllAttackedSquares()
+
         turn += 1
+
     }
     /*public fun addNewMoves(attackedSquares : List<Pair<Int,Int>>, startX : Int, startY : Int){
         possibleMoves.clear()

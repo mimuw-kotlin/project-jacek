@@ -6,5 +6,6 @@ data class Move (
     val endX : Int,
     val endY : Int,
     val isEnPassant : Boolean = false,
-    val isCastling : Boolean = false
+    val isCastling : Boolean = false,
+    val attacking : Boolean = false
 )

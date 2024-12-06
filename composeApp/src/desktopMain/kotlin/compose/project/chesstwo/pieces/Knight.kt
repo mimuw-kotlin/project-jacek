@@ -20,7 +20,7 @@ class Knight(
             if (x<0 || x>7 || y<0 || y>7 || (Pair(x,y) in board.piecesPositions.keys && board.piecesPositions[Pair(x,y)]!!.color==color)){
                 continue
             }
-            moves.addLast(Move(posX,posY,x,y))
+            moves.addLast(Move(posX,posY,x,y, attacking = (Pair(x,y) in board.piecesPositions.keys && board.piecesPositions[Pair(x,y)]!!.color!=color)))
 
         }
         return moves

@@ -19,13 +19,13 @@ class Bishop(
             while(x in 0..7 && y in 0..7){
                 if (Pair(x,y) in board.piecesPositions.keys){
                     if(board.piecesPositions[Pair(x,y)]!!.color!=color){
-                        println(Pair(x,y))
-                        moves.addLast(Move(posX,posY,x,y))
+
+                        moves.addLast(Move(posX,posY,x,y, attacking = true))
                     }
                     break
                 }
                 moves.addLast(Move(posX,posY,x,y))
-                println(Pair(x,y))
+
                 x+=dir.first
                 y+=dir.second
             }

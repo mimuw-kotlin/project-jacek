@@ -138,6 +138,11 @@ fun ChessBoard(board : Board) {
                                         drawCircle(color = Color.Green, alpha = 0.5f)
                                     })
                                 }
+                                /*if (board.turn>0 && isPieceSelected.value && Pair(col,row) in board.allAttackedSquares[board.turn%2]){
+                                    Canvas(modifier = Modifier.size(50.dp).align(Alignment.Center), onDraw = {
+                                        drawCircle(color = Color.Red, alpha = 0.5f)
+                                    })
+                                }*/
 
                             }
                         }
