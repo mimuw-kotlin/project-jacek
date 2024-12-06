@@ -53,14 +53,45 @@ class Board {
 
     }
 
-    private fun getAllAttackedSquares(){
+    fun getAllAttackedSquares2(color : Int) : MutableList<Pair<Int,Int>>{ //Attacked by color
+        var ret = mutableListOf<Pair<Int,Int>>()
+        piecesPositions.forEach { (pos, piece) ->
+            if(piece.color==color) {
+                piece.getPseudoMoves(this).forEach {
+                    /*if(it.isEnPassant){
+                        allAttackedSquares[piece.color].addLast(Pair())
+                    }*/
+                    if (it.attacking) {
+                        ret.addLast(Pair(it.endX, it.endY))
+                    }
+
+                }
+                if (piece is Pawn) {
+                    piece.getPotentialAttacks(this).forEach {
+                        ret.addLast(Pair(it.endX, it.endY))
+                    }
+                }
+            }
+        }
+        return ret
+    }
+
+    fun getAllAttackedSquares(){
         allAttackedSquares.forEach{it.clear()}
         piecesPositions.forEach { (pos, piece) ->
             piece.getMoves(this).forEach {
                 /*if(it.isEnPassant){
                     allAttackedSquares[piece.color].addLast(Pair())
                 }*/
-                allAttackedSquares[piece.color].addLast(Pair(it.endX,it.endY))
+                if(it.attacking){
+                    allAttackedSquares[piece.color].addLast(Pair(it.endX,it.endY))
+                }
+
+            }
+            if (piece is Pawn){
+                piece.getPotentialAttacks(this).forEach{
+                    allAttackedSquares[piece.color].addLast(Pair(it.endX,it.endY))
+                }
             }
         }
     }
@@ -92,7 +123,7 @@ class Board {
 
         piecesPositions[Pair(endX,endY)]!!.move(endX,endY,this)
 
-        getAllAttackedSquares()
+        //getAllAttackedSquares()
 
         turn += 1
 
@@ -113,4 +144,16 @@ class Board {
     fun inBounds(x:Int,y:Int):Boolean{
         return x in 0..7 && y in 0..7
     }
+
+    public fun inCheck(color : Int) : Boolean{
+        //getAllAttackedSquares()
+        allAttackedSquares[1-color].forEach{
+            if(it in piecesPositions.keys && piecesPositions[it] is King && piecesPositions[it]!!.color==color){
+                return true
+            }
+        }
+        return false
+    }
+
+
 }

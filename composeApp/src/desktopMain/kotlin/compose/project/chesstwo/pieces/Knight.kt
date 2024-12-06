@@ -10,7 +10,7 @@ class Knight(
     override var texture: DrawableResource,
     override var color: Int
 ) : Piece {
-    override fun getMoves(board: Board): List<Move> {
+    override fun getPseudoMoves(board: Board): List<Move> {
         val directions = listOf(Pair(1,2),Pair(1,-2),Pair(-1,2),Pair(-1,-2),Pair(2,1),Pair(2,-1),Pair(-2,1),Pair(-2,-1))
         val moves :MutableList<Move> = mutableListOf()
         for (dir in directions){
@@ -20,7 +20,7 @@ class Knight(
             if (x<0 || x>7 || y<0 || y>7 || (Pair(x,y) in board.piecesPositions.keys && board.piecesPositions[Pair(x,y)]!!.color==color)){
                 continue
             }
-            moves.addLast(Move(posX,posY,x,y, attacking = (Pair(x,y) in board.piecesPositions.keys && board.piecesPositions[Pair(x,y)]!!.color!=color)))
+            moves.addLast(Move(posX,posY,x,y))
 
         }
         return moves

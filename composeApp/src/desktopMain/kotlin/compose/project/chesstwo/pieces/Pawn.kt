@@ -13,7 +13,7 @@ class Pawn(
     var moved: Boolean = false,
     var turnOfDoubleMove : Int = -1
 ) : Piece {
-    override fun getMoves(board: Board): List<Move> {
+    override fun getPseudoMoves(board: Board): List<Move> {
         val moves:MutableList<Move> = mutableListOf()
         /*if(!moved){
             moves.add(if (color==1) Move(posX,posY,posX,posY+2) else Move(posX,posY,posX,posY-2))
@@ -22,24 +22,24 @@ class Pawn(
         for (d in listOf(-1,1)){
             //Attacking on diagonal
             if (board.inBounds(posX+d,nextRow) && Pair(posX+d,nextRow) in board.piecesPositions.keys && board.piecesPositions[Pair(posX+d,nextRow)]!!.color!=color){
-                moves.add(Move(posX,posY,posX+d,nextRow, attacking = true))
+                moves.addLast(Move(posX,posY,posX+d,nextRow))
             }
             //En passant
             if(board.inBounds(posX+d,nextRow) && Pair(posX+d,posY) in board.piecesPositions.keys && board.piecesPositions[Pair(posX+d,posY)]!!.color!=color &&
                 board.piecesPositions[Pair(posX+d,posY)]!! is Pawn && (board.piecesPositions[Pair(posX+d,posY)]!! as Pawn).turnOfDoubleMove==board.turn-1){
-                moves.add(Move(posX,posY,posX+d,nextRow,true, attacking = true))
+                moves.addLast(Move(posX,posY,posX+d,nextRow,true))
             }
         }
 
         //Move one square
         if(nextRow in 0..7 && Pair(posX,nextRow) !in board.piecesPositions.keys){
-            moves.add(Move(posX,posY,posX,nextRow))
+            moves.addLast(Move(posX,posY,posX,nextRow,attacking = false))
         }
 
         //Move two squares
         nextRow = if (color==0) posY-2 else posY+2
         if(!moved && nextRow in 0..7 && Pair(posX,nextRow) !in board.piecesPositions.keys){
-            moves.add(Move(posX,posY,posX,nextRow))
+            moves.addLast(Move(posX,posY,posX,nextRow, attacking = false))
         }
 
         // TODO implement en passant
@@ -60,6 +60,20 @@ class Pawn(
         }*/
         return moves
     }
+
+    fun getPotentialAttacks(board : Board) : List<Move> {
+        val moves:MutableList<Move> = mutableListOf()
+        val nextRow = if (color==0) posY-1 else posY+1
+        for (d in listOf(-1,1)){
+            //Attacking on diagonal
+            if (board.inBounds(posX+d,nextRow) && Pair(posX+d,nextRow) !in board.piecesPositions.keys){
+                moves.addLast(Move(posX,posY,posX+d,nextRow))
+            }
+
+        }
+        return moves
+    }
+
     override fun move(endX : Int,endY : Int, board : Board){
         moved = true
         //madeDoubleMove = abs(endY-posY)==2
