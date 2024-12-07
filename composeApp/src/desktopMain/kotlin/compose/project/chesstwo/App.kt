@@ -191,18 +191,13 @@ fun ChessBoard(board : Board, onExitToMenu : () -> Unit) {
             }
             Box() {
                 Column(modifier = Modifier.fillMaxSize().padding(25.dp)){
-                    Box(modifier = Modifier.fillMaxWidth().weight(1.0f).background(color=Color.Green)){
+                    Box(modifier = Modifier.fillMaxWidth().weight(1.0f)){
 
                     }
-                    //promotionDisplay.value = board.promotionChoice
-                    println("oooooooooooooooooooooooooo")
-                    print(promotionDisplay.value)
-                    print("   ")
-                    println(board.promotionChoice)
-                    println("oooooooooooooooooooooooooo")
                     Box(modifier = Modifier.fillMaxWidth().weight(5.0f)){
-                        if(board.promotionChoice){
-                            promotionDisplay.value=true
+                        promotionDisplay.value=board.promotionChoice
+                        if(promotionDisplay.value){
+
                             val textures = listOf(listOf(Res.drawable.queenW,Res.drawable.rookW,Res.drawable.bishopW,Res.drawable.knightW),
                                 listOf(Res.drawable.queenB,Res.drawable.rookB,Res.drawable.bishopB,Res.drawable.knightB))
                             Column(modifier = Modifier.fillMaxSize()) {
@@ -210,7 +205,11 @@ fun ChessBoard(board : Board, onExitToMenu : () -> Unit) {
                                 for (t in textures[board.turn % 2]) {
                                     Image(painter = painterResource(t), contentDescription = null, modifier = Modifier.align(alignment = Alignment.CenterHorizontally).clickable {
                                         board.finishPromotionMove(t)
-                                        promotionDisplay.value=false
+                                        println("ooooooooooo")
+                                        println(board.promotionChoice)
+                                        println(promotionDisplay.value)
+                                        println("ooooooooooo")
+                                        promotionDisplay.value=board.promotionChoice
                                         endDisplay.value = board.gameEnded
                                     })
                                 }
@@ -219,8 +218,15 @@ fun ChessBoard(board : Board, onExitToMenu : () -> Unit) {
 
                         }
                     }
-                    Box(modifier = Modifier.fillMaxWidth().weight(1.0f).background(color=Color.Red)){
+                    Box(modifier = Modifier.fillMaxWidth().weight(1.0f)){
+                        Button(
+                            modifier = Modifier.fillMaxWidth().height(60.dp).alpha(0.3f),
+                            onClick = {onExitToMenu()},
 
+
+                        ){
+                            Text(text = "End game")
+                        }
                     }
                 }
             }
@@ -301,7 +307,6 @@ fun MainMenuScene(onStartGame: () -> Unit) {
                 .height(200.dp)
         )
         Spacer(modifier = Modifier.height(100.dp))
-        // Button: Start Game
         Button(
             onClick = onStartGame,
             modifier = Modifier
