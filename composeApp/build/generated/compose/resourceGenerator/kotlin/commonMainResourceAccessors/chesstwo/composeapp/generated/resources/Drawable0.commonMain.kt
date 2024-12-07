@@ -27,6 +27,9 @@ private object CommonMainDrawable0 {
   public val knightW: DrawableResource by 
       lazy { init_knightW() }
 
+  public val mmBackground: DrawableResource by 
+      lazy { init_mmBackground() }
+
   public val pawnB: DrawableResource by 
       lazy { init_pawnB() }
 
@@ -54,6 +57,7 @@ internal fun _collectCommonMainDrawable0Resources(map: MutableMap<String, Drawab
   map.put("kingW", CommonMainDrawable0.kingW)
   map.put("knightB", CommonMainDrawable0.knightB)
   map.put("knightW", CommonMainDrawable0.knightW)
+  map.put("mmBackground", CommonMainDrawable0.mmBackground)
   map.put("pawnB", CommonMainDrawable0.pawnB)
   map.put("pawnW", CommonMainDrawable0.pawnW)
   map.put("queenB", CommonMainDrawable0.queenB)
@@ -125,6 +129,18 @@ private fun init_knightW(): DrawableResource = org.jetbrains.compose.resources.D
     setOf(
       org.jetbrains.compose.resources.ResourceItem(setOf(),
     "composeResources/chesstwo.composeapp.generated.resources/drawable/knightW.png", -1, -1),
+    )
+)
+
+internal val Res.drawable.mmBackground: DrawableResource
+  get() = CommonMainDrawable0.mmBackground
+
+private fun init_mmBackground(): DrawableResource =
+    org.jetbrains.compose.resources.DrawableResource(
+  "drawable:mmBackground",
+    setOf(
+      org.jetbrains.compose.resources.ResourceItem(setOf(),
+    "composeResources/chesstwo.composeapp.generated.resources/drawable/mmBackground.jpg", -1, -1),
     )
 )
 

@@ -26,6 +26,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshots.SnapshotStateList
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.unit.IntSize
@@ -47,6 +48,7 @@ import chesstwo.composeapp.generated.resources.knightW
 import chesstwo.composeapp.generated.resources.knightB
 import chesstwo.composeapp.generated.resources.pawnW
 import chesstwo.composeapp.generated.resources.pawnB
+import chesstwo.composeapp.generated.resources.mmBackground
 import compose.project.chesstwo.pieces.Bishop
 import compose.project.chesstwo.pieces.King
 import compose.project.chesstwo.pieces.Knight
@@ -67,12 +69,14 @@ fun ChessBoard(board : Board, onExitToMenu : () -> Unit) {
     var isPieceSelected = remember { mutableStateOf(false) }
     var promotionDisplay = remember { mutableStateOf(false) }
     var endDisplay = remember { mutableStateOf(false) }
+
+    Image(painter = painterResource((Res.drawable.mmBackground)), contentDescription = "Background",alpha = 0.4f)
     Box( modifier = Modifier
         //.height(size.height.dp)
         //.width(size.width.dp)
         //.padding(10.dp)
         //.aspectRatio(1.0f)
-        .background(Color(0xff89d0e8)).fillMaxSize()
+        .background(Color(0x9989d0e8)).fillMaxSize()
         //.onSizeChanged {
         //    size = it
         //}
@@ -225,9 +229,9 @@ fun ChessBoard(board : Board, onExitToMenu : () -> Unit) {
             Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(Color.White.copy(alpha = 0.8f)) // Semi-transparent black background
-                    .zIndex(1f) // Ensure it is on top of everything
-                    .align(Alignment.Center) // Position at the center of the screen
+                    .background(Color.White.copy(alpha = 0.8f))
+                    .zIndex(1f)
+                    .align(Alignment.Center)
                     .clickable {
                         onExitToMenu()
                     }
@@ -236,7 +240,7 @@ fun ChessBoard(board : Board, onExitToMenu : () -> Unit) {
                     Text(
                         text = "Stalemate",
                         color = Color.Black,
-                        modifier = Modifier.align(Alignment.Center), // Center the text in the box
+                        modifier = Modifier.align(Alignment.Center),
                         style = MaterialTheme.typography.h6
                     )
                 }
@@ -244,7 +248,7 @@ fun ChessBoard(board : Board, onExitToMenu : () -> Unit) {
                     Text(
                         text = "Draw",
                         color = Color.Black,
-                        modifier = Modifier.align(Alignment.Center), // Center the text in the box
+                        modifier = Modifier.align(Alignment.Center),
                         style = MaterialTheme.typography.h6
                     )
                 }
@@ -254,7 +258,7 @@ fun ChessBoard(board : Board, onExitToMenu : () -> Unit) {
                             Text(
                                 text = "Check Mate",
                                 color = Color.Black,
-                                modifier = Modifier.align(Alignment.Center), // Center the text in the box
+                                modifier = Modifier.align(Alignment.Center),
 
                                 style = MaterialTheme.typography.h6
                             )
@@ -263,7 +267,7 @@ fun ChessBoard(board : Board, onExitToMenu : () -> Unit) {
                             Text(
                                 text = (if (board.gameResult == 0) "White" else "Black") + " won",
                                 color = Color.Black,
-                                modifier = Modifier.align(Alignment.Center), // Center the text in the box
+                                modifier = Modifier.align(Alignment.Center),
                                 style = MaterialTheme.typography.h6
                             )
                         }
@@ -280,20 +284,21 @@ fun ChessBoard(board : Board, onExitToMenu : () -> Unit) {
 
 @Composable
 fun MainMenuScene(onStartGame: () -> Unit) {
+    Image(painter = painterResource((Res.drawable.mmBackground)), contentDescription = "Background",alpha = 0.7f)
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xff89d0e8)) // Dark background
+            .background(Color(0x7689d0e8))
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        // Image at the top
+
         Image(
-            painter = painterResource(Res.drawable.pawnW), // Replace with your image resource
+            painter = painterResource(Res.drawable.pawnW),
             contentDescription = "Game Logo",
             modifier = Modifier
                 .fillMaxWidth()
-                .height(200.dp) // Adjust as needed
+                .height(200.dp)
         )
         Spacer(modifier = Modifier.height(100.dp))
         // Button: Start Game
@@ -307,9 +312,9 @@ fun MainMenuScene(onStartGame: () -> Unit) {
             Text(text = "Start Game")
         }
 
-        // Button: Do Nothing
+
         Button(
-            onClick = { /* Do Nothing */ },
+            onClick = { },
             modifier = Modifier
                 .width(300.dp)
                 .height(100.dp)
@@ -318,7 +323,7 @@ fun MainMenuScene(onStartGame: () -> Unit) {
             Text(text = "Play with the computer W.I.P.")
         }
 
-        // Button: Close App
+
         Button(
             onClick = {exitProcess(0)},
             modifier = Modifier
