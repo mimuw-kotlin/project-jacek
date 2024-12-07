@@ -29,7 +29,7 @@ class Board {
     public val allAttackedSquares = listOf<MutableList<Pair<Int,Int>>>(mutableListOf(), mutableListOf())
 
     public fun setupPieces(){
-        piecesPositions[Pair(0,0)] = Rook(0,0, Res.drawable.rookB,1)
+        //piecesPositions[Pair(0,0)] = Rook(0,0, Res.drawable.rookB,1)
         piecesPositions[Pair(1,0)] = Knight(1,0, Res.drawable.knightB,1)
         piecesPositions[Pair(2,0)] = Bishop(2,0, Res.drawable.bishopB,1)
         piecesPositions[Pair(3,0)] = Queen(3,0, Res.drawable.queenB,1)
@@ -48,8 +48,8 @@ class Board {
         piecesPositions[Pair(7,7)] = Rook(7,7, Res.drawable.rookW,0)
 
         for (i in 0 until 8){
-            piecesPositions[Pair(i,1)] = Pawn(i,1, Res.drawable.pawnB,1)
-            piecesPositions[Pair(i,6)] = Pawn(i,6, Res.drawable.pawnW,0)
+            //piecesPositions[Pair(i,1)] = Pawn(i,1, Res.drawable.pawnB,1)
+            piecesPositions[Pair(i,3)] = Pawn(i,3, Res.drawable.pawnW,0)//6
         }
 
     }
@@ -120,9 +120,17 @@ class Board {
         piecesPositions[Pair(endX,endY)] = piecesPositions[Pair(startX,startY)]!!
         piecesPositions.remove(Pair(startX,startY))
 
+
+
         //if(piecesPositions)
 
         piecesPositions[Pair(endX,endY)]!!.move(endX,endY,this)
+
+        if(isPawnOnLastRank(piecesPositions[Pair(endX,endY)]!!)){
+            println("JEST")
+            val pawn = piecesPositions[Pair(endX,endY)]!!
+            piecesPositions[Pair(endX,endY)] = Queen(pawn.posX,pawn.posY,if (pawn.color==0) Res.drawable.queenW else Res.drawable.queenB,pawn.color)
+        }
 
         //getAllAttackedSquares()
 
@@ -173,6 +181,17 @@ class Board {
         println("MAT")
         return true
     }
-
+    private fun isPawnOnLastRank(piece : Piece) : Boolean{
+        if(piece !is Pawn){
+            return false
+        }
+        println("PIONEK")
+        println(piece.color)
+        println(piece.posY)
+        if((piece.color==0 && piece.posY==0) || (piece.color==1 && piece.posY==7)){
+            return true
+        }
+        return false
+    }
 
 }
