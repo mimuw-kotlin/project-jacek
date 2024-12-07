@@ -14,8 +14,11 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.onClick
+import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
@@ -28,6 +31,7 @@ import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.unit.IntSize
 
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import compose.project.chesstwo.Board
 import chesstwo.composeapp.generated.resources.Res
 
@@ -50,12 +54,12 @@ import compose.project.chesstwo.pieces.Pawn
 import compose.project.chesstwo.pieces.Piece
 import compose.project.chesstwo.pieces.Queen
 import compose.project.chesstwo.pieces.Rook
-
-
+import java.lang.Thread.sleep
+import kotlin.system.exitProcess
 
 
 @Composable
-fun ChessBoard(board : Board) {
+fun ChessBoard(board : Board, onExitToMenu : () -> Unit) {
     //var size by remember { mutableStateOf(IntSize(400,400)) }
     var attackedSquares = remember {mutableStateListOf<Pair<Int,Int>>()}
     var selectedPieceX = remember { mutableIntStateOf(-1) }
@@ -99,6 +103,8 @@ fun ChessBoard(board : Board) {
                                                         col,
                                                         row
                                                     )
+                                                    endDisplay.value = board.gameEnded
+
                                                 }
                                                 isPieceSelected.value = false
 
@@ -128,6 +134,7 @@ fun ChessBoard(board : Board) {
                                                         col,
                                                         row
                                                     )
+                                                    endDisplay.value = board.gameEnded
                                                     isPieceSelected.value = false
 
                                                 } else if (board.piecesPositions[Pair(
@@ -200,6 +207,7 @@ fun ChessBoard(board : Board) {
                                     Image(painter = painterResource(t), contentDescription = null, modifier = Modifier.align(alignment = Alignment.CenterHorizontally).clickable {
                                         board.finishPromotionMove(t)
                                         promotionDisplay.value=false
+                                        endDisplay.value = board.gameEnded
                                     })
                                 }
                             }
@@ -213,16 +221,127 @@ fun ChessBoard(board : Board) {
                 }
             }
         }
+        if(endDisplay.value){
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color.White.copy(alpha = 0.8f)) // Semi-transparent black background
+                    .zIndex(1f) // Ensure it is on top of everything
+                    .align(Alignment.Center) // Position at the center of the screen
+                    .clickable {
+                        onExitToMenu()
+                    }
+            ) {
+                if(board.gameResult==2){
+                    Text(
+                        text = "Stalemate",
+                        color = Color.Black,
+                        modifier = Modifier.align(Alignment.Center), // Center the text in the box
+                        style = MaterialTheme.typography.h6
+                    )
+                }
+                else{
+                    Column() {
+                        Box(modifier = Modifier.weight(1.0f).fillMaxWidth()) {
+                            Text(
+                                text = "Check Mate",
+                                color = Color.Black,
+                                modifier = Modifier.align(Alignment.Center), // Center the text in the box
+
+                                style = MaterialTheme.typography.h6
+                            )
+                        }
+                        Box(modifier = Modifier.weight(1.0f).fillMaxWidth()) {
+                            Text(
+                                text = (if (board.gameResult == 0) "White" else "Black") + " won",
+                                color = Color.Black,
+                                modifier = Modifier.align(Alignment.Center), // Center the text in the box
+                                style = MaterialTheme.typography.h6
+                            )
+                        }
+                    }
+                }
+
+            }
+
+        }
     }
 
 }
 
+
+@Composable
+fun MainMenuScene(onStartGame: () -> Unit) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color(0xff89d0e8)) // Dark background
+            .padding(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        // Image at the top
+        Image(
+            painter = painterResource(Res.drawable.pawnW), // Replace with your image resource
+            contentDescription = "Game Logo",
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(200.dp) // Adjust as needed
+        )
+        Spacer(modifier = Modifier.height(100.dp))
+        // Button: Start Game
+        Button(
+            onClick = onStartGame,
+            modifier = Modifier
+                .width(300.dp)
+                .height(100.dp)
+                .padding(vertical = 20.dp)
+        ) {
+            Text(text = "Start Game")
+        }
+
+        // Button: Do Nothing
+        Button(
+            onClick = { /* Do Nothing */ },
+            modifier = Modifier
+                .width(300.dp)
+                .height(100.dp)
+                .padding(vertical = 20.dp)
+        ) {
+            Text(text = "Play with the computer W.I.P.")
+        }
+
+        // Button: Close App
+        Button(
+            onClick = {exitProcess(0)},
+            modifier = Modifier
+                .width(300.dp)
+                .height(100.dp)
+                .padding(vertical = 20.dp),
+            colors = ButtonDefaults.buttonColors(backgroundColor = Color.Red)
+        ) {
+            Text(text = "Exit", color = Color.White)
+        }
+    }
+}
+
+
+sealed class Scene {
+    object MainMenu : Scene()
+    object Gameplay : Scene()
+}
+
+
 @Composable
 @Preview
 fun App() {
+    var currentScene by remember { mutableStateOf<Scene>(Scene.MainMenu) }
     var board = Board()
     board.setupPieces()
     MaterialTheme {
-        ChessBoard(board)
+        //ChessBoard(board,currentScene)
+        when (currentScene) {
+            is Scene.MainMenu -> MainMenuScene(onStartGame = { currentScene = Scene.Gameplay; board = Board(); board.setupPieces()})
+            is Scene.Gameplay -> ChessBoard(board, onExitToMenu = { currentScene = Scene.MainMenu })
+        }
     }
 }

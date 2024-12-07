@@ -35,15 +35,17 @@ class Board {
     public val allAttackedSquares = listOf<MutableList<Pair<Int,Int>>>(mutableListOf(), mutableListOf())
     public var promotionChoice = false
     public var promotingPawn : Piece? = null
+    public var gameEnded = false
+    public var gameResult : Int = 0
     public fun setupPieces(){
         //piecesPositions[Pair(0,0)] = Rook(0,0, Res.drawable.rookB,1)
-        piecesPositions[Pair(1,0)] = Knight(1,0, Res.drawable.knightB,1)
-        piecesPositions[Pair(2,0)] = Bishop(2,0, Res.drawable.bishopB,1)
-        piecesPositions[Pair(3,0)] = Queen(3,0, Res.drawable.queenB,1)
+        //piecesPositions[Pair(1,0)] = Knight(1,0, Res.drawable.knightB,1)
+        //piecesPositions[Pair(2,0)] = Bishop(2,0, Res.drawable.bishopB,1)
+        //piecesPositions[Pair(3,0)] = Queen(3,0, Res.drawable.queenB,1)
         piecesPositions[Pair(4,0)] = King(4,0, Res.drawable.kingB,1)
-        piecesPositions[Pair(5,0)] = Bishop(5,0, Res.drawable.bishopB,1)
-        piecesPositions[Pair(6,0)] = Knight(6,0, Res.drawable.knightB,1)
-        piecesPositions[Pair(7,0)] = Rook(7,0, Res.drawable.rookB,1)
+        //piecesPositions[Pair(5,0)] = Bishop(5,0, Res.drawable.bishopB,1)
+        //piecesPositions[Pair(6,0)] = Knight(6,0, Res.drawable.knightB,1)
+        //piecesPositions[Pair(7,0)] = Rook(7,0, Res.drawable.rookB,1)
 
         piecesPositions[Pair(0,7)] = Rook(0,7, Res.drawable.rookW,0)
         piecesPositions[Pair(1,7)] = Knight(1,7, Res.drawable.knightW,0)
@@ -144,7 +146,16 @@ class Board {
             turn += 1
 
             if(isCheckMate(turn%2)){
-                println("Szach-mat: Wygrał $turn")
+                if(inCheck(turn%2)){
+                    println("Szach-mat: Wygrał $turn")
+                    gameEnded = true
+                    gameResult = (turn+1)%2
+                }
+                else{
+                    gameEnded = true
+                    gameResult = 2
+                }
+
             }
         }
 
@@ -167,7 +178,16 @@ class Board {
         turn += 1
 
         if(isCheckMate(turn%2)){
-            println("Szach-mat: Wygrał $turn")
+            if(inCheck(turn%2)){
+                println("Szach-mat: Wygrał $turn")
+                gameEnded = true
+                gameResult = (turn+1)%2
+            }
+            else{
+                gameEnded = true
+                gameResult = 2
+            }
+
         }
     }
     /*public fun addNewMoves(attackedSquares : List<Pair<Int,Int>>, startX : Int, startY : Int){
@@ -189,7 +209,7 @@ class Board {
 
     public fun inCheck(color : Int) : Boolean{
         //getAllAttackedSquares()
-        allAttackedSquares[1-color].forEach{
+        getAllAttackedSquares2(1-color).forEach{
             if(it in piecesPositions.keys && piecesPositions[it] is King && piecesPositions[it]!!.color==color){
                 return true
             }
