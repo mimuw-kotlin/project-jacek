@@ -39,7 +39,8 @@ class King(
             //Pair(it.endX,it.endY) in board.allAttackedSquares[1-color]
             inCheckAfterMove(board,it)
         }*/
-
+        println(color)
+        println(moves)
         return moves
     }
     override fun move(endX: Int, endY: Int, board: Board) {

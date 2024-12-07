@@ -20,6 +20,7 @@ import compose.project.chesstwo.pieces.Pawn
 import compose.project.chesstwo.pieces.Piece
 import compose.project.chesstwo.pieces.Queen
 import compose.project.chesstwo.pieces.Rook
+import java.lang.Thread.sleep
 
 class Board {
     public val piecesPositions = mutableMapOf<Pair<Int,Int>, Piece>()
@@ -127,6 +128,10 @@ class Board {
 
         turn += 1
 
+        if(isCheckMate(turn%2)){
+            println("Szach-mat: Wygrał $turn")
+        }
+
     }
     /*public fun addNewMoves(attackedSquares : List<Pair<Int,Int>>, startX : Int, startY : Int){
         possibleMoves.clear()
@@ -153,6 +158,20 @@ class Board {
             }
         }
         return false
+    }
+
+    public fun isCheckMate(color : Int) : Boolean{
+        println("--------------")
+        val pieces = piecesPositions.values.toList()
+        for(piece in pieces) {
+
+            if(piece.color==color && piece.getMoves(this).isNotEmpty()){
+                return false
+
+            }
+        }
+        println("MAT")
+        return true
     }
 
 

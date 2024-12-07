@@ -16,9 +16,11 @@ interface Piece {
         posY=endY
     }
     fun getMoves(board: Board): List<Move> {
+        println("Sprawdzam ruchy dla $this")
         var pseudoMoves = getPseudoMoves(board)
+        println(123)
         var moves = mutableListOf<Move>()
-        for ( move in pseudoMoves){
+        for (move in pseudoMoves){
             var startPiece : Piece = board.piecesPositions[Pair(move.startX,move.startY)]!!
             var endPiece :Piece? = board.piecesPositions[Pair(move.endX,move.endY)]
             board.piecesPositions[Pair(move.endX,move.endY)]=startPiece
@@ -42,6 +44,9 @@ interface Piece {
                 board.piecesPositions.remove(Pair(move.endX,move.endY))
             }
         }
+        println(456)
+        print("Legal moves: ")
+        println(moves)
         return moves
     }
 
