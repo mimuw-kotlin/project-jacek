@@ -240,6 +240,14 @@ fun ChessBoard(board : Board, onExitToMenu : () -> Unit) {
                         style = MaterialTheme.typography.h6
                     )
                 }
+                else if(board.gameResult==3){
+                    Text(
+                        text = "Draw",
+                        color = Color.Black,
+                        modifier = Modifier.align(Alignment.Center), // Center the text in the box
+                        style = MaterialTheme.typography.h6
+                    )
+                }
                 else{
                     Column() {
                         Box(modifier = Modifier.weight(1.0f).fillMaxWidth()) {

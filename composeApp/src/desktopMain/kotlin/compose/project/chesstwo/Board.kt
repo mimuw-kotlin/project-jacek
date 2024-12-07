@@ -37,6 +37,7 @@ class Board {
     public var promotingPawn : Piece? = null
     public var gameEnded = false
     public var gameResult : Int = 0
+    public var lastActiveMove = 0
     public fun setupPieces(){
         //piecesPositions[Pair(0,0)] = Rook(0,0, Res.drawable.rookB,1)
         //piecesPositions[Pair(1,0)] = Knight(1,0, Res.drawable.knightB,1)
@@ -116,8 +117,16 @@ class Board {
             }
         }
 
+        if(piecesPositions[Pair(startX,startY)] is Pawn){
+            lastActiveMove = turn
+        }
+
         if(playedMove.isEnPassant){ //En passant
             piecesPositions.remove(Pair(endX,startY))
+            lastActiveMove = turn
+        }
+        else if (Pair(endX,endY) in piecesPositions.keys){
+            lastActiveMove = turn
         }
         if(playedMove.isCastling){
             val rookEndX = (endX+startX)/2
@@ -157,6 +166,10 @@ class Board {
                 }
 
             }
+            if(turn-lastActiveMove>=150){
+                gameEnded = true
+                gameResult = 3
+            }
         }
 
 
@@ -188,6 +201,10 @@ class Board {
                 gameResult = 2
             }
 
+        }
+        if(turn-lastActiveMove>=150){
+            gameEnded = true
+            gameResult = 3
         }
     }
     /*public fun addNewMoves(attackedSquares : List<Pair<Int,Int>>, startX : Int, startY : Int){
