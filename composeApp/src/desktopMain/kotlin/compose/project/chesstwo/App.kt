@@ -14,6 +14,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.onClick
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -60,6 +61,8 @@ fun ChessBoard(board : Board) {
     var selectedPieceX = remember { mutableIntStateOf(-1) }
     var selectedPieceY = remember { mutableIntStateOf(-1) }
     var isPieceSelected = remember { mutableStateOf(false) }
+    var promotionDisplay = remember { mutableStateOf(false) }
+    var endDisplay = remember { mutableStateOf(false) }
     Box( modifier = Modifier
         //.height(size.height.dp)
         //.width(size.width.dp)
@@ -70,82 +73,142 @@ fun ChessBoard(board : Board) {
         //    size = it
         //}
     ){
-        Box(modifier = Modifier.align(Alignment.CenterStart).padding(horizontal = 50.dp)) {
+        Row {
+            Box(modifier = Modifier.padding(25.dp)) {//modifier = Modifier.align(Alignment.CenterStart).padding(horizontal = 50.dp)
 
 
-            Column {
-                for (row in 0 until 8) {
-                    Row {
-                        for (col in 0 until 8) {
-                            Box(
-                                modifier = Modifier
-                                    //.size(width = (size.width/8).dp,height = (size.height/8).dp)
-                                    .size(100.dp)
-                                    .background(
-                                        if ((row + col) % 2 == 0) Color(0xffe0e0e0) else Color(
-                                            0xffc7a25a
+                Column {
+                    for (row in 0 until 8) {
+                        Row {
+                            for (col in 0 until 8) {
+                                Box(
+                                    modifier = Modifier
+                                        //.size(width = (size.width/8).dp,height = (size.height/8).dp)
+                                        .size(100.dp)
+                                        .background(
+                                            if ((row + col) % 2 == 0) Color(0xffe0e0e0) else Color(
+                                                0xffc7a25a
+                                            )
                                         )
-                                    )
-                                    .clickable { if(isPieceSelected.value){
-                                        if (Pair(col,row) in attackedSquares.toList()){
-                                            board.move(selectedPieceX.value,selectedPieceY.value,col,row)
-                                        }
-                                        isPieceSelected.value=false
-
-                                    } }
-
-                            ) {
-                                if (Pair(col, row) in board.piecesPositions.keys) {
-                                    Image(
-                                        painter = painterResource(
-                                            board.piecesPositions[Pair(
-                                                col,
-                                                row
-                                            )]!!.texture
-                                        ),
-                                        contentDescription = null,
-                                        modifier = Modifier.clickable {
-
-                                            if(isPieceSelected.value && Pair(col,row) in attackedSquares.toList()){
-                                                board.move(selectedPieceX.value,selectedPieceY.value,col,row)
-                                                isPieceSelected.value=false
+                                        .clickable {
+                                            if (isPieceSelected.value) {
+                                                if (Pair(col, row) in attackedSquares.toList()) {
+                                                    board.move(
+                                                        selectedPieceX.value,
+                                                        selectedPieceY.value,
+                                                        col,
+                                                        row
+                                                    )
+                                                }
+                                                isPieceSelected.value = false
 
                                             }
+                                        }
 
-                                            else if(board.piecesPositions[Pair(col, row)]!!.color==(board.turn)%2) {
+                                ) {
+                                    if (Pair(col, row) in board.piecesPositions.keys) {
+                                        Image(
+                                            painter = painterResource(
+                                                board.piecesPositions[Pair(
+                                                    col,
+                                                    row
+                                                )]!!.texture
+                                            ),
+                                            contentDescription = null,
+                                            modifier = Modifier.clickable {
 
-                                                isPieceSelected.value = false
-                                                board.possibleMoves.clear()
-                                                board.possibleMoves.addAll(
-                                                    board.piecesPositions[Pair(col, row)]!!
-                                                        .getMoves(board)
-                                                )
-                                                attackedSquares.clear()
-                                                attackedSquares.addAll(board.getAttackedSquares())
-                                                if (selectedPieceX.value != col || selectedPieceY.value != row || !isPieceSelected.value) {
-                                                    selectedPieceX.value = col;
-                                                    selectedPieceY.value = row;
-                                                    isPieceSelected.value = true;
+                                                if (isPieceSelected.value && Pair(
+                                                        col,
+                                                        row
+                                                    ) in attackedSquares.toList()
+                                                ) {
+                                                    board.move(
+                                                        selectedPieceX.value,
+                                                        selectedPieceY.value,
+                                                        col,
+                                                        row
+                                                    )
+                                                    isPieceSelected.value = false
 
+                                                } else if (board.piecesPositions[Pair(
+                                                        col,
+                                                        row
+                                                    )]!!.color == (board.turn) % 2
+                                                ) {
+
+                                                    isPieceSelected.value = false
+                                                    board.possibleMoves.clear()
+                                                    board.possibleMoves.addAll(
+                                                        board.piecesPositions[Pair(col, row)]!!
+                                                            .getMoves(board)
+                                                    )
+                                                    attackedSquares.clear()
+                                                    attackedSquares.addAll(board.getAttackedSquares())
+                                                    if (selectedPieceX.value != col || selectedPieceY.value != row || !isPieceSelected.value) {
+                                                        selectedPieceX.value = col;
+                                                        selectedPieceY.value = row;
+                                                        isPieceSelected.value = true;
+
+                                                    }
                                                 }
                                             }
-                                        }
 
-                                    )
-                                }
-                                if (isPieceSelected.value && Pair(col,row) in board.getAttackedSquares()){
-                                    Canvas(modifier = Modifier.size(50.dp).align(Alignment.Center), onDraw = {
-                                        drawCircle(color = Color.Green, alpha = 0.5f)
-                                    })
-                                }
-                                /*if (board.turn>0 && isPieceSelected.value && Pair(col,row) in board.allAttackedSquares[board.turn%2]){
-                                    Canvas(modifier = Modifier.size(50.dp).align(Alignment.Center), onDraw = {
-                                        drawCircle(color = Color.Red, alpha = 0.5f)
-                                    })
-                                }*/
+                                        )
+                                    }
+                                    if (isPieceSelected.value && Pair(
+                                            col,
+                                            row
+                                        ) in board.getAttackedSquares()
+                                    ) {
+                                        Canvas(
+                                            modifier = Modifier.size(50.dp).align(Alignment.Center),
+                                            onDraw = {
+                                                drawCircle(color = Color.Green, alpha = 0.5f)
+                                            })
+                                    }
+                                    /*if (board.turn>0 && isPieceSelected.value && Pair(col,row) in board.allAttackedSquares[board.turn%2]){
+                                        Canvas(modifier = Modifier.size(50.dp).align(Alignment.Center), onDraw = {
+                                            drawCircle(color = Color.Red, alpha = 0.5f)
+                                        })
+                                    }*/
 
+                                }
                             }
                         }
+                    }
+                }
+            }
+            Box() {
+                Column(modifier = Modifier.fillMaxSize().padding(25.dp)){
+                    Box(modifier = Modifier.fillMaxWidth().weight(1.0f).background(color=Color.Green)){
+
+                    }
+                    //promotionDisplay.value = board.promotionChoice
+                    println("oooooooooooooooooooooooooo")
+                    print(promotionDisplay.value)
+                    print("   ")
+                    println(board.promotionChoice)
+                    println("oooooooooooooooooooooooooo")
+                    Box(modifier = Modifier.fillMaxWidth().weight(5.0f)){
+                        if(board.promotionChoice){
+                            promotionDisplay.value=true
+                            val textures = listOf(listOf(Res.drawable.queenW,Res.drawable.rookW,Res.drawable.bishopW,Res.drawable.knightW),
+                                listOf(Res.drawable.queenB,Res.drawable.rookB,Res.drawable.bishopB,Res.drawable.knightB))
+                            Column(modifier = Modifier.fillMaxSize()) {
+                                Text("Choose a piece for promotion", modifier = Modifier.align(alignment = Alignment.CenterHorizontally))
+                                for (t in textures[board.turn % 2]) {
+                                    Image(painter = painterResource(t), contentDescription = null, modifier = Modifier.align(alignment = Alignment.CenterHorizontally).clickable {
+                                        board.finishPromotionMove(t)
+                                        promotionDisplay.value=false
+                                    })
+                                }
+                            }
+
+
+                        }
+                    }
+                    Box(modifier = Modifier.fillMaxWidth().weight(1.0f).background(color=Color.Red)){
+
                     }
                 }
             }

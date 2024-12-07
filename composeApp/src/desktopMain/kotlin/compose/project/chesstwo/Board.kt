@@ -1,5 +1,10 @@
 package compose.project.chesstwo
 
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableIntState
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.remember
 import  chesstwo.composeapp.generated.resources.Res
 import chesstwo.composeapp.generated.resources.bishopB
 import chesstwo.composeapp.generated.resources.bishopW
@@ -20,6 +25,7 @@ import compose.project.chesstwo.pieces.Pawn
 import compose.project.chesstwo.pieces.Piece
 import compose.project.chesstwo.pieces.Queen
 import compose.project.chesstwo.pieces.Rook
+import org.jetbrains.compose.resources.DrawableResource
 import java.lang.Thread.sleep
 
 class Board {
@@ -27,7 +33,8 @@ class Board {
     public var turn = 0
     public var possibleMoves = mutableListOf<Move>()
     public val allAttackedSquares = listOf<MutableList<Pair<Int,Int>>>(mutableListOf(), mutableListOf())
-
+    public var promotionChoice = false
+    public var promotingPawn : Piece? = null
     public fun setupPieces(){
         //piecesPositions[Pair(0,0)] = Rook(0,0, Res.drawable.rookB,1)
         piecesPositions[Pair(1,0)] = Knight(1,0, Res.drawable.knightB,1)
@@ -127,19 +134,41 @@ class Board {
         piecesPositions[Pair(endX,endY)]!!.move(endX,endY,this)
 
         if(isPawnOnLastRank(piecesPositions[Pair(endX,endY)]!!)){
-            println("JEST")
-            val pawn = piecesPositions[Pair(endX,endY)]!!
-            piecesPositions[Pair(endX,endY)] = Queen(pawn.posX,pawn.posY,if (pawn.color==0) Res.drawable.queenW else Res.drawable.queenB,pawn.color)
+            promotingPawn = piecesPositions[Pair(endX,endY)]!!
+            promotionChoice = true
+
         }
 
         //getAllAttackedSquares()
+        else{
+            turn += 1
 
+            if(isCheckMate(turn%2)){
+                println("Szach-mat: Wygrał $turn")
+            }
+        }
+
+
+    }
+    public fun finishPromotionMove(texture : DrawableResource){
+        val pawn = promotingPawn!!
+        val endX  = pawn.posX
+        val endY = pawn.posY
+        //val pawn = promotingPawn
+        //piecesPositions[Pair(endX,endY)] = Queen(pawn.posX,pawn.posY,if (pawn.color==0) Res.drawable.queenW else Res.drawable.queenB,pawn.color)
+        val piece : Piece = when(texture){
+            Res.drawable.queenW, Res.drawable.queenB -> Queen(endX,endY,texture,pawn.color)
+            Res.drawable.rookW, Res.drawable.rookB -> Rook(endX,endY,texture,pawn.color)
+            Res.drawable.bishopW, Res.drawable.bishopB -> Bishop(endX,endY,texture,pawn.color)
+            else -> Knight(endX,endY,texture,pawn.color)
+        }
+        promotionChoice = false
+        piecesPositions[Pair(endX,endY)] = piece
         turn += 1
 
         if(isCheckMate(turn%2)){
             println("Szach-mat: Wygrał $turn")
         }
-
     }
     /*public fun addNewMoves(attackedSquares : List<Pair<Int,Int>>, startX : Int, startY : Int){
         possibleMoves.clear()
@@ -185,9 +214,6 @@ class Board {
         if(piece !is Pawn){
             return false
         }
-        println("PIONEK")
-        println(piece.color)
-        println(piece.posY)
         if((piece.color==0 && piece.posY==0) || (piece.color==1 && piece.posY==7)){
             return true
         }
