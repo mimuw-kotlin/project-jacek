@@ -12,21 +12,22 @@ class Rook(
     var moved: Boolean = false
 ) : Piece {
     override fun getPseudoMoves(board: Board): List<Move> {
-        val directions = listOf(Pair(0,1),Pair(0,-1),Pair(1,0),Pair(-1,0))
-        val moves :MutableList<Move> = mutableListOf()
-        for (dir in directions){
-            var x = posX+dir.first
-            var y = posY+dir.second
-            while(x in 0..7 && y in 0..7){
-                if (Pair(x,y) in board.piecesPositions.keys){
-                    if(board.piecesPositions[Pair(x,y)]!!.color!=color){
-                        moves.addLast(Move(posX,posY,x,y))
+        //Directions in which rook can move
+        val directions = listOf(Pair(0, 1), Pair(0, -1), Pair(1, 0), Pair(-1, 0))
+        val moves: MutableList<Move> = mutableListOf()
+        for (dir in directions) {
+            var x = posX + dir.first
+            var y = posY + dir.second
+            while (x in 0..7 && y in 0..7) {
+                if (Pair(x, y) in board.piecesPositions.keys) { //Found a piece in the way
+                    if (board.piecesPositions[Pair(x, y)]!!.color != color) {
+                        moves.addLast(Move(posX, posY, x, y))
                     }
                     break
                 }
-                moves.addLast(Move(posX,posY,x,y))
-                x+=dir.first
-                y+=dir.second
+                moves.addLast(Move(posX, posY, x, y))
+                x += dir.first
+                y += dir.second
             }
         }
         return moves
@@ -34,6 +35,6 @@ class Rook(
 
     override fun move(endX: Int, endY: Int, board: Board) {
         super.move(endX, endY, board)
-        moved=true
+        moved = true
     }
 }
