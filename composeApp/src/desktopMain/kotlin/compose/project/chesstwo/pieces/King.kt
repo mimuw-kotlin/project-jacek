@@ -29,7 +29,7 @@ class King(
             ) {
                 continue
             }
-            moves.addLast(Move(posX, posY, x, y))
+            moves.add(Move(posX, posY, x, y))
 
         }
         if (!moved) {
@@ -40,7 +40,7 @@ class King(
                 && isLineFree(board, false) && isLineNotAttacked(board, false)
             ) {
 
-                moves.addLast(Move(posX, posY, 2, posY, isCastling = true, attacking = false))
+                moves.add(Move(posX, posY, 2, posY, isCastling = true, attacking = false))
             }
 
             //Short castle
@@ -50,7 +50,7 @@ class King(
                 && isLineFree(board) && isLineNotAttacked(board)
             ) {
 
-                moves.addLast(Move(posX, posY, 6, posY, isCastling = true, attacking = false))
+                moves.add(Move(posX, posY, 6, posY, isCastling = true, attacking = false))
             }
         }
 

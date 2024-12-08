@@ -47,7 +47,7 @@ interface Piece {
 
             // King not in check - legal move
             if (!found) {
-                moves.addLast(move)
+                moves.add(move)
 
             }
 

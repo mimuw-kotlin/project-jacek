@@ -25,7 +25,7 @@ class Pawn(
                 && Pair(posX+d,nextRow) in board.piecesPositions.keys
                 && board.piecesPositions[Pair(posX+d,nextRow)]!!.color!=color){
 
-                moves.addLast(Move(posX,posY,posX+d,nextRow))
+                moves.add(Move(posX,posY,posX+d,nextRow))
             }
             //En passant
 
@@ -36,7 +36,7 @@ class Pawn(
                 if(potentialEnPassantPawn.color!=color
                     && potentialEnPassantPawn is Pawn
                     && potentialEnPassantPawn.turnOfDoubleMove==board.turn-1){
-                    moves.addLast(Move(posX,posY,posX+d,nextRow,true))
+                    moves.add(Move(posX,posY,posX+d,nextRow,true))
                 }
             }
 
@@ -44,13 +44,13 @@ class Pawn(
 
         //Move one square
         if(nextRow in 0..7 && Pair(posX,nextRow) !in board.piecesPositions.keys){
-            moves.addLast(Move(posX,posY,posX,nextRow,attacking = false))
+            moves.add(Move(posX,posY,posX,nextRow,attacking = false))
         }
 
         //Move two squares
         nextRow = if (color==0) posY-2 else posY+2
         if(!moved && nextRow in 0..7 && Pair(posX,nextRow) !in board.piecesPositions.keys){
-            moves.addLast(Move(posX,posY,posX,nextRow, attacking = false))
+            moves.add(Move(posX,posY,posX,nextRow, attacking = false))
         }
         return moves
     }
@@ -65,7 +65,7 @@ class Pawn(
             //Attacking on diagonal
             if (board.inBounds(posX+d,nextRow)
                 && Pair(posX+d,nextRow) !in board.piecesPositions.keys){
-                moves.addLast(Move(posX,posY,posX+d,nextRow))
+                moves.add(Move(posX,posY,posX+d,nextRow))
             }
 
         }

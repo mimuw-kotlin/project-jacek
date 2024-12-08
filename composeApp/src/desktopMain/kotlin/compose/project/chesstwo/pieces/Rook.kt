@@ -21,11 +21,11 @@ class Rook(
             while (x in 0..7 && y in 0..7) {
                 if (Pair(x, y) in board.piecesPositions.keys) { //Found a piece in the way
                     if (board.piecesPositions[Pair(x, y)]!!.color != color) {
-                        moves.addLast(Move(posX, posY, x, y))
+                        moves.add(Move(posX, posY, x, y))
                     }
                     break
                 }
-                moves.addLast(Move(posX, posY, x, y))
+                moves.add(Move(posX, posY, x, y))
                 x += dir.first
                 y += dir.second
             }

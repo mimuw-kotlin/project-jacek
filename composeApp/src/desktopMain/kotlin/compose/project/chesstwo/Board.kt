@@ -75,14 +75,14 @@ class Board {
             if (piece.color == color) {
                 piece.getPseudoMoves(this).forEach {
                     if (it.attacking) {
-                        moves.addLast(Pair(it.endX, it.endY))
+                        moves.add(Pair(it.endX, it.endY))
                     }
 
                 }
                 //Check for a potential pawn diagonal attack
                 if (piece is Pawn) {
                     piece.getPotentialAttacks(this).forEach {
-                        moves.addLast(Pair(it.endX, it.endY))
+                        moves.add(Pair(it.endX, it.endY))
                     }
                 }
             }
@@ -190,7 +190,7 @@ class Board {
     fun getAttackedSquares(): List<Pair<Int, Int>> {
         val ret = mutableListOf<Pair<Int, Int>>()
         possibleMoves.forEach {
-            ret.addLast(Pair(it.endX, it.endY))
+            ret.add(Pair(it.endX, it.endY))
         }
         return ret
     }

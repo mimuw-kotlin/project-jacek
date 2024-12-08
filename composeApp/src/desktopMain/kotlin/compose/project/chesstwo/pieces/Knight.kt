@@ -29,7 +29,7 @@ class Knight(
             ) {
                 continue
             }
-            moves.addLast(Move(posX, posY, x, y))
+            moves.add(Move(posX, posY, x, y))
 
         }
         return moves
