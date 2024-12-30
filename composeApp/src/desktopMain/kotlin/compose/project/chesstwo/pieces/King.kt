@@ -23,7 +23,7 @@ class King(
             val y = posY + move.second
 
             //Square occupied by same color piece
-            if (x < 0 || x > 7 || y < 0 || y > 7 ||
+            if (x < 0 || x >=board.size || y < 0 || y >= board.size ||
                 (Pair(x, y) in board.piecesPositions.keys
                         && board.piecesPositions[Pair(x, y)]!!.color == color)
             ) {
@@ -40,17 +40,17 @@ class King(
                 && isLineFree(board, false) && isLineNotAttacked(board, false)
             ) {
 
-                moves.add(Move(posX, posY, 2, posY, isCastling = true, attacking = false))
+                moves.add(Move(posX, posY, posX-2, posY, isCastling = true, attacking = false))
             }
 
             //Short castle
-            if (Pair(7, posY) in board.piecesPositions.keys
-                && board.piecesPositions[Pair(7, posY)] is Rook
-                && !(board.piecesPositions[Pair(7, posY)] as Rook).moved
+            if (Pair(board.size-1, posY) in board.piecesPositions.keys
+                && board.piecesPositions[Pair(board.size-1, posY)] is Rook
+                && !(board.piecesPositions[Pair(board.size-1, posY)] as Rook).moved
                 && isLineFree(board) && isLineNotAttacked(board)
             ) {
 
-                moves.add(Move(posX, posY, 6, posY, isCastling = true, attacking = false))
+                moves.add(Move(posX, posY, posX+2, posY, isCastling = true, attacking = false))
             }
         }
 
@@ -65,25 +65,45 @@ class King(
     //Check if the space between king and rook is empty
     private fun isLineFree(board: Board, shortCastle: Boolean = true): Boolean {
         if (shortCastle) {
-            return Pair(5, posY) !in board.piecesPositions.keys
-                    && Pair(6, posY) !in board.piecesPositions.keys
+            //return Pair(5, posY) !in board.piecesPositions.keys
+                 //   && Pair(6, posY) !in board.piecesPositions.keys
+            for(x in posX+1..<board.size-1){
+                if(Pair(x,posY) in board.piecesPositions.keys) return false
+            }
+            return true
         }
-        return Pair(1, posY) !in board.piecesPositions.keys
-                && Pair(2, posY) !in board.piecesPositions.keys
-                && Pair(3, posY) !in board.piecesPositions.keys
+        //return Pair(1, posY) !in board.piecesPositions.keys
+        //        && Pair(2, posY) !in board.piecesPositions.keys
+        //        && Pair(3, posY) !in board.piecesPositions.keys
+        for(x in 1..<posX){
+            if(Pair(x,posY) in board.piecesPositions.keys) return false
+        }
+        return true
     }
 
     //Check if the squares that king passes during castling are not attacked
     private fun isLineNotAttacked(board: Board, shortCastle: Boolean = true): Boolean {
         if (shortCastle) {
-            for (x in 4..6) {
+            /*for (x in 4..6) {
+                if (Pair(x, posY) in board.getAllPseudoAttackedSquares(1 - color)) {
+                    return false
+                }
+            }
+            return true*/
+            for (x in posX..posX+2){
                 if (Pair(x, posY) in board.getAllPseudoAttackedSquares(1 - color)) {
                     return false
                 }
             }
             return true
         }
-        for (x in 2..4) {
+        /*for (x in 2..4) {
+            if (Pair(x, posY) in board.getAllPseudoAttackedSquares(1 - color)) {
+                return false
+            }
+        }
+        return true*/
+        for (x in posX-2..posX){
             if (Pair(x, posY) in board.getAllPseudoAttackedSquares(1 - color)) {
                 return false
             }

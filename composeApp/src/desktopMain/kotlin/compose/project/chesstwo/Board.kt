@@ -23,7 +23,7 @@ import compose.project.chesstwo.pieces.Rook
 import org.jetbrains.compose.resources.DrawableResource
 
 
-class Board {
+class Board(val size : Int = 8) {
     //Current positions of all the pieces on the board
     val piecesPositions = mutableMapOf<Pair<Int, Int>, Piece>()
 
@@ -115,7 +115,7 @@ class Board {
 
         if (playedMove.isCastling) {
             val rookEndX = (endX + startX) / 2
-            val rookStartX = if (endX < startX) 0 else 7
+            val rookStartX = if (endX < startX) 0 else size-1
 
             //Handling rook movement during castling
             piecesPositions[Pair(rookEndX, endY)] = piecesPositions[Pair(rookStartX, endY)]!!
@@ -197,7 +197,7 @@ class Board {
 
     // Checking if a piece is inside of the chessboard bounds
     fun inBounds(x: Int, y: Int): Boolean {
-        return x in 0..7 && y in 0..7
+        return x in 0..<size && y in 0..<size
     }
 
     // Checking if 'color' king is in check
@@ -230,7 +230,7 @@ class Board {
         if (piece !is Pawn) {
             return false
         }
-        if ((piece.color == 0 && piece.posY == 0) || (piece.color == 1 && piece.posY == 7)) {
+        if ((piece.color == 0 && piece.posY == 0) || (piece.color == 1 && piece.posY == size-1)) {
             return true
         }
         return false

@@ -94,12 +94,12 @@ fun ChessBoard(board: Board, onExitToMenu: () -> Unit) {
 
                 //Construction of the chessboard
                 Column {
-                    for (row in 0 until 8) {
+                    for (row in 0 until board.size) {
                         Row {
-                            for (col in 0 until 8) {
+                            for (col in 0 until board.size) {
                                 Box(
                                     modifier = Modifier
-                                        .size(100.dp)
+                                        .size((800/board.size).dp)
                                         .background(
                                             if ((row + col) % 2 == 0) lightSquareColor
                                             else darkSquareColor
@@ -318,12 +318,12 @@ fun App() {
     //Scene that is currently displayed
     var currentScene by remember { mutableStateOf<Scene>(Scene.MainMenu) }
 
-    var board = Board()
-    board.setupPieces()
+    var board = Board(size = 10)
+    //board.setupPieces()
     MaterialTheme {
         when (currentScene) {
             is Scene.MainMenu -> MainMenuScene(onStartGame =
-            { currentScene = Scene.Gameplay; board = Board(); board.setupPieces() })
+            { currentScene = Scene.Gameplay; board = Board(size=10); board.setupPieces() })
 
             is Scene.Gameplay -> ChessBoard(board, onExitToMenu =
             { currentScene = Scene.MainMenu })

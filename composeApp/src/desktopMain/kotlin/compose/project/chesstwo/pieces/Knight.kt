@@ -23,7 +23,7 @@ class Knight(
             val y = posY + move.second
 
             //Square occupied by same color piece
-            if (x < 0 || x > 7 || y < 0 || y > 7
+            if (x < 0 || x > board.size-1 || y < 0 || y > board.size-1
                 || (Pair(x, y) in board.piecesPositions.keys
                         && board.piecesPositions[Pair(x, y)]!!.color == color)
             ) {

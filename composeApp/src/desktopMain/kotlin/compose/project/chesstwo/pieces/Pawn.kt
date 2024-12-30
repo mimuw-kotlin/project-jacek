@@ -43,13 +43,13 @@ class Pawn(
         }
 
         //Move one square
-        if(nextRow in 0..7 && Pair(posX,nextRow) !in board.piecesPositions.keys){
+        if(nextRow in 0..<board.size && Pair(posX,nextRow) !in board.piecesPositions.keys){
             moves.add(Move(posX,posY,posX,nextRow,attacking = false))
         }
 
         //Move two squares
         nextRow = if (color==0) posY-2 else posY+2
-        if(!moved && nextRow in 0..7 && Pair(posX,nextRow) !in board.piecesPositions.keys){
+        if(!moved && nextRow in 0..<board.size && Pair(posX,nextRow) !in board.piecesPositions.keys){
             moves.add(Move(posX,posY,posX,nextRow, attacking = false))
         }
         return moves

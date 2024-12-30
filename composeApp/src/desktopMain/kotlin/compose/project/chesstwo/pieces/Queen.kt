@@ -21,7 +21,7 @@ class Queen(
         for (dir in directions) {
             var x = posX + dir.first
             var y = posY + dir.second
-            while (x in 0..7 && y in 0..7) {
+            while (x in 0..<board.size && y in 0..<board.size) {
                 if (Pair(x, y) in board.piecesPositions.keys) { //Found a piece in the way
                     if (board.piecesPositions[Pair(x, y)]!!.color != color) {
                         moves.add(Move(posX, posY, x, y))
