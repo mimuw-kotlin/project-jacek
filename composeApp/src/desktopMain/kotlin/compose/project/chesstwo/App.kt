@@ -44,6 +44,7 @@ import compose.project.chesstwo.composables.MainMenuButton
 import compose.project.chesstwo.composables.PieceSelection
 import compose.project.chesstwo.composables.RightPanel
 import compose.project.chesstwo.composables.SideButton
+import compose.project.chesstwo.pieces.King
 import compose.project.chesstwo.pieces.Piece
 import org.jetbrains.compose.resources.DrawableResource
 import kotlin.system.exitProcess
@@ -271,7 +272,7 @@ fun MainMenuScene(onStartGame: () -> Unit) {
 fun SettingUpScene(){
     var choosingColor by remember { mutableStateOf(0) }
     var selectedPiece by remember { mutableStateOf(Res.drawable.mmBackground)}
-    val board by remember {mutableStateOf(SetUpBoard(8))}
+    val board by remember {mutableStateOf(SetUpBoard(14))}
     val points = remember{ mutableStateListOf(39,39)}
     var sideSelectedPiece by remember{ mutableStateOf(false)}
     //val board = SetUpBoard(8)
@@ -319,9 +320,10 @@ fun SettingUpScene(){
 
                                         )
                                         .clickable {
-                                            if(sideSelectedPiece && Pair(col,row) !in board.piecesPositions.keys && board.inAvailableSpace(row,choosingColor)){
+                                            if(sideSelectedPiece && Pair(col,row) !in board.piecesPositions.keys && board.inAvailableSpace(row,choosingColor)
+                                                && points[choosingColor] >=board.textureToPiece(selectedPiece,col,row,choosingColor).value){
                                                 board.placePiece(col,row,choosingColor)
-                                                points[choosingColor]-=1
+                                                points[choosingColor]-=board.textureToPiece(selectedPiece,col,row,choosingColor).value
                                             }
 
                                         }
@@ -336,7 +338,18 @@ fun SettingUpScene(){
                                                 )]!!.texture
                                             ),
                                             contentDescription = null,
+                                            modifier = Modifier
+                                                .clickable {
 
+                                                    val pieceToDelete = board.piecesPositions[Pair(col,row)]!!
+                                                    if(pieceToDelete !is King &&
+                                                        !((pieceToDelete.color==0 && pieceToDelete.posY==board.size-2 && pieceToDelete.posX==board.size/2)
+                                                                ||(pieceToDelete.color==1 && pieceToDelete.posY==1 && pieceToDelete.posY==board.size/2))){
+                                                        points[choosingColor]+=pieceToDelete.value
+                                                        board.piecesPositions.remove(Pair(col,row))
+                                                    }
+
+                                                }
                                         )
                                     }
                                 }
@@ -348,11 +361,15 @@ fun SettingUpScene(){
 
             Box{
                 Column{
-                    Text(text = "Points left:\n${points[choosingColor]}")
+
                     PieceSelection(allTextures[choosingColor]) {
                         selectedPiece = it
                         board.selectedPieceTexture = it
                         sideSelectedPiece = true
+                    }
+                    Text(text = "Points left: ${points[choosingColor]}",style = MaterialTheme.typography.h5, modifier = Modifier.padding(top=25.dp))
+                    if(sideSelectedPiece){
+                        Text(text = "Piece value: ${board.textureToPiece(selectedPiece,0,0,0).value}",style = MaterialTheme.typography.h5)
                     }
                 }
 

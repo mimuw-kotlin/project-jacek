@@ -11,6 +11,7 @@ class Rook(
     override var color: Int,
     var moved: Boolean = false
 ) : Piece {
+    override val value = 5
     override fun getPseudoMoves(board: Board): List<Move> {
         //Directions in which rook can move
         val directions = listOf(Pair(0, 1), Pair(0, -1), Pair(1, 0), Pair(-1, 0))

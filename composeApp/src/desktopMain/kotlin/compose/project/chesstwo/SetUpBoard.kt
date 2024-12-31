@@ -28,7 +28,12 @@ import compose.project.chesstwo.pieces.Queen
 import compose.project.chesstwo.pieces.Rook
 class SetUpBoard(size : Int = 8) : Board(size) {
     //override val piecesPositions = mutableMapOf<Pair<Int, Int>, Piece>()
-
+    init{
+        piecesPositions[Pair(size/2,0)]=King(size/2,0,Res.drawable.kingB,1)
+        piecesPositions[Pair(size/2,1)]=Pawn(size/2,1,Res.drawable.pawnB,1)
+        piecesPositions[Pair(size/2,size-1)]=King(size/2,size-1,Res.drawable.kingW,0)
+        piecesPositions[Pair(size/2,size-2)]=Pawn(size/2,size-2,Res.drawable.pawnW,0)
+    }
     lateinit var selectedPieceTexture : DrawableResource
     fun placePiece(posX : Int, posY : Int, color : Int){
         piecesPositions[Pair(posX,posY)] = textureToPiece(selectedPieceTexture,posX,posY,color)

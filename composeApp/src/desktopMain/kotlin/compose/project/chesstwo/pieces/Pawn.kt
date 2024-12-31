@@ -13,6 +13,7 @@ class Pawn(
     private var moved: Boolean = false,
     private var turnOfDoubleMove : Int = -1
 ) : Piece {
+    override val value = 1
     override fun getPseudoMoves(board: Board): List<Move> {
         val moves:MutableList<Move> = mutableListOf()
 

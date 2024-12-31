@@ -10,6 +10,7 @@ class Queen(
     override var texture: DrawableResource,
     override var color: Int
 ) : Piece {
+    override val value = 9
     override fun getPseudoMoves(board: Board): List<Move> {
         //Directions in which queen can move
         val directions = listOf(

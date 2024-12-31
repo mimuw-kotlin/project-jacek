@@ -11,6 +11,7 @@ class King(
     override var color: Int,
     private var moved: Boolean = false
 ) : Piece {
+    override val value = Int.MAX_VALUE
     override fun getPseudoMoves(board: Board): List<Move> {
         //All possible knight moves
         val allMoves = listOf(

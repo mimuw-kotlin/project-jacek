@@ -10,6 +10,7 @@ class Bishop(
     override var texture: DrawableResource,
     override var color: Int
 ) : Piece {
+    override val value = 3
 
     override fun getPseudoMoves(board: Board): List<Move> {
         //Directions in which bishop can move

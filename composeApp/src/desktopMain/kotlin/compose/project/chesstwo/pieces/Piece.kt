@@ -9,6 +9,7 @@ interface Piece {
     var posY: Int
     var texture: DrawableResource
     var color: Int
+    val value: Int
 
     // Generate all pseudo-legal moves for a piece
     fun getPseudoMoves(board: Board): List<Move>
