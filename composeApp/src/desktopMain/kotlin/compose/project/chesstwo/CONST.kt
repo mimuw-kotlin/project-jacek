@@ -16,6 +16,9 @@ import chesstwo.composeapp.generated.resources.rookW
 val lightSquareColor = Color(0xffe0e0e0)
 val darkSquareColor = Color(0xffc7a25a)
 
+val fogLightSquareColor = Color(0xffa0a0a0)
+val fogDarkSquareColor = Color(0xff87621a)
+
 val textures = listOf(
     listOf(
         Res.drawable.queenW, Res.drawable.rookW,

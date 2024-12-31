@@ -33,4 +33,8 @@ class SetUpBoard(size : Int = 8) : Board(size) {
     fun placePiece(posX : Int, posY : Int, color : Int){
         piecesPositions[Pair(posX,posY)] = textureToPiece(selectedPieceTexture,posX,posY,color)
     }
+    fun inAvailableSpace(posY : Int, color : Int) : Boolean{
+        if (color==0) return posY>=size/2+1
+        return posY<size/2-1
+    }
 }

@@ -273,7 +273,7 @@ fun SettingUpScene(){
     var selectedPiece by remember { mutableStateOf(Res.drawable.mmBackground)}
     val board by remember {mutableStateOf(SetUpBoard(8))}
     val points = remember{ mutableStateListOf(39,39)}
-    var sideSelectedPiece : Boolean = false
+    var sideSelectedPiece by remember{ mutableStateOf(false)}
     //val board = SetUpBoard(8)
     println("Recompos $choosingColor")
     //println(numPieces)
@@ -308,12 +308,18 @@ fun SettingUpScene(){
                                     modifier = Modifier
                                         .size((800/board.size).dp)
                                         .background(
-                                            if ((row + col) % 2 == 0) lightSquareColor
-                                            else darkSquareColor
+                                            if(board.inAvailableSpace(row,choosingColor)){
+                                                if ((row + col) % 2 == 0) lightSquareColor
+                                                else darkSquareColor
+                                            } else {
+                                                if ((row + col) % 2 == 0) fogLightSquareColor
+                                                else fogDarkSquareColor
+                                            }
+
 
                                         )
                                         .clickable {
-                                            if(sideSelectedPiece){
+                                            if(sideSelectedPiece && Pair(col,row) !in board.piecesPositions.keys && board.inAvailableSpace(row,choosingColor)){
                                                 board.placePiece(col,row,choosingColor)
                                                 points[choosingColor]-=1
                                             }
