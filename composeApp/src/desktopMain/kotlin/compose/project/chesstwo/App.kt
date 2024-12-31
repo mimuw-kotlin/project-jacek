@@ -44,6 +44,8 @@ import compose.project.chesstwo.composables.MainMenuButton
 import compose.project.chesstwo.composables.PieceSelection
 import compose.project.chesstwo.composables.RightPanel
 import compose.project.chesstwo.composables.SideButton
+import compose.project.chesstwo.pieces.Piece
+import org.jetbrains.compose.resources.DrawableResource
 import kotlin.system.exitProcess
 
 val buttonColor = Color(0xff89d0e8)
@@ -268,8 +270,13 @@ fun MainMenuScene(onStartGame: () -> Unit) {
 @Composable
 fun SettingUpScene(){
     var choosingColor by remember { mutableStateOf(0) }
-    val board = Board(8)
+    var selectedPiece by remember { mutableStateOf(Res.drawable.mmBackground)}
+    val board by remember {mutableStateOf(SetUpBoard(8))}
+    val points = remember{ mutableStateListOf(39,39)}
+    var sideSelectedPiece : Boolean = false
+    //val board = SetUpBoard(8)
     println("Recompos $choosingColor")
+    //println(numPieces)
     Image(
         painter = painterResource((Res.drawable.mmBackground)),
         contentDescription = "Background", alpha = 0.4f
@@ -283,7 +290,7 @@ fun SettingUpScene(){
             Box(modifier = Modifier.width(175.dp)){
                 Column{
                     Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center){
-                        SideButton(choosingColor=choosingColor, setChoosingColor =  {choosingColor=it})
+                        SideButton(choosingColor=choosingColor, setChoosingColor =  {choosingColor=it; sideSelectedPiece = false})
                     }
 
                 }
@@ -306,11 +313,27 @@ fun SettingUpScene(){
 
                                         )
                                         .clickable {
-
+                                            if(sideSelectedPiece){
+                                                board.placePiece(col,row,choosingColor)
+                                                points[choosingColor]-=1
+                                            }
 
                                         }
 
-                                )
+                                ){
+                                    if(Pair(col,row) in board.piecesPositions.keys && board.piecesPositions[Pair(col,row)]!!.color==choosingColor){
+                                        Image(
+                                            painter = painterResource(
+                                                board.piecesPositions[Pair(
+                                                    col,
+                                                    row
+                                                )]!!.texture
+                                            ),
+                                            contentDescription = null,
+
+                                        )
+                                    }
+                                }
                             }
                         }
                     }
@@ -318,12 +341,22 @@ fun SettingUpScene(){
             }
 
             Box{
-                PieceSelection(allTextures[choosingColor])
+                Column{
+                    Text(text = "Points left:\n${points[choosingColor]}")
+                    PieceSelection(allTextures[choosingColor]) {
+                        selectedPiece = it
+                        board.selectedPieceTexture = it
+                        sideSelectedPiece = true
+                    }
+                }
+
             }
         }
 
     }
 }
+
+
 
 
 sealed class Scene {
@@ -349,7 +382,7 @@ fun App() {
             is Scene.Gameplay -> ChessBoard(board, onExitToMenu =
             { currentScene = Scene.MainMenu })
 
-            Scene.SettingUp -> SettingUpScene()
+            is Scene.SettingUp -> SettingUpScene()
         }
     }
 }

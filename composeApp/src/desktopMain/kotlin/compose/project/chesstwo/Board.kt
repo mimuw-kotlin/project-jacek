@@ -27,9 +27,9 @@ import compose.project.chesstwo.pieces.Queen
 import compose.project.chesstwo.pieces.Rook
 import org.jetbrains.compose.resources.DrawableResource
 
-class Board(val size : Int = 8) {
+open class Board(val size : Int = 8) {
     //Current positions of all the pieces on the board
-    val piecesPositions = mutableMapOf<Pair<Int, Int>, Piece>()
+    open val piecesPositions = mutableMapOf<Pair<Int, Int>, Piece>()
 
     var turn = 0
 
@@ -67,7 +67,7 @@ class Board(val size : Int = 8) {
         piecesPositions[Pair(7, 7)] = Rook(7, 7, Res.drawable.rookW, 0)
 
         for (i in 0 until 8) {
-            //piecesPositions[Pair(i, 1)] = Pawn(i, 1, Res.drawable.pawnB, 1)
+            piecesPositions[Pair(i, 1)] = Pawn(i, 1, Res.drawable.pawnB, 1)
             piecesPositions[Pair(i, 6)] = Pawn(i, 6, Res.drawable.pawnW, 0)
         }
 
@@ -152,6 +152,17 @@ class Board(val size : Int = 8) {
 
     }
 
+    fun textureToPiece(texture: DrawableResource, posX : Int, posY : Int, color : Int) : Piece{
+        val piece: Piece = when (texture) {
+            Res.drawable.queenW, Res.drawable.queenB -> Queen(posX, posY, texture, color)
+            Res.drawable.rookW, Res.drawable.rookB -> Rook(posX, posY, texture, color)
+            Res.drawable.bishopW, Res.drawable.bishopB -> Bishop(posX, posY, texture, color)
+            Res.drawable.knightW, Res.drawable.knightB -> Knight(posX, posY, texture, color)
+            else -> Pawn(posX, posY, texture, color)
+        }
+        return piece
+    }
+
     //Function to finish the turn after promotin a pawn
     fun finishPromotionMove(texture: DrawableResource) {
         val pawn = promotingPawn!!
@@ -159,12 +170,7 @@ class Board(val size : Int = 8) {
         val endY = pawn.posY
 
         //Choosing new piece depending on selected texture
-        val piece: Piece = when (texture) {
-            Res.drawable.queenW, Res.drawable.queenB -> Queen(endX, endY, texture, pawn.color)
-            Res.drawable.rookW, Res.drawable.rookB -> Rook(endX, endY, texture, pawn.color)
-            Res.drawable.bishopW, Res.drawable.bishopB -> Bishop(endX, endY, texture, pawn.color)
-            else -> Knight(endX, endY, texture, pawn.color)
-        }
+        val piece = textureToPiece(texture, endX,endY, pawn.color)
 
         promotionChoice = false
         piecesPositions[Pair(endX, endY)] = piece

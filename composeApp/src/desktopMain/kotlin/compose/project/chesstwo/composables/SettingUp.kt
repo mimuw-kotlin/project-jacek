@@ -16,6 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import chesstwo.composeapp.generated.resources.Res
 import compose.project.chesstwo.Board
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
@@ -43,7 +44,7 @@ fun SideButton(choosingColor: Int, setChoosingColor: (Int)->Unit) {
 }
 
 @Composable
-fun PieceSelection(textures : List<DrawableResource>){
+fun PieceSelection(textures : List<DrawableResource>, selectPiece : (DrawableResource) -> Unit){
     Column{
         for (t in textures) {
             Image(painter = painterResource(t),
@@ -51,7 +52,7 @@ fun PieceSelection(textures : List<DrawableResource>){
                 modifier = Modifier
                     .align(alignment = Alignment.CenterHorizontally)
                     .clickable {
-
+                        selectPiece(t)
                     })
         }
     }
