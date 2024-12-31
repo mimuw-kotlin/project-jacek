@@ -38,8 +38,12 @@ import chesstwo.composeapp.generated.resources.knightW
 import chesstwo.composeapp.generated.resources.knightB
 import chesstwo.composeapp.generated.resources.mmBackground
 import compose.project.chesstwo.composables.EndDisplay
+import compose.project.chesstwo.composables.EndGameButton
 import compose.project.chesstwo.composables.Logo
 import compose.project.chesstwo.composables.MainMenuButton
+import compose.project.chesstwo.composables.PieceSelection
+import compose.project.chesstwo.composables.RightPanel
+import compose.project.chesstwo.composables.SideButton
 import kotlin.system.exitProcess
 
 val buttonColor = Color(0xff89d0e8)
@@ -47,35 +51,25 @@ val buttonColor = Color(0xff89d0e8)
 @Composable
 fun ChessBoard(board: Board, onExitToMenu: () -> Unit) {
 
-    val isPieceSelected = remember { mutableStateOf(false) }
+    var isPieceSelected by remember { mutableStateOf(false) }
 
     //Position of the selected piece
-    val selectedPieceX = remember { mutableIntStateOf(-1) }
-    val selectedPieceY = remember { mutableIntStateOf(-1) }
+    var selectedPieceX by remember { mutableIntStateOf(-1) }
+    var selectedPieceY by remember { mutableIntStateOf(-1) }
 
     //List of squares attacked by the selected piece
-    val attackedSquares = remember { mutableStateListOf<Pair<Int, Int>>() }
+    var attackedSquares = remember { mutableStateListOf<Pair<Int, Int>>() }
 
     //A need to display pieces for promotion
-    val promotionDisplay = remember { mutableStateOf(false) }
+    var promotionDisplay by remember { mutableStateOf(false) }
 
     //A need to display game result
-    val endDisplay = remember { mutableStateOf(false) }
+    var endDisplay by remember { mutableStateOf(false) }
 
-    val lightSquareColor = Color(0xffe0e0e0)
-    val darkSquareColor = Color(0xffc7a25a)
+
 
     //Textures of pieces available for promotion
-    val textures = listOf(
-        listOf(
-            Res.drawable.queenW, Res.drawable.rookW,
-            Res.drawable.bishopW, Res.drawable.knightW
-        ),
-        listOf(
-            Res.drawable.queenB, Res.drawable.rookB,
-            Res.drawable.bishopB, Res.drawable.knightB
-        )
-    )
+
 
     //Background image
     Image(
@@ -90,6 +84,7 @@ fun ChessBoard(board: Board, onExitToMenu: () -> Unit) {
         Row {
 
             //Chessboard
+
             Box(modifier = Modifier.padding(25.dp)) {
 
                 //Construction of the chessboard
@@ -108,19 +103,19 @@ fun ChessBoard(board: Board, onExitToMenu: () -> Unit) {
                                         .clickable {
 
                                             //Clicked empty square
-                                            if (isPieceSelected.value && !board.promotionChoice) {
+                                            if (isPieceSelected && !board.promotionChoice) {
                                                 //Move if available
                                                 if (Pair(col, row) in attackedSquares.toList()) {
                                                     board.move(
-                                                        selectedPieceX.value,
-                                                        selectedPieceY.value,
+                                                        selectedPieceX,
+                                                        selectedPieceY,
                                                         col,
                                                         row
                                                     )
-                                                    endDisplay.value = board.gameEnded
+                                                    endDisplay = board.gameEnded
 
                                                 }
-                                                isPieceSelected.value = false
+                                                isPieceSelected = false
 
                                             }
                                         }
@@ -141,19 +136,19 @@ fun ChessBoard(board: Board, onExitToMenu: () -> Unit) {
                                                     val newPiece = board
                                                         .piecesPositions[Pair(col, row)]!!
                                                     //Attacked another piece
-                                                    if (isPieceSelected.value && Pair(
+                                                    if (isPieceSelected && Pair(
                                                             col,
                                                             row
                                                         ) in attackedSquares.toList()
                                                     ) {
                                                         board.move(
-                                                            selectedPieceX.value,
-                                                            selectedPieceY.value,
+                                                            selectedPieceX,
+                                                            selectedPieceY,
                                                             col,
                                                             row
                                                         )
-                                                        endDisplay.value = board.gameEnded
-                                                        isPieceSelected.value = false
+                                                        endDisplay = board.gameEnded
+                                                        isPieceSelected = false
 
                                                     }
                                                     //Selected another piece
@@ -161,7 +156,7 @@ fun ChessBoard(board: Board, onExitToMenu: () -> Unit) {
                                                     else if (
                                                         newPiece.color == (board.turn) % 2) {
 
-                                                        isPieceSelected.value = false
+                                                        isPieceSelected = false
 
                                                         //Getting all possible moves
                                                         //for newly selected piece
@@ -177,13 +172,13 @@ fun ChessBoard(board: Board, onExitToMenu: () -> Unit) {
                                                             .addAll(board.getAttackedSquares())
 
                                                         //Update selected piece information
-                                                        if (selectedPieceX.value != col
-                                                            || selectedPieceY.value != row
-                                                            || !isPieceSelected.value
+                                                        if (selectedPieceX != col
+                                                            || selectedPieceY != row
+                                                            || !isPieceSelected
                                                         ) {
-                                                            selectedPieceX.value = col
-                                                            selectedPieceY.value = row
-                                                            isPieceSelected.value = true
+                                                            selectedPieceX = col
+                                                            selectedPieceY = row
+                                                            isPieceSelected = true
 
                                                         }
                                                     }
@@ -194,12 +189,12 @@ fun ChessBoard(board: Board, onExitToMenu: () -> Unit) {
                                     }
 
                                     //Drawing squares attacked by selected piece
-                                    if (isPieceSelected.value && Pair(col, row)
+                                    if (isPieceSelected && Pair(col, row)
                                         in board.getAttackedSquares()
                                     ) {
                                         Canvas(
                                             modifier = Modifier
-                                                .size(50.dp)
+                                                .size((400/board.size).dp)
                                                 .align(Alignment.Center),
                                             onDraw = {
                                                 drawCircle(color = Color.Green, alpha = 0.5f)
@@ -213,52 +208,17 @@ fun ChessBoard(board: Board, onExitToMenu: () -> Unit) {
                 }
             }
             //Right panel
-            Box {
-                Column(modifier = Modifier.fillMaxSize().padding(25.dp)) {
-
-                    //Space for displaying pieces for promotion
-                    Box(modifier = Modifier.fillMaxWidth().weight(5.0f)) {
-                        promotionDisplay.value = board.promotionChoice
-                        if (promotionDisplay.value) {
-                            Column(modifier = Modifier.fillMaxSize()) {
-                                Text(
-                                    "Choose a piece for promotion",
-                                    modifier = Modifier
-                                        .align(alignment = Alignment.CenterHorizontally),
-                                    style = MaterialTheme.typography.h6
-                                )
-                                for (t in textures[board.turn % 2]) {
-                                    Image(painter = painterResource(t),
-                                        contentDescription = null,
-                                        modifier = Modifier
-                                            .align(alignment = Alignment.CenterHorizontally)
-                                            .clickable {
-                                                board.finishPromotionMove(t)
-                                                promotionDisplay.value = board.promotionChoice
-                                                endDisplay.value = board.gameEnded
-                                            })
-                                }
-                            }
-
-
-                        }
-                    }
-                    // Button for ending the game
-                    Box(modifier = Modifier.fillMaxWidth().weight(1.0f)) {
-                        Button(
-                            modifier = Modifier.fillMaxWidth().height(60.dp),
-                            onClick = { onExitToMenu() },
-                            colors = ButtonDefaults.buttonColors(backgroundColor = buttonColor)
-
-                        ) {
-                            Text(text = "End game", style = MaterialTheme.typography.h6)
-                        }
-                    }
-                }
-            }
+            promotionDisplay = board.promotionChoice
+            RightPanel(
+                promotionDisplay = promotionDisplay,
+                onEndDisplayChange = {newValue ->  println("endDisplay change: $endDisplay -> $newValue");endDisplay =newValue},
+                onExitToMenu = onExitToMenu,
+                board = board,
+                textures = textures,
+            )
         }
         // Display of the result of the game
-        if (endDisplay.value) {
+        if (endDisplay) {
             EndDisplay(board, onExitToMenu)
 
         }
@@ -305,10 +265,71 @@ fun MainMenuScene(onStartGame: () -> Unit) {
     }
 }
 
+@Composable
+fun SettingUpScene(){
+    var choosingColor by remember { mutableStateOf(0) }
+    val board = Board(8)
+    println("Recompos $choosingColor")
+    Image(
+        painter = painterResource((Res.drawable.mmBackground)),
+        contentDescription = "Background", alpha = 0.4f
+    )
+
+    Box(
+        modifier = Modifier
+            .background(Color(0x9989d0e8)).fillMaxSize()
+    ) {
+        Row {
+            Box(modifier = Modifier.width(175.dp)){
+                Column{
+                    Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center){
+                        SideButton(choosingColor=choosingColor, setChoosingColor =  {choosingColor=it})
+                    }
+
+                }
+            }
+            //Chessboard
+
+            Box(modifier = Modifier.padding(25.dp)) {
+
+                //Construction of the chessboard
+                Column {
+                    for (row in 0 until board.size) {
+                        Row {
+                            for (col in 0 until board.size) {
+                                Box(
+                                    modifier = Modifier
+                                        .size((800/board.size).dp)
+                                        .background(
+                                            if ((row + col) % 2 == 0) lightSquareColor
+                                            else darkSquareColor
+
+                                        )
+                                        .clickable {
+
+
+                                        }
+
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+
+            Box{
+                PieceSelection(allTextures[choosingColor])
+            }
+        }
+
+    }
+}
+
 
 sealed class Scene {
     data object MainMenu : Scene()
     data object Gameplay : Scene()
+    data object SettingUp : Scene()
 }
 
 
@@ -316,7 +337,7 @@ sealed class Scene {
 @Preview
 fun App() {
     //Scene that is currently displayed
-    var currentScene by remember { mutableStateOf<Scene>(Scene.MainMenu) }
+    var currentScene by remember { mutableStateOf<Scene>(Scene.SettingUp) }
 
     var board = Board(size = 10)
     //board.setupPieces()
@@ -327,6 +348,8 @@ fun App() {
 
             is Scene.Gameplay -> ChessBoard(board, onExitToMenu =
             { currentScene = Scene.MainMenu })
+
+            Scene.SettingUp -> SettingUpScene()
         }
     }
 }

@@ -1,5 +1,10 @@
 package compose.project.chesstwo
 
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import  chesstwo.composeapp.generated.resources.Res
 import chesstwo.composeapp.generated.resources.bishopB
 import chesstwo.composeapp.generated.resources.bishopW
@@ -22,7 +27,6 @@ import compose.project.chesstwo.pieces.Queen
 import compose.project.chesstwo.pieces.Rook
 import org.jetbrains.compose.resources.DrawableResource
 
-
 class Board(val size : Int = 8) {
     //Current positions of all the pieces on the board
     val piecesPositions = mutableMapOf<Pair<Int, Int>, Piece>()
@@ -33,7 +37,8 @@ class Board(val size : Int = 8) {
     var possibleMoves = mutableListOf<Move>()
 
     //A need to choice a piece for a pawn to be promoted to
-    var promotionChoice = false
+    //var promotionChoice = false
+    var promotionChoice by mutableStateOf(false)
 
     //A pawn to be promoted
     private var promotingPawn: Piece? = null
@@ -62,7 +67,7 @@ class Board(val size : Int = 8) {
         piecesPositions[Pair(7, 7)] = Rook(7, 7, Res.drawable.rookW, 0)
 
         for (i in 0 until 8) {
-            piecesPositions[Pair(i, 1)] = Pawn(i, 1, Res.drawable.pawnB, 1)
+            //piecesPositions[Pair(i, 1)] = Pawn(i, 1, Res.drawable.pawnB, 1)
             piecesPositions[Pair(i, 6)] = Pawn(i, 6, Res.drawable.pawnW, 0)
         }
 
