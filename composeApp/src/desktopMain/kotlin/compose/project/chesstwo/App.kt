@@ -43,6 +43,7 @@ import compose.project.chesstwo.composables.Logo
 import compose.project.chesstwo.composables.MainMenuButton
 import compose.project.chesstwo.composables.PieceSelection
 import compose.project.chesstwo.composables.RightPanel
+import compose.project.chesstwo.composables.SettingUpButton
 import compose.project.chesstwo.composables.SideButton
 import compose.project.chesstwo.pieces.King
 import compose.project.chesstwo.pieces.Piece
@@ -269,7 +270,7 @@ fun MainMenuScene(onStartGame: () -> Unit) {
 }
 
 @Composable
-fun SettingUpScene(){
+fun SettingUpScene(onExitToMenu: () -> Unit, startGame : () -> Unit){
     var choosingColor by remember { mutableStateOf(0) }
     var selectedPiece by remember { mutableStateOf(Res.drawable.mmBackground)}
     val board by remember {mutableStateOf(SetUpBoard(14))}
@@ -291,7 +292,13 @@ fun SettingUpScene(){
             Box(modifier = Modifier.width(175.dp)){
                 Column{
                     Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center){
-                        SideButton(choosingColor=choosingColor, setChoosingColor =  {choosingColor=it; sideSelectedPiece = false})
+                        SideButton(choosingColor=choosingColor, setChoosingColor =  {choosingColor=it; sideSelectedPiece = false},width = 150)
+                    }
+                    Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center){
+                        SettingUpButton(onClick = startGame,text = "Start", textColor = Color.Black, buttonColor = ButtonDefaults.buttonColors(backgroundColor = Color.Green),width=150)
+                    }
+                    Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center){
+                        SettingUpButton(onClick = onExitToMenu,text = "Main Menu", textColor = Color.White, buttonColor = ButtonDefaults.buttonColors(backgroundColor = Color.Red),width=150)
                     }
 
                 }
@@ -405,7 +412,8 @@ fun App() {
             is Scene.Gameplay -> ChessBoard(board, onExitToMenu =
             { currentScene = Scene.MainMenu })
 
-            is Scene.SettingUp -> SettingUpScene()
+            is Scene.SettingUp -> SettingUpScene(onExitToMenu =
+            { currentScene = Scene.MainMenu }, startGame = {})
         }
     }
 }
