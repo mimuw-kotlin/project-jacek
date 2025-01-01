@@ -34,7 +34,6 @@ fun SideButton(choosingColor: Int, setChoosingColor: (Int)->Unit,width: Int) {
 
     Button(
         onClick = {
-            //choosingColor = 1 - choosingColor
             setChoosingColor(1-choosingColor)
         },
         colors = ButtonDefaults.buttonColors(backgroundColor = buttonColor),

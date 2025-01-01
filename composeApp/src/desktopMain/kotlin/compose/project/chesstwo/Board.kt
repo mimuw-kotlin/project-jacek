@@ -29,7 +29,7 @@ import org.jetbrains.compose.resources.DrawableResource
 
 open class Board(val size : Int = 8) {
     //Current positions of all the pieces on the board
-    open val piecesPositions = mutableMapOf<Pair<Int, Int>, Piece>()
+    open var piecesPositions = mutableMapOf<Pair<Int, Int>, Piece>()
 
     var turn = 0
 

@@ -37,6 +37,7 @@ import chesstwo.composeapp.generated.resources.bishopB
 import chesstwo.composeapp.generated.resources.knightW
 import chesstwo.composeapp.generated.resources.knightB
 import chesstwo.composeapp.generated.resources.mmBackground
+import compose.project.chesstwo.composables.BoardParametersScene
 import compose.project.chesstwo.composables.EndDisplay
 import compose.project.chesstwo.composables.EndGameButton
 import compose.project.chesstwo.composables.Logo
@@ -270,11 +271,11 @@ fun MainMenuScene(onStartGame: () -> Unit) {
 }
 
 @Composable
-fun SettingUpScene(onExitToMenu: () -> Unit, startGame : () -> Unit){
+fun SettingUpScene(onExitToMenu: () -> Unit, startGame : (MutableMap<Pair<Int,Int>,Piece>) -> Unit, newBoardSize : Int = 8, newPoints: Int = 38){
     var choosingColor by remember { mutableStateOf(0) }
     var selectedPiece by remember { mutableStateOf(Res.drawable.mmBackground)}
-    val board by remember {mutableStateOf(SetUpBoard(14))}
-    val points = remember{ mutableStateListOf(39,39)}
+    val board by remember {mutableStateOf(SetUpBoard(newBoardSize))}
+    val points = remember{ mutableStateListOf(newPoints,newPoints)}
     var sideSelectedPiece by remember{ mutableStateOf(false)}
     //val board = SetUpBoard(8)
     println("Recompos $choosingColor")
@@ -295,7 +296,7 @@ fun SettingUpScene(onExitToMenu: () -> Unit, startGame : () -> Unit){
                         SideButton(choosingColor=choosingColor, setChoosingColor =  {choosingColor=it; sideSelectedPiece = false},width = 150)
                     }
                     Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center){
-                        SettingUpButton(onClick = startGame,text = "Start", textColor = Color.Black, buttonColor = ButtonDefaults.buttonColors(backgroundColor = Color.Green),width=150)
+                        SettingUpButton(onClick = { startGame(board.piecesPositions) },text = "Start", textColor = Color.Black, buttonColor = ButtonDefaults.buttonColors(backgroundColor = Color.Green),width=150)
                     }
                     Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center){
                         SettingUpButton(onClick = onExitToMenu,text = "Main Menu", textColor = Color.White, buttonColor = ButtonDefaults.buttonColors(backgroundColor = Color.Red),width=150)
@@ -393,6 +394,7 @@ sealed class Scene {
     data object MainMenu : Scene()
     data object Gameplay : Scene()
     data object SettingUp : Scene()
+    data object BoardParameters : Scene()
 }
 
 
@@ -400,20 +402,24 @@ sealed class Scene {
 @Preview
 fun App() {
     //Scene that is currently displayed
-    var currentScene by remember { mutableStateOf<Scene>(Scene.SettingUp) }
+    var currentScene by remember { mutableStateOf<Scene>(Scene.MainMenu) }
 
     var board = Board(size = 10)
+    var boardSize = 8
+    var points = 38
     //board.setupPieces()
     MaterialTheme {
         when (currentScene) {
             is Scene.MainMenu -> MainMenuScene(onStartGame =
-            { currentScene = Scene.Gameplay; board = Board(size=10); board.setupPieces() })
+            { currentScene = Scene.BoardParameters; board = Board(size=10); board.setupPieces() })
 
             is Scene.Gameplay -> ChessBoard(board, onExitToMenu =
             { currentScene = Scene.MainMenu })
 
             is Scene.SettingUp -> SettingUpScene(onExitToMenu =
-            { currentScene = Scene.MainMenu }, startGame = {})
+            { currentScene = Scene.MainMenu }, startGame = {pos -> board = Board(boardSize);board.piecesPositions=pos;currentScene=Scene.Gameplay}, newBoardSize = boardSize, newPoints = points)
+
+            is Scene.BoardParameters -> BoardParametersScene(onSubmitParameters = {newBoardSize,newPoints ->boardSize = newBoardSize; points = newPoints;currentScene=Scene.SettingUp})
         }
     }
 }
