@@ -419,7 +419,8 @@ fun App() {
             is Scene.SettingUp -> SettingUpScene(onExitToMenu =
             { currentScene = Scene.MainMenu }, startGame = {pos -> board = Board(boardSize);board.piecesPositions=pos;currentScene=Scene.Gameplay}, newBoardSize = boardSize, newPoints = points)
 
-            is Scene.BoardParameters -> BoardParametersScene(onSubmitParameters = {newBoardSize,newPoints ->boardSize = newBoardSize; points = newPoints;currentScene=Scene.SettingUp})
+            is Scene.BoardParameters -> BoardParametersScene(onSubmitParameters = {newBoardSize,newPoints ->boardSize = newBoardSize; points = newPoints;currentScene=Scene.SettingUp},
+                onSelectedScenario = {pos, newBoardSize -> board = Board(newBoardSize); board.piecesPositions=pos;currentScene = Scene.Gameplay})
         }
     }
 }

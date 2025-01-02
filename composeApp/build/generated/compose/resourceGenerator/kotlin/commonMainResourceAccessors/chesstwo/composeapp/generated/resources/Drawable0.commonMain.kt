@@ -15,6 +15,9 @@ private object CommonMainDrawable0 {
   public val bishopW: DrawableResource by 
       lazy { init_bishopW() }
 
+  public val classic: DrawableResource by 
+      lazy { init_classic() }
+
   public val kingB: DrawableResource by 
       lazy { init_kingB() }
 
@@ -47,12 +50,16 @@ private object CommonMainDrawable0 {
 
   public val rookW: DrawableResource by 
       lazy { init_rookW() }
+
+  public val sandomierz: DrawableResource by 
+      lazy { init_sandomierz() }
 }
 
 @InternalResourceApi
 internal fun _collectCommonMainDrawable0Resources(map: MutableMap<String, DrawableResource>) {
   map.put("bishopB", CommonMainDrawable0.bishopB)
   map.put("bishopW", CommonMainDrawable0.bishopW)
+  map.put("classic", CommonMainDrawable0.classic)
   map.put("kingB", CommonMainDrawable0.kingB)
   map.put("kingW", CommonMainDrawable0.kingW)
   map.put("knightB", CommonMainDrawable0.knightB)
@@ -64,6 +71,7 @@ internal fun _collectCommonMainDrawable0Resources(map: MutableMap<String, Drawab
   map.put("queenW", CommonMainDrawable0.queenW)
   map.put("rookB", CommonMainDrawable0.rookB)
   map.put("rookW", CommonMainDrawable0.rookW)
+  map.put("sandomierz", CommonMainDrawable0.sandomierz)
 }
 
 internal val Res.drawable.bishopB: DrawableResource
@@ -85,6 +93,17 @@ private fun init_bishopW(): DrawableResource = org.jetbrains.compose.resources.D
     setOf(
       org.jetbrains.compose.resources.ResourceItem(setOf(),
     "composeResources/chesstwo.composeapp.generated.resources/drawable/bishopW.png", -1, -1),
+    )
+)
+
+internal val Res.drawable.classic: DrawableResource
+  get() = CommonMainDrawable0.classic
+
+private fun init_classic(): DrawableResource = org.jetbrains.compose.resources.DrawableResource(
+  "drawable:classic",
+    setOf(
+      org.jetbrains.compose.resources.ResourceItem(setOf(),
+    "composeResources/chesstwo.composeapp.generated.resources/drawable/classic.png", -1, -1),
     )
 )
 
@@ -207,5 +226,16 @@ private fun init_rookW(): DrawableResource = org.jetbrains.compose.resources.Dra
     setOf(
       org.jetbrains.compose.resources.ResourceItem(setOf(),
     "composeResources/chesstwo.composeapp.generated.resources/drawable/rookW.png", -1, -1),
+    )
+)
+
+internal val Res.drawable.sandomierz: DrawableResource
+  get() = CommonMainDrawable0.sandomierz
+
+private fun init_sandomierz(): DrawableResource = org.jetbrains.compose.resources.DrawableResource(
+  "drawable:sandomierz",
+    setOf(
+      org.jetbrains.compose.resources.ResourceItem(setOf(),
+    "composeResources/chesstwo.composeapp.generated.resources/drawable/sandomierz.png", -1, -1),
     )
 )
