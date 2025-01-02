@@ -71,3 +71,24 @@ fun sandomierzScenario() : MutableMap<Pair<Int,Int>, Piece> {
     }
     return piecesPositions
 }
+
+fun lotrScenario() : MutableMap<Pair<Int,Int>, Piece> {
+    val piecesPositions = mutableMapOf<Pair<Int,Int>,Piece>()
+    piecesPositions[Pair(0, 0)] = Rook(0, 0, Res.drawable.rookB, 1)
+    piecesPositions[Pair(6, 0)] = King(6, 0, Res.drawable.kingB, 1)
+    piecesPositions[Pair(11, 0)] = Rook(11, 0, Res.drawable.rookB, 1)
+
+    piecesPositions[Pair(6, 11)] = King(6, 11, Res.drawable.kingW, 0)
+
+    for (i in 0 until 12) {
+        piecesPositions[Pair(i, 1)] = Pawn(i, 1, Res.drawable.pawnB, 1)
+        piecesPositions[Pair(i, 2)] = Pawn(i, 2, Res.drawable.pawnB, 1)
+        piecesPositions[Pair(i, 3)] = Pawn(i, 3, Res.drawable.pawnB, 1)
+
+
+        if(i!=6)piecesPositions[Pair(i, 11)] = Knight(i, 11, Res.drawable.knightW, 0)
+        piecesPositions[Pair(i, 10)] = Knight(i, 10, Res.drawable.knightW, 0)
+
+    }
+    return piecesPositions
+}

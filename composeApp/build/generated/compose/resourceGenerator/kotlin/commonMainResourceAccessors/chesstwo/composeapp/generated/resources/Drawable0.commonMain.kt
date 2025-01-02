@@ -30,6 +30,9 @@ private object CommonMainDrawable0 {
   public val knightW: DrawableResource by 
       lazy { init_knightW() }
 
+  public val lotr: DrawableResource by 
+      lazy { init_lotr() }
+
   public val mmBackground: DrawableResource by 
       lazy { init_mmBackground() }
 
@@ -64,6 +67,7 @@ internal fun _collectCommonMainDrawable0Resources(map: MutableMap<String, Drawab
   map.put("kingW", CommonMainDrawable0.kingW)
   map.put("knightB", CommonMainDrawable0.knightB)
   map.put("knightW", CommonMainDrawable0.knightW)
+  map.put("lotr", CommonMainDrawable0.lotr)
   map.put("mmBackground", CommonMainDrawable0.mmBackground)
   map.put("pawnB", CommonMainDrawable0.pawnB)
   map.put("pawnW", CommonMainDrawable0.pawnW)
@@ -148,6 +152,17 @@ private fun init_knightW(): DrawableResource = org.jetbrains.compose.resources.D
     setOf(
       org.jetbrains.compose.resources.ResourceItem(setOf(),
     "composeResources/chesstwo.composeapp.generated.resources/drawable/knightW.png", -1, -1),
+    )
+)
+
+internal val Res.drawable.lotr: DrawableResource
+  get() = CommonMainDrawable0.lotr
+
+private fun init_lotr(): DrawableResource = org.jetbrains.compose.resources.DrawableResource(
+  "drawable:lotr",
+    setOf(
+      org.jetbrains.compose.resources.ResourceItem(setOf(),
+    "composeResources/chesstwo.composeapp.generated.resources/drawable/lotr.png", -1, -1),
     )
 )
 

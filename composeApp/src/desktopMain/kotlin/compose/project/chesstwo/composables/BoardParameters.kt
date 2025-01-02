@@ -32,7 +32,9 @@ import chesstwo.composeapp.generated.resources.Res
 import chesstwo.composeapp.generated.resources.mmBackground
 import chesstwo.composeapp.generated.resources.classic
 import chesstwo.composeapp.generated.resources.sandomierz
+import chesstwo.composeapp.generated.resources.lotr
 import compose.project.chesstwo.classicScenario
+import compose.project.chesstwo.lotrScenario
 import compose.project.chesstwo.pieces.Piece
 import compose.project.chesstwo.sandomierzScenario
 import org.jetbrains.compose.resources.DrawableResource
@@ -103,6 +105,7 @@ fun BoardParametersScene(
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly){
                 ScenarioButton("Classic",Res.drawable.classic, classicScenario(), onSelectedScenario)
                 ScenarioButton("Sandomierz Gambit", Res.drawable.sandomierz, sandomierzScenario(), onSelectedScenario)
+                ScenarioButton("Rohan vs Mordor", Res.drawable.lotr, lotrScenario(), onSelectedScenario, 12)
             }
         }
     }
