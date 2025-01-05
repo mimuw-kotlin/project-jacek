@@ -15,6 +15,12 @@ private object CommonMainDrawable0 {
   public val bishopW: DrawableResource by 
       lazy { init_bishopW() }
 
+  public val bombB: DrawableResource by 
+      lazy { init_bombB() }
+
+  public val bombW: DrawableResource by 
+      lazy { init_bombW() }
+
   public val classic: DrawableResource by 
       lazy { init_classic() }
 
@@ -36,11 +42,32 @@ private object CommonMainDrawable0 {
   public val mmBackground: DrawableResource by 
       lazy { init_mmBackground() }
 
+  public val necromancerB: DrawableResource by 
+      lazy { init_necromancerB() }
+
+  public val necromancerW: DrawableResource by 
+      lazy { init_necromancerW() }
+
   public val pawnB: DrawableResource by 
       lazy { init_pawnB() }
 
   public val pawnW: DrawableResource by 
       lazy { init_pawnW() }
+
+  public val pieces: DrawableResource by 
+      lazy { init_pieces() }
+
+  public val portalB: DrawableResource by 
+      lazy { init_portalB() }
+
+  public val portalW: DrawableResource by 
+      lazy { init_portalW() }
+
+  public val princeB: DrawableResource by 
+      lazy { init_princeB() }
+
+  public val princeW: DrawableResource by 
+      lazy { init_princeW() }
 
   public val queenB: DrawableResource by 
       lazy { init_queenB() }
@@ -56,12 +83,26 @@ private object CommonMainDrawable0 {
 
   public val sandomierz: DrawableResource by 
       lazy { init_sandomierz() }
+
+  public val shieldB: DrawableResource by 
+      lazy { init_shieldB() }
+
+  public val shieldW: DrawableResource by 
+      lazy { init_shieldW() }
+
+  public val unicornB: DrawableResource by 
+      lazy { init_unicornB() }
+
+  public val unicornW: DrawableResource by 
+      lazy { init_unicornW() }
 }
 
 @InternalResourceApi
 internal fun _collectCommonMainDrawable0Resources(map: MutableMap<String, DrawableResource>) {
   map.put("bishopB", CommonMainDrawable0.bishopB)
   map.put("bishopW", CommonMainDrawable0.bishopW)
+  map.put("bombB", CommonMainDrawable0.bombB)
+  map.put("bombW", CommonMainDrawable0.bombW)
   map.put("classic", CommonMainDrawable0.classic)
   map.put("kingB", CommonMainDrawable0.kingB)
   map.put("kingW", CommonMainDrawable0.kingW)
@@ -69,13 +110,24 @@ internal fun _collectCommonMainDrawable0Resources(map: MutableMap<String, Drawab
   map.put("knightW", CommonMainDrawable0.knightW)
   map.put("lotr", CommonMainDrawable0.lotr)
   map.put("mmBackground", CommonMainDrawable0.mmBackground)
+  map.put("necromancerB", CommonMainDrawable0.necromancerB)
+  map.put("necromancerW", CommonMainDrawable0.necromancerW)
   map.put("pawnB", CommonMainDrawable0.pawnB)
   map.put("pawnW", CommonMainDrawable0.pawnW)
+  map.put("pieces", CommonMainDrawable0.pieces)
+  map.put("portalB", CommonMainDrawable0.portalB)
+  map.put("portalW", CommonMainDrawable0.portalW)
+  map.put("princeB", CommonMainDrawable0.princeB)
+  map.put("princeW", CommonMainDrawable0.princeW)
   map.put("queenB", CommonMainDrawable0.queenB)
   map.put("queenW", CommonMainDrawable0.queenW)
   map.put("rookB", CommonMainDrawable0.rookB)
   map.put("rookW", CommonMainDrawable0.rookW)
   map.put("sandomierz", CommonMainDrawable0.sandomierz)
+  map.put("shieldB", CommonMainDrawable0.shieldB)
+  map.put("shieldW", CommonMainDrawable0.shieldW)
+  map.put("unicornB", CommonMainDrawable0.unicornB)
+  map.put("unicornW", CommonMainDrawable0.unicornW)
 }
 
 internal val Res.drawable.bishopB: DrawableResource
@@ -97,6 +149,28 @@ private fun init_bishopW(): DrawableResource = org.jetbrains.compose.resources.D
     setOf(
       org.jetbrains.compose.resources.ResourceItem(setOf(),
     "composeResources/chesstwo.composeapp.generated.resources/drawable/bishopW.png", -1, -1),
+    )
+)
+
+internal val Res.drawable.bombB: DrawableResource
+  get() = CommonMainDrawable0.bombB
+
+private fun init_bombB(): DrawableResource = org.jetbrains.compose.resources.DrawableResource(
+  "drawable:bombB",
+    setOf(
+      org.jetbrains.compose.resources.ResourceItem(setOf(),
+    "composeResources/chesstwo.composeapp.generated.resources/drawable/bombB.png", -1, -1),
+    )
+)
+
+internal val Res.drawable.bombW: DrawableResource
+  get() = CommonMainDrawable0.bombW
+
+private fun init_bombW(): DrawableResource = org.jetbrains.compose.resources.DrawableResource(
+  "drawable:bombW",
+    setOf(
+      org.jetbrains.compose.resources.ResourceItem(setOf(),
+    "composeResources/chesstwo.composeapp.generated.resources/drawable/bombW.png", -1, -1),
     )
 )
 
@@ -178,6 +252,30 @@ private fun init_mmBackground(): DrawableResource =
     )
 )
 
+internal val Res.drawable.necromancerB: DrawableResource
+  get() = CommonMainDrawable0.necromancerB
+
+private fun init_necromancerB(): DrawableResource =
+    org.jetbrains.compose.resources.DrawableResource(
+  "drawable:necromancerB",
+    setOf(
+      org.jetbrains.compose.resources.ResourceItem(setOf(),
+    "composeResources/chesstwo.composeapp.generated.resources/drawable/necromancerB.png", -1, -1),
+    )
+)
+
+internal val Res.drawable.necromancerW: DrawableResource
+  get() = CommonMainDrawable0.necromancerW
+
+private fun init_necromancerW(): DrawableResource =
+    org.jetbrains.compose.resources.DrawableResource(
+  "drawable:necromancerW",
+    setOf(
+      org.jetbrains.compose.resources.ResourceItem(setOf(),
+    "composeResources/chesstwo.composeapp.generated.resources/drawable/necromancerW.png", -1, -1),
+    )
+)
+
 internal val Res.drawable.pawnB: DrawableResource
   get() = CommonMainDrawable0.pawnB
 
@@ -197,6 +295,61 @@ private fun init_pawnW(): DrawableResource = org.jetbrains.compose.resources.Dra
     setOf(
       org.jetbrains.compose.resources.ResourceItem(setOf(),
     "composeResources/chesstwo.composeapp.generated.resources/drawable/pawnW.png", -1, -1),
+    )
+)
+
+internal val Res.drawable.pieces: DrawableResource
+  get() = CommonMainDrawable0.pieces
+
+private fun init_pieces(): DrawableResource = org.jetbrains.compose.resources.DrawableResource(
+  "drawable:pieces",
+    setOf(
+      org.jetbrains.compose.resources.ResourceItem(setOf(),
+    "composeResources/chesstwo.composeapp.generated.resources/drawable/pieces", -1, -1),
+    )
+)
+
+internal val Res.drawable.portalB: DrawableResource
+  get() = CommonMainDrawable0.portalB
+
+private fun init_portalB(): DrawableResource = org.jetbrains.compose.resources.DrawableResource(
+  "drawable:portalB",
+    setOf(
+      org.jetbrains.compose.resources.ResourceItem(setOf(),
+    "composeResources/chesstwo.composeapp.generated.resources/drawable/portalB.png", -1, -1),
+    )
+)
+
+internal val Res.drawable.portalW: DrawableResource
+  get() = CommonMainDrawable0.portalW
+
+private fun init_portalW(): DrawableResource = org.jetbrains.compose.resources.DrawableResource(
+  "drawable:portalW",
+    setOf(
+      org.jetbrains.compose.resources.ResourceItem(setOf(),
+    "composeResources/chesstwo.composeapp.generated.resources/drawable/portalW.png", -1, -1),
+    )
+)
+
+internal val Res.drawable.princeB: DrawableResource
+  get() = CommonMainDrawable0.princeB
+
+private fun init_princeB(): DrawableResource = org.jetbrains.compose.resources.DrawableResource(
+  "drawable:princeB",
+    setOf(
+      org.jetbrains.compose.resources.ResourceItem(setOf(),
+    "composeResources/chesstwo.composeapp.generated.resources/drawable/princeB.png", -1, -1),
+    )
+)
+
+internal val Res.drawable.princeW: DrawableResource
+  get() = CommonMainDrawable0.princeW
+
+private fun init_princeW(): DrawableResource = org.jetbrains.compose.resources.DrawableResource(
+  "drawable:princeW",
+    setOf(
+      org.jetbrains.compose.resources.ResourceItem(setOf(),
+    "composeResources/chesstwo.composeapp.generated.resources/drawable/princeW.png", -1, -1),
     )
 )
 
@@ -252,5 +405,49 @@ private fun init_sandomierz(): DrawableResource = org.jetbrains.compose.resource
     setOf(
       org.jetbrains.compose.resources.ResourceItem(setOf(),
     "composeResources/chesstwo.composeapp.generated.resources/drawable/sandomierz.png", -1, -1),
+    )
+)
+
+internal val Res.drawable.shieldB: DrawableResource
+  get() = CommonMainDrawable0.shieldB
+
+private fun init_shieldB(): DrawableResource = org.jetbrains.compose.resources.DrawableResource(
+  "drawable:shieldB",
+    setOf(
+      org.jetbrains.compose.resources.ResourceItem(setOf(),
+    "composeResources/chesstwo.composeapp.generated.resources/drawable/shieldB.png", -1, -1),
+    )
+)
+
+internal val Res.drawable.shieldW: DrawableResource
+  get() = CommonMainDrawable0.shieldW
+
+private fun init_shieldW(): DrawableResource = org.jetbrains.compose.resources.DrawableResource(
+  "drawable:shieldW",
+    setOf(
+      org.jetbrains.compose.resources.ResourceItem(setOf(),
+    "composeResources/chesstwo.composeapp.generated.resources/drawable/shieldW.png", -1, -1),
+    )
+)
+
+internal val Res.drawable.unicornB: DrawableResource
+  get() = CommonMainDrawable0.unicornB
+
+private fun init_unicornB(): DrawableResource = org.jetbrains.compose.resources.DrawableResource(
+  "drawable:unicornB",
+    setOf(
+      org.jetbrains.compose.resources.ResourceItem(setOf(),
+    "composeResources/chesstwo.composeapp.generated.resources/drawable/unicornB.png", -1, -1),
+    )
+)
+
+internal val Res.drawable.unicornW: DrawableResource
+  get() = CommonMainDrawable0.unicornW
+
+private fun init_unicornW(): DrawableResource = org.jetbrains.compose.resources.DrawableResource(
+  "drawable:unicornW",
+    setOf(
+      org.jetbrains.compose.resources.ResourceItem(setOf(),
+    "composeResources/chesstwo.composeapp.generated.resources/drawable/unicornW.png", -1, -1),
     )
 )
