@@ -35,6 +35,7 @@ import compose.project.chesstwo.pieces.King
 import compose.project.chesstwo.pieces.Knight
 import compose.project.chesstwo.pieces.Pawn
 import compose.project.chesstwo.pieces.Piece
+import compose.project.chesstwo.pieces.Portal
 import compose.project.chesstwo.pieces.Prince
 import compose.project.chesstwo.pieces.Queen
 import compose.project.chesstwo.pieces.Rook
@@ -174,7 +175,7 @@ open class Board(val size : Int = 8) {
             Res.drawable.knightW, Res.drawable.knightB -> Knight(posX, posY, texture, color)
             Res.drawable.princeW, Res.drawable.princeB -> Prince(posX, posY, texture, color)
             Res.drawable.unicornW, Res.drawable.unicornB -> Unicorn(posX, posY, texture, color)
-            Res.drawable.portalW, Res.drawable.portalB -> Knight(posX, posY, texture, color)
+            Res.drawable.portalW, Res.drawable.portalB -> Portal(posX, posY, texture, color)
             Res.drawable.bombW, Res.drawable.bombB -> Knight(posX, posY, texture, color)
             Res.drawable.shieldW, Res.drawable.shieldB -> Knight(posX, posY, texture, color)
             Res.drawable.necromancerW, Res.drawable.necromancerB -> Knight(posX, posY, texture, color)
