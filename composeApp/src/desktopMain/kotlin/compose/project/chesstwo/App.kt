@@ -368,7 +368,7 @@ fun SettingUpScene(onExitToMenu: () -> Unit, startGame : (MutableMap<Pair<Int,In
             }
 
             Box{
-                Column{
+                Column(modifier = Modifier.fillMaxWidth().wrapContentSize(Alignment.TopCenter)){
 
                     PieceSelection(allTextures[choosingColor]) {
                         selectedPiece = it

@@ -6,6 +6,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonColors
 import androidx.compose.material.ButtonDefaults
@@ -66,7 +68,7 @@ fun SettingUpButton(
 
 @Composable
 fun PieceSelection(textures : List<DrawableResource>, selectPiece : (DrawableResource) -> Unit){
-    Column{
+    Column(modifier = Modifier.wrapContentSize(Alignment.TopCenter)){
         for (t in textures) {
             Image(painter = painterResource(t),
                 contentDescription = null,
@@ -74,7 +76,9 @@ fun PieceSelection(textures : List<DrawableResource>, selectPiece : (DrawableRes
                     .align(alignment = Alignment.CenterHorizontally)
                     .clickable {
                         selectPiece(t)
-                    })
+                    }
+                    .width(70.dp)
+                    .height(70.dp))
         }
     }
 }
