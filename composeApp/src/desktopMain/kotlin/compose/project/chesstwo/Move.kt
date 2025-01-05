@@ -14,5 +14,6 @@ data class Move(
 
     // Is the piece attacking a square
     // (The only exception is pawn pushing forward)
-    val attacking: Boolean = true
+    val attacking: Boolean = true,
+    val bombAttack: Boolean = false
 )

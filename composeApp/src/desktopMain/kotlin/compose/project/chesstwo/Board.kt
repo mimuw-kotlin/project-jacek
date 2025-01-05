@@ -31,6 +31,7 @@ import chesstwo.composeapp.generated.resources.shieldW
 import chesstwo.composeapp.generated.resources.unicornB
 import chesstwo.composeapp.generated.resources.unicornW
 import compose.project.chesstwo.pieces.Bishop
+import compose.project.chesstwo.pieces.Bomb
 import compose.project.chesstwo.pieces.King
 import compose.project.chesstwo.pieces.Knight
 import compose.project.chesstwo.pieces.Pawn
@@ -143,6 +144,8 @@ open class Board(val size : Int = 8) {
             piecesPositions[Pair(rookEndX, endY)]!!.move(rookEndX, endY, this)
         }
 
+
+
         //Moving piece to its final square
         piecesPositions[Pair(endX, endY)] = piecesPositions[Pair(startX, startY)]!!
 
@@ -157,6 +160,12 @@ open class Board(val size : Int = 8) {
             promotingPawn = piecesPositions[Pair(endX, endY)]!!
             promotionChoice = true
 
+        }
+        //Bomb explodes
+        else if(playedMove.bombAttack){
+            piecesPositions.remove(Pair(endX, endY))
+            turn += 1
+            checkForEndGame()
         }
         //Ending turn
         else {
@@ -176,7 +185,7 @@ open class Board(val size : Int = 8) {
             Res.drawable.princeW, Res.drawable.princeB -> Prince(posX, posY, texture, color)
             Res.drawable.unicornW, Res.drawable.unicornB -> Unicorn(posX, posY, texture, color)
             Res.drawable.portalW, Res.drawable.portalB -> Portal(posX, posY, texture, color)
-            Res.drawable.bombW, Res.drawable.bombB -> Knight(posX, posY, texture, color)
+            Res.drawable.bombW, Res.drawable.bombB -> Bomb(posX, posY, texture, color)
             Res.drawable.shieldW, Res.drawable.shieldB -> Knight(posX, posY, texture, color)
             Res.drawable.necromancerW, Res.drawable.necromancerB -> Knight(posX, posY, texture, color)
             else -> Pawn(posX, posY, texture, color)
