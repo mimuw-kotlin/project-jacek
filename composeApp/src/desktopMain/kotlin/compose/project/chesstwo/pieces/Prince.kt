@@ -31,6 +31,9 @@ class Prince (override var posX: Int,
             moves.add(Move(posX, posY, x, y))
 
         }
+        moves.removeIf{
+            Pair(it.endX,it.endY) in board.piecesPositions.keys && !ableToCapture(board,it.endX,it.endY)
+        }
         return moves
     }
 }

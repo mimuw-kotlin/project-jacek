@@ -40,6 +40,7 @@ import compose.project.chesstwo.pieces.Portal
 import compose.project.chesstwo.pieces.Prince
 import compose.project.chesstwo.pieces.Queen
 import compose.project.chesstwo.pieces.Rook
+import compose.project.chesstwo.pieces.Shield
 import compose.project.chesstwo.pieces.Unicorn
 import org.jetbrains.compose.resources.DrawableResource
 
@@ -144,7 +145,9 @@ open class Board(val size : Int = 8) {
             piecesPositions[Pair(rookEndX, endY)]!!.move(rookEndX, endY, this)
         }
 
-
+        if (Pair(endX,endY) in piecesPositions.keys && piecesPositions[Pair(startX,startY)] is Shield){
+            (piecesPositions[Pair(startX,startY)] as Shield).attacked = true
+        }
 
         //Moving piece to its final square
         piecesPositions[Pair(endX, endY)] = piecesPositions[Pair(startX, startY)]!!
@@ -186,7 +189,7 @@ open class Board(val size : Int = 8) {
             Res.drawable.unicornW, Res.drawable.unicornB -> Unicorn(posX, posY, texture, color)
             Res.drawable.portalW, Res.drawable.portalB -> Portal(posX, posY, texture, color)
             Res.drawable.bombW, Res.drawable.bombB -> Bomb(posX, posY, texture, color)
-            Res.drawable.shieldW, Res.drawable.shieldB -> Knight(posX, posY, texture, color)
+            Res.drawable.shieldW, Res.drawable.shieldB -> Shield(posX, posY, texture, color)
             Res.drawable.necromancerW, Res.drawable.necromancerB -> Knight(posX, posY, texture, color)
             else -> Pawn(posX, posY, texture, color)
         }

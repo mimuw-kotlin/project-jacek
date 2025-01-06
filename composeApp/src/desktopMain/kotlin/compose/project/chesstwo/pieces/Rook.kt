@@ -21,7 +21,7 @@ class Rook(
             var y = posY + dir.second
             while (x in 0..<board.size && y in 0..<board.size) {
                 if (Pair(x, y) in board.piecesPositions.keys) { //Found a piece in the way
-                    if (board.piecesPositions[Pair(x, y)]!!.color != color) {
+                    if (ableToCapture(board,x,y)) {
                         moves.add(Move(posX, posY, x, y))
                     }
                     break
@@ -31,6 +31,7 @@ class Rook(
                 y += dir.second
             }
         }
+
         return moves
     }
 

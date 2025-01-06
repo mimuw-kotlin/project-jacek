@@ -20,6 +20,13 @@ interface Piece {
         posY = endY
     }
 
+    fun ableToCapture(board : Board, x : Int, y : Int) : Boolean{
+        return board.piecesPositions[Pair(x, y)]!!.color != color
+                && (board.piecesPositions[Pair(x,y)] !is Shield
+                || (board.piecesPositions[Pair(x,y)] is Shield
+                        && !(board.piecesPositions[Pair(x,y)] as Shield).attacked))
+    }
+
     // Generates all legal moves for a piece
     fun getMoves(board: Board): List<Move> {
 

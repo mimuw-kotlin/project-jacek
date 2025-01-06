@@ -24,7 +24,7 @@ class Pawn(
             //Attacking on diagonal
             if (board.inBounds(posX+d,nextRow)
                 && Pair(posX+d,nextRow) in board.piecesPositions.keys
-                && board.piecesPositions[Pair(posX+d,nextRow)]!!.color!=color){
+                && ableToCapture(board,posX+d,nextRow)){
 
                 moves.add(Move(posX,posY,posX+d,nextRow))
             }
