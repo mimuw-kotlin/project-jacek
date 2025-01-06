@@ -34,6 +34,7 @@ import compose.project.chesstwo.pieces.Bishop
 import compose.project.chesstwo.pieces.Bomb
 import compose.project.chesstwo.pieces.King
 import compose.project.chesstwo.pieces.Knight
+import compose.project.chesstwo.pieces.Necromancer
 import compose.project.chesstwo.pieces.Pawn
 import compose.project.chesstwo.pieces.Piece
 import compose.project.chesstwo.pieces.Portal
@@ -62,6 +63,7 @@ open class Board(val size : Int = 8) {
     var gameEnded = false
     var gameResult: GameResult = GameResult.WHITEWIN
     private var lastActiveMove = 0
+    private val lastCapturedPiece = listOf(ArrayDeque<Piece>(),ArrayDeque<Piece>())
 
     //Initial positioning of the pieces
     fun setupPieces() {
@@ -129,9 +131,13 @@ open class Board(val size : Int = 8) {
         }
 
         if (playedMove.isEnPassant) {
+            val captured = piecesPositions[Pair(endX,startY)]!!
+            lastCapturedPiece[captured.color].addFirst(captured)
             piecesPositions.remove(Pair(endX, startY))
             lastActiveMove = turn
         } else if (Pair(endX, endY) in piecesPositions.keys) {
+            val captured = piecesPositions[Pair(endX,endY)]!!
+            lastCapturedPiece[captured.color].addFirst(captured)
             lastActiveMove = turn
         }
 
@@ -155,8 +161,15 @@ open class Board(val size : Int = 8) {
         //Deleting it from its starting square
         piecesPositions.remove(Pair(startX, startY))
 
+        val movedPiece = piecesPositions[Pair(endX, endY)]!!
         //Updating its information
-        piecesPositions[Pair(endX, endY)]!!.move(endX, endY, this)
+        movedPiece.move(endX, endY, this)
+
+        if(movedPiece is Necromancer && lastActiveMove==turn && lastCapturedPiece[movedPiece.color].isNotEmpty()){
+            piecesPositions[Pair(endX, endY)] = lastCapturedPiece[movedPiece.color].first()
+            lastCapturedPiece[movedPiece.color].removeFirst()
+            piecesPositions[Pair(endX, endY)]!!.move(endX,endY,this)
+        }
 
         //Checking for promotion
         if (isPawnOnLastRank(piecesPositions[Pair(endX, endY)]!!)) {
@@ -190,7 +203,7 @@ open class Board(val size : Int = 8) {
             Res.drawable.portalW, Res.drawable.portalB -> Portal(posX, posY, texture, color)
             Res.drawable.bombW, Res.drawable.bombB -> Bomb(posX, posY, texture, color)
             Res.drawable.shieldW, Res.drawable.shieldB -> Shield(posX, posY, texture, color)
-            Res.drawable.necromancerW, Res.drawable.necromancerB -> Knight(posX, posY, texture, color)
+            Res.drawable.necromancerW, Res.drawable.necromancerB -> Necromancer(posX, posY, texture, color)
             else -> Pawn(posX, posY, texture, color)
         }
         return piece
