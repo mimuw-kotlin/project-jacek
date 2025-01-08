@@ -73,6 +73,7 @@ fun ChessBoard(board: Board, onExitToMenu: () -> Unit, gameWithComputer: Boolean
 
     var computerToPlay by remember {mutableStateOf(false)}//(!gameWithComputer || !computerToPlay
     val computer = Computer(computerColor)
+    println("EWALUACJA: ${computer.evaluate(board)}")
     if(gameWithComputer && computerToPlay && !board.promotionChoice){
         val move = computer.makeMove(board)
         if( move!=null){
