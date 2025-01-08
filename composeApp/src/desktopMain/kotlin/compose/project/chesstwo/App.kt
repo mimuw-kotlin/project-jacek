@@ -54,7 +54,7 @@ import kotlin.system.exitProcess
 val buttonColor = Color(0xff89d0e8)
 
 @Composable
-fun ChessBoard(board: Board, onExitToMenu: () -> Unit) {
+fun ChessBoard(board: Board, onExitToMenu: () -> Unit, gameWithComputer: Boolean = false, computerColor : Int = 1) {
 
     var isPieceSelected by remember { mutableStateOf(false) }
 
@@ -71,7 +71,18 @@ fun ChessBoard(board: Board, onExitToMenu: () -> Unit) {
     //A need to display game result
     var endDisplay by remember { mutableStateOf(false) }
 
+    var computerToPlay by remember {mutableStateOf(false)}//(!gameWithComputer || !computerToPlay
+    val computer = Computer(computerColor)
+    if(gameWithComputer && computerToPlay && !board.promotionChoice){
+        val move = computer.makeMove(board)
+        if( move!=null){
+            board.move(move.startX,move.startY,move.endX,move.endY)
 
+        }
+
+        endDisplay = board.gameEnded
+        computerToPlay = false
+    }
 
     //Textures of pieces available for promotion
 
@@ -108,7 +119,7 @@ fun ChessBoard(board: Board, onExitToMenu: () -> Unit) {
                                         .clickable {
 
                                             //Clicked empty square
-                                            if (isPieceSelected && !board.promotionChoice) {
+                                            if (isPieceSelected && !board.promotionChoice && !(gameWithComputer && computerToPlay)) {
                                                 //Move if available
                                                 if (Pair(col, row) in attackedSquares.toList()) {
                                                     board.move(
@@ -118,6 +129,7 @@ fun ChessBoard(board: Board, onExitToMenu: () -> Unit) {
                                                         row
                                                     )
                                                     endDisplay = board.gameEnded
+                                                    computerToPlay = true
 
                                                 }
                                                 isPieceSelected = false
@@ -137,7 +149,7 @@ fun ChessBoard(board: Board, onExitToMenu: () -> Unit) {
                                             ),
                                             contentDescription = null,
                                             modifier = Modifier.clickable {
-                                                if (!board.promotionChoice) {
+                                                if (!board.promotionChoice && !(gameWithComputer && computerToPlay)) {
                                                     val newPiece = board
                                                         .piecesPositions[Pair(col, row)]!!
                                                     //Attacked another piece
@@ -154,6 +166,7 @@ fun ChessBoard(board: Board, onExitToMenu: () -> Unit) {
                                                         )
                                                         endDisplay = board.gameEnded
                                                         isPieceSelected = false
+                                                        computerToPlay = true
 
                                                     }
                                                     //Selected another piece
@@ -233,7 +246,7 @@ fun ChessBoard(board: Board, onExitToMenu: () -> Unit) {
 
 
 @Composable
-fun MainMenuScene(onStartGame: () -> Unit) {
+fun MainMenuScene(onStartGame: () -> Unit, onStartComputerGame: () -> Unit) {
 
     //Background
     Image(
@@ -259,7 +272,7 @@ fun MainMenuScene(onStartGame: () -> Unit) {
         )
 
         MainMenuButton(
-            {}, "Play the computer W.I.P.", Color.Black,
+            onStartComputerGame, "Play the computer W.I.P.", Color.Black,
             ButtonDefaults.buttonColors(backgroundColor = buttonColor)
         )
 
@@ -407,14 +420,16 @@ fun App() {
     var board = Board(size = 10)
     var boardSize = 8
     var points = 38
+    var computerGame = false
     //board.setupPieces()
     MaterialTheme {
         when (currentScene) {
             is Scene.MainMenu -> MainMenuScene(onStartGame =
-            { currentScene = Scene.BoardParameters; board = Board(size=10); board.setupPieces() })
+            { currentScene = Scene.BoardParameters; board = Board(size=10); board.setupPieces(); computerGame=false;},
+                {currentScene = Scene.BoardParameters; board = Board(size=10); board.setupPieces(); computerGame=true;})
 
             is Scene.Gameplay -> ChessBoard(board, onExitToMenu =
-            { currentScene = Scene.MainMenu })
+            { currentScene = Scene.MainMenu }, gameWithComputer = computerGame)
 
             is Scene.SettingUp -> SettingUpScene(onExitToMenu =
             { currentScene = Scene.MainMenu }, startGame = {pos -> board = Board(boardSize);board.piecesPositions=pos;currentScene=Scene.Gameplay}, newBoardSize = boardSize, newPoints = points)
