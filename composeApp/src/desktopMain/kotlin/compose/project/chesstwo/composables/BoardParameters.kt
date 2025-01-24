@@ -84,11 +84,7 @@ fun BoardParametersScene(
             TextField(
                 value = points,
                 onValueChange = {
-                    val parsedValue = it.toIntOrNull()
-                    if (parsedValue != null) {
-                        points = it
-                    }
-
+                    points = it
                 },
                 modifier = Modifier.fillMaxWidth()
             )
@@ -119,7 +115,7 @@ fun BoardParametersScene(
                 Spacer(modifier = Modifier.height(16.dp))
             }
             Button(
-                onClick = { onSubmitParameters(boardSize, points.toInt(), 1-playerColor) },
+                onClick = { onSubmitParameters(boardSize, if(points.toIntOrNull()!=null) points.toInt() else 38, 1-playerColor) },
                 modifier = Modifier
                     .padding(vertical = 20.dp)
                     .width(100.dp)
