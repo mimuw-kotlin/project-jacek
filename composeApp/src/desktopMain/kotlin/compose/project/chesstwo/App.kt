@@ -392,9 +392,10 @@ fun SettingUpScene(onExitToMenu: () -> Unit, startGame : (MutableMap<Pair<Int,In
                         board.selectedPieceTexture = it
                         sideSelectedPiece = true
                     }
-                    Text(text = "Points left: ${points[choosingColor]}",style = MaterialTheme.typography.h5, modifier = Modifier.padding(top=25.dp))
+                    Text(text = "Points left: ${points[choosingColor]}",style = MaterialTheme.typography.h6, modifier = Modifier.padding(top=25.dp).width(200.dp))
                     if(sideSelectedPiece){
-                        Text(text = "Piece value: ${board.textureToPiece(selectedPiece,0,0,0).value}",style = MaterialTheme.typography.h5)
+                        Text(text = "Piece value: ${board.textureToPiece(selectedPiece,0,0,0).value}",style = MaterialTheme.typography.h6,
+                            modifier = Modifier.width(200.dp))
                     }
                 }
 

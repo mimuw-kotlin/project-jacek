@@ -49,7 +49,7 @@ fun BoardParametersScene(
 
     val initialValue = 8
     val minValue = 8
-    val maxValue = 30
+    val maxValue = if(computerGame) 12 else 30
     var boardSize by remember { mutableStateOf(initialValue.coerceIn(minValue, maxValue)) }
     var points by remember { mutableStateOf("38") }
     Image(
