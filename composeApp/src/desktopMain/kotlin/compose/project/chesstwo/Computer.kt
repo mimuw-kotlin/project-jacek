@@ -20,6 +20,7 @@ class Computer(val color : Int) {
         //if(numPieces<5) return 5
         if(numMoves>15) return 3
         if(numMoves>7) return 4
+        if(numPieces>4) return 4
         return -numMoves + 12
     }
 

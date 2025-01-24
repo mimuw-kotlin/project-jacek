@@ -43,7 +43,7 @@ import org.jetbrains.compose.resources.painterResource
 @Composable
 fun BoardParametersScene(
     onSubmitParameters : (Int,Int, Int)->Unit,
-    onSelectedScenario : (MutableMap<Pair<Int,Int>,Piece>, Int)-> Unit,
+    onSelectedScenario : (MutableMap<Pair<Int,Int>,Piece>, Int, Int)-> Unit,
     computerGame : Boolean
     ) {
 
@@ -52,6 +52,7 @@ fun BoardParametersScene(
     val maxValue = if(computerGame) 12 else 30
     var boardSize by remember { mutableStateOf(initialValue.coerceIn(minValue, maxValue)) }
     var points by remember { mutableStateOf("38") }
+    var playerColor by remember { mutableStateOf(0)}
     Image(
         painter = painterResource((Res.drawable.mmBackground)),
         contentDescription = "Background", alpha = 0.4f
@@ -93,52 +94,53 @@ fun BoardParametersScene(
             )
 
             Spacer(modifier = Modifier.height(16.dp))
-            if(!computerGame) {
-                Button(
-                    onClick = { onSubmitParameters(boardSize, points.toInt(), 1) },
-                    modifier = Modifier
-                        .padding(vertical = 20.dp)
-                        .width(100.dp)
-                ) {
-                    Text(text = "Play", style = MaterialTheme.typography.h6)
-                }
-            }
-            else{
-                Row{
+            if(computerGame) {
+                Row {
                     Button(
-                        onClick = { onSubmitParameters(boardSize, points.toInt(), 1) },
+                        onClick = { playerColor = 0},
                         modifier = Modifier
                             .padding(vertical = 20.dp)
-                            .width(250.dp)
+                            .width(250.dp),
+                        enabled = playerColor == 1
                     ) {
                         Text(text = "Play as white", style = MaterialTheme.typography.h6)
                     }
                     Spacer(modifier = Modifier.width(100.dp))
                     Button(
-                        onClick = { onSubmitParameters(boardSize, points.toInt(), 0) },
+                        onClick = { playerColor = 1},
                         modifier = Modifier
                             .padding(vertical = 20.dp)
-                            .width(250.dp)
+                            .width(250.dp),
+                        enabled = playerColor == 0
                     ) {
                         Text(text = "Play as black", style = MaterialTheme.typography.h6)
                     }
                 }
+                Spacer(modifier = Modifier.height(16.dp))
             }
-            Spacer(Modifier.height(200.dp))
+            Button(
+                onClick = { onSubmitParameters(boardSize, points.toInt(), 1-playerColor) },
+                modifier = Modifier
+                    .padding(vertical = 20.dp)
+                    .width(100.dp)
+            ) {
+                Text(text = "Play", style = MaterialTheme.typography.h6)
+            }
+            Spacer(Modifier.height(100.dp))
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly){
-                ScenarioButton("Classic",Res.drawable.classic, classicScenario(), onSelectedScenario)
-                ScenarioButton("Sandomierz Gambit", Res.drawable.sandomierz, sandomierzScenario(), onSelectedScenario)
-                ScenarioButton("Rohan vs Mordor", Res.drawable.lotr, lotrScenario(), onSelectedScenario, 12, !computerGame)
+                ScenarioButton("Classic",Res.drawable.classic, classicScenario(), onSelectedScenario, playerColor = playerColor)
+                ScenarioButton("Sandomierz Gambit", Res.drawable.sandomierz, sandomierzScenario(), onSelectedScenario,playerColor = playerColor)
+                ScenarioButton("Rohan vs Mordor", Res.drawable.lotr, lotrScenario(), onSelectedScenario, boardSize = 12, enabled = !computerGame, playerColor=playerColor)
             }
         }
     }
 }
 
 @Composable
-fun ScenarioButton(text : String, image : DrawableResource, scenarioSetup :  MutableMap<Pair<Int,Int>, Piece>, onSelectedScenario : (MutableMap<Pair<Int,Int>,Piece>,Int)-> Unit,
-                   boardSize : Int = 8, enabled : Boolean = true){
+fun ScenarioButton(text : String, image : DrawableResource, scenarioSetup :  MutableMap<Pair<Int,Int>, Piece>, onSelectedScenario : (MutableMap<Pair<Int,Int>,Piece>,Int, Int)-> Unit,
+                   boardSize : Int = 8, enabled : Boolean = true, playerColor : Int = 0){
     Button(
-        onClick={onSelectedScenario(scenarioSetup,boardSize)},
+        onClick={onSelectedScenario(scenarioSetup,boardSize,1-playerColor)},
         modifier = Modifier
             .height(4000.dp)
             .width(300.dp),

@@ -443,7 +443,7 @@ fun App() {
             { currentScene = Scene.MainMenu }, startGame = {pos -> board = Board(boardSize);board.piecesPositions=pos;currentScene=Scene.Gameplay}, newBoardSize = boardSize, newPoints = points)
 
             is Scene.BoardParameters -> BoardParametersScene(onSubmitParameters = {newBoardSize,newPoints, newComputerColor ->boardSize = newBoardSize; points = newPoints;computerColor=newComputerColor;currentScene=Scene.SettingUp},
-                onSelectedScenario = {pos, newBoardSize -> board = Board(newBoardSize); board.piecesPositions=pos;currentScene = Scene.Gameplay},computerGame)
+                onSelectedScenario = {pos, newBoardSize, newComputerColor -> board = Board(newBoardSize); board.piecesPositions=pos;computerColor=newComputerColor;currentScene = Scene.Gameplay},computerGame)
         }
     }
 }
