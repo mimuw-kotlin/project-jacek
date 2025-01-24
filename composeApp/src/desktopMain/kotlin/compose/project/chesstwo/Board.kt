@@ -122,7 +122,7 @@ open class Board(val size : Int = 8) {
     }
 
     //Function registering move on the board
-    fun move(startX: Int, startY: Int, endX: Int, endY: Int) {
+    fun move(startX: Int, startY: Int, endX: Int, endY: Int, computerMove: Boolean = false) {
 
         //Checking for the played move
         var playedMove: Move = possibleMoves[0]
@@ -181,7 +181,13 @@ open class Board(val size : Int = 8) {
         //Checking for promotion
         if (isPawnOnLastRank(piecesPositions[Pair(endX, endY)]!!)) {
             promotingPawn = piecesPositions[Pair(endX, endY)]!!
-            promotionChoice = true
+            if(!computerMove){
+                promotionChoice = true
+            }
+            else{
+                finishPromotionMove(if (turn%2==0)Res.drawable.queenW else Res.drawable.queenB)
+            }
+
 
         }
         //Bomb explodes

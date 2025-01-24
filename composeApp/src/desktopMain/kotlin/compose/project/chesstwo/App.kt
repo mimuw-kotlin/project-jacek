@@ -71,7 +71,7 @@ fun ChessBoard(board: Board, onExitToMenu: () -> Unit, gameWithComputer: Boolean
     //A need to display game result
     var endDisplay by remember { mutableStateOf(false) }
 
-    var computerToPlay by remember {mutableStateOf(false)}//(!gameWithComputer || !computerToPlay
+    var computerToPlay by remember {mutableStateOf(gameWithComputer && computerColor==0)}//(!gameWithComputer || !computerToPlay
     val computer = Computer(computerColor)
     println("EWALUACJA: ${computer.evaluate(board)}")
 
@@ -79,8 +79,10 @@ fun ChessBoard(board: Board, onExitToMenu: () -> Unit, gameWithComputer: Boolean
     if(gameWithComputer && computerToPlay && !board.promotionChoice){
         //println("SEARCH: ${computer.search(board,3, -1001,1001)}")
         val move = computer.makeMove(board)
-        if( move!=null){
-            board.move(move.startX,move.startY,move.endX,move.endY)
+        if(move!=null){
+            board.possibleMoves.clear()
+            board.possibleMoves.addAll(board.piecesPositions[Pair(move.startX,move.startY)]!!.getMoves(board))
+            board.move(move.startX,move.startY,move.endX,move.endY, computerMove = true)
 
         }
 
@@ -426,6 +428,7 @@ fun App() {
     var boardSize = 8
     var points = 38
     var computerGame = false
+    var computerColor = 1
     //board.setupPieces()
     MaterialTheme {
         when (currentScene) {
@@ -434,12 +437,12 @@ fun App() {
                 {currentScene = Scene.BoardParameters; board = Board(size=10); board.setupPieces(); computerGame=true;})
 
             is Scene.Gameplay -> ChessBoard(board, onExitToMenu =
-            { currentScene = Scene.MainMenu }, gameWithComputer = computerGame)
+            { currentScene = Scene.MainMenu }, gameWithComputer = computerGame, computerColor = computerColor)
 
             is Scene.SettingUp -> SettingUpScene(onExitToMenu =
             { currentScene = Scene.MainMenu }, startGame = {pos -> board = Board(boardSize);board.piecesPositions=pos;currentScene=Scene.Gameplay}, newBoardSize = boardSize, newPoints = points)
 
-            is Scene.BoardParameters -> BoardParametersScene(onSubmitParameters = {newBoardSize,newPoints ->boardSize = newBoardSize; points = newPoints;currentScene=Scene.SettingUp},
+            is Scene.BoardParameters -> BoardParametersScene(onSubmitParameters = {newBoardSize,newPoints, newComputerColor ->boardSize = newBoardSize; points = newPoints;computerColor=newComputerColor;currentScene=Scene.SettingUp},
                 onSelectedScenario = {pos, newBoardSize -> board = Board(newBoardSize); board.piecesPositions=pos;currentScene = Scene.Gameplay},computerGame)
         }
     }

@@ -42,7 +42,7 @@ import org.jetbrains.compose.resources.painterResource
 
 @Composable
 fun BoardParametersScene(
-    onSubmitParameters : (Int,Int)->Unit,
+    onSubmitParameters : (Int,Int, Int)->Unit,
     onSelectedScenario : (MutableMap<Pair<Int,Int>,Piece>, Int)-> Unit,
     computerGame : Boolean
     ) {
@@ -93,14 +93,36 @@ fun BoardParametersScene(
             )
 
             Spacer(modifier = Modifier.height(16.dp))
-
-            Button(
-                onClick = { onSubmitParameters(boardSize, points.toInt()) },
-                modifier = Modifier
-                    .padding(vertical = 20.dp)
-                    .width(100.dp)
-            ) {
-                Text(text = "Done", style = MaterialTheme.typography.h6)
+            if(!computerGame) {
+                Button(
+                    onClick = { onSubmitParameters(boardSize, points.toInt(), 1) },
+                    modifier = Modifier
+                        .padding(vertical = 20.dp)
+                        .width(100.dp)
+                ) {
+                    Text(text = "Play", style = MaterialTheme.typography.h6)
+                }
+            }
+            else{
+                Row{
+                    Button(
+                        onClick = { onSubmitParameters(boardSize, points.toInt(), 1) },
+                        modifier = Modifier
+                            .padding(vertical = 20.dp)
+                            .width(250.dp)
+                    ) {
+                        Text(text = "Play as white", style = MaterialTheme.typography.h6)
+                    }
+                    Spacer(modifier = Modifier.width(100.dp))
+                    Button(
+                        onClick = { onSubmitParameters(boardSize, points.toInt(), 0) },
+                        modifier = Modifier
+                            .padding(vertical = 20.dp)
+                            .width(250.dp)
+                    ) {
+                        Text(text = "Play as black", style = MaterialTheme.typography.h6)
+                    }
+                }
             }
             Spacer(Modifier.height(200.dp))
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly){
