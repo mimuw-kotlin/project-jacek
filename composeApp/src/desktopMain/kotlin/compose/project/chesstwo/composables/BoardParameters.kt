@@ -43,7 +43,8 @@ import org.jetbrains.compose.resources.painterResource
 @Composable
 fun BoardParametersScene(
     onSubmitParameters : (Int,Int)->Unit,
-    onSelectedScenario : (MutableMap<Pair<Int,Int>,Piece>, Int)-> Unit
+    onSelectedScenario : (MutableMap<Pair<Int,Int>,Piece>, Int)-> Unit,
+    computerGame : Boolean
     ) {
 
     val initialValue = 8
@@ -105,7 +106,7 @@ fun BoardParametersScene(
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly){
                 ScenarioButton("Classic",Res.drawable.classic, classicScenario(), onSelectedScenario)
                 ScenarioButton("Sandomierz Gambit", Res.drawable.sandomierz, sandomierzScenario(), onSelectedScenario)
-                ScenarioButton("Rohan vs Mordor", Res.drawable.lotr, lotrScenario(), onSelectedScenario, 12)
+                ScenarioButton("Rohan vs Mordor", Res.drawable.lotr, lotrScenario(), onSelectedScenario, 12, !computerGame)
             }
         }
     }
@@ -113,7 +114,7 @@ fun BoardParametersScene(
 
 @Composable
 fun ScenarioButton(text : String, image : DrawableResource, scenarioSetup :  MutableMap<Pair<Int,Int>, Piece>, onSelectedScenario : (MutableMap<Pair<Int,Int>,Piece>,Int)-> Unit,
-                   boardSize : Int = 8){
+                   boardSize : Int = 8, enabled : Boolean = true){
     Button(
         onClick={onSelectedScenario(scenarioSetup,boardSize)},
         modifier = Modifier
@@ -125,6 +126,7 @@ fun ScenarioButton(text : String, image : DrawableResource, scenarioSetup :  Mut
                 Text(text=text, modifier = Modifier.height(100.dp).fillMaxWidth(), textAlign = TextAlign.Center,style=MaterialTheme.typography.h5)
             }
 
-        }
+        },
+        enabled = enabled
     )
 }
