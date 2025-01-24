@@ -41,7 +41,7 @@ class King(
             if (Pair(0, posY) in board.piecesPositions.keys
                 && board.piecesPositions[Pair(0, posY)] is Rook
                 && !(board.piecesPositions[Pair(0, posY)] as Rook).moved
-                && isLineFree(board, false) && isLineNotAttacked(board, false)
+                && isLineFree(board, false) //&& isLineNotAttacked(board, false)
             ) {
 
                 moves.add(Move(posX, posY, posX-2, posY, isCastling = true, attacking = false))
@@ -51,7 +51,7 @@ class King(
             if (Pair(board.size-1, posY) in board.piecesPositions.keys
                 && board.piecesPositions[Pair(board.size-1, posY)] is Rook
                 && !(board.piecesPositions[Pair(board.size-1, posY)] as Rook).moved
-                && isLineFree(board) && isLineNotAttacked(board)
+                && isLineFree(board) //&& isLineNotAttacked(board)
             ) {
 
                 moves.add(Move(posX, posY, posX+2, posY, isCastling = true, attacking = false))

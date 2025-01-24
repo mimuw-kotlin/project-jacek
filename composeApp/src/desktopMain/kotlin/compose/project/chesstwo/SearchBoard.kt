@@ -1,8 +1,12 @@
 package compose.project.chesstwo
 
+import chesstwo.composeapp.generated.resources.Res
+import chesstwo.composeapp.generated.resources.queenB
+import chesstwo.composeapp.generated.resources.queenW
 import compose.project.chesstwo.pieces.Necromancer
 import compose.project.chesstwo.pieces.Pawn
 import compose.project.chesstwo.pieces.Piece
+import compose.project.chesstwo.pieces.Queen
 import compose.project.chesstwo.pieces.Shield
 
 data class BoardState(val positions : MutableMap<Pair<Int,Int>,Piece>, val lastCapturedPiece : List<ArrayDeque<Piece>>, val lastActiveMove : Int)
@@ -13,13 +17,7 @@ class SearchBoard(board : Board) : Board() {
 
         //piecesPositions=board.piecesPositions.toMutableMap()
         piecesPositions = copyPositions(board.piecesPositions)
-        println("START")
-        if(piecesPositions[Pair(6,0)] == null){
-            println("null")
-        }
-        else if(piecesPositions[Pair(6,0)] is Piece){
-            println("Piece")
-        }
+
         lastCapturedPiece = copyLastCapturedPiece(board.lastCapturedPiece)
         turn = board.turn
         //possibleMoves = board.possibleMoves
@@ -72,7 +70,7 @@ class SearchBoard(board : Board) : Board() {
         lastCapturedPiece = copyLastCapturedPiece(state.lastCapturedPiece)
         turn-=1
         lastActiveMove = state.lastActiveMove
-        println("Po unmake: ${piecesPositions[Pair(6,0)]}")
+        //println("Po unmake: ${piecesPositions[Pair(6,0)]}")
     }
     fun move(move : Move) {
         saveParameters()
@@ -81,13 +79,8 @@ class SearchBoard(board : Board) : Board() {
         val startY = move.startY
         val endX = move.endX
         val endY = move.endY
-        println("${startX}, $startY, $endX, $endY")
-        if(piecesPositions[Pair(startX,startY)] == null){
-            println("null")
-        }
-        else if(piecesPositions[Pair(startX,startY)] is Piece){
-            println("Piece")
-        }
+        //println("${startX}, $startY, $endX, $endY")
+
 
         if (piecesPositions[Pair(startX, startY)] is Pawn) {
             lastActiveMove = turn
@@ -134,13 +127,17 @@ class SearchBoard(board : Board) : Board() {
             piecesPositions[Pair(endX, endY)]!!.move(endX,endY,this)
         }
 
+        //Checking for promotion
+        if (isPawnOnLastRank(piecesPositions[Pair(endX, endY)]!!)) {
+            piecesPositions[Pair(endX, endY)] = Queen(endX,endY, if(turn%2==0) Res.drawable.queenW else Res.drawable.queenB,turn%2)
 
+        }
         //Bomb explodes
-        if(move.bombAttack){
+        else if(move.bombAttack){
             piecesPositions.remove(Pair(endX, endY))
         }
         //Ending turn
         turn+=1
-        println("Po ruchu: ${piecesPositions[Pair(6,0)]}")
+        //println("Po ruchu: ${piecesPositions[Pair(6,0)]}")
     }
 }

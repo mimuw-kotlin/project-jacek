@@ -16,7 +16,21 @@ class Computer(val color : Int) {
     }
 
     fun makeMove(board : Board) : Move?{
-        return genAllMovesForColor(board,color).randomOrNull()
+        val moves = genAllMovesForColor(board,color)
+        if(moves.isEmpty()) return null
+        val searchBoard = SearchBoard(board)
+        var bestEval = -1001
+        var bestMove = moves[0]
+        moves.forEach{move->
+            searchBoard.move(move)
+            val eval = -searchRec(searchBoard,3,-1001,1001)
+            if(eval>bestEval){
+                bestEval = eval
+                bestMove = move
+            }
+            searchBoard.unmakeMove()
+        }
+        return bestMove
     }
     private fun countMaterial(board: Board, color : Int) : Int{
         var sum = 0

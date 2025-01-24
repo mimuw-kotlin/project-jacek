@@ -290,7 +290,7 @@ open class Board(val size : Int = 8) {
     }
 
 
-    private fun isPawnOnLastRank(piece: Piece): Boolean {
+    fun isPawnOnLastRank(piece: Piece): Boolean {
         if (piece !is Pawn) {
             return false
         }
