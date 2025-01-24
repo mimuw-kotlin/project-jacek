@@ -49,4 +49,7 @@ class Portal (override var posX: Int,
             return 0
         return pos
     }
+    override fun copy() : Piece{
+        return Portal(posX,posY,texture,color,moved)
+    }
 }

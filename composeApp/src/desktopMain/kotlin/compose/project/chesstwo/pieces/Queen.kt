@@ -36,4 +36,7 @@ class Queen(
         }
         return moves
     }
+    override fun copy() : Piece{
+        return Queen(posX,posY,texture,color)
+    }
 }

@@ -39,4 +39,7 @@ class Rook(
         super.move(endX, endY, board)
         moved = true
     }
+    override fun copy() : Piece{
+        return Rook(posX,posY,texture,color,moved)
+    }
 }

@@ -62,8 +62,15 @@ open class Board(val size : Int = 8) {
     private var promotingPawn: Piece? = null
     var gameEnded = false
     var gameResult: GameResult = GameResult.WHITEWIN
-    private var lastActiveMove = 0
-    private val lastCapturedPiece = listOf(ArrayDeque<Piece>(),ArrayDeque<Piece>())
+    var lastActiveMove = 0
+    var lastCapturedPiece = listOf(ArrayDeque<Piece>(),ArrayDeque<Piece>())
+
+   /* fun copy(): Board{
+        val newBoard = Board(size)
+        newBoard.piecesPositions=piecesPositions
+        newBoard.turn = turn
+        newBoard
+    }*/
 
     //Initial positioning of the pieces
     fun setupPieces() {
@@ -258,7 +265,7 @@ open class Board(val size : Int = 8) {
     }
 
     // Checking if 'color' king is in check
-    private fun inCheck(color: Int): Boolean {
+    fun inCheck(color: Int): Boolean {
 
         getAllPseudoAttackedSquares(1 - color).forEach {
             if (it in piecesPositions.keys && piecesPositions[it] is King

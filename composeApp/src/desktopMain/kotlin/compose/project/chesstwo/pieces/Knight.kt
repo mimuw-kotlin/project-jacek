@@ -38,4 +38,7 @@ class Knight(
         }
         return moves
     }
+    override fun copy() : Piece{
+        return Knight(posX,posY,texture,color)
+    }
 }

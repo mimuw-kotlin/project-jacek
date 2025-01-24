@@ -33,4 +33,7 @@ class Bomb(
         }
         return moves
     }
+    override fun copy() : Piece{
+        return Bomb(posX,posY,texture,color)
+    }
 }

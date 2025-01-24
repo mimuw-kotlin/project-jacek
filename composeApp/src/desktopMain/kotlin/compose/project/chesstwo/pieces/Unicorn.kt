@@ -40,5 +40,8 @@ class Unicorn (override var posX: Int,
         }
         return moves
     }
+    override fun copy() : Piece{
+        return Unicorn(posX,posY,texture,color,moved)
+    }
 
 }

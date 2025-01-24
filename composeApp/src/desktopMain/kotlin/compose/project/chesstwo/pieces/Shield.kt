@@ -39,5 +39,8 @@ class Shield(
         }
         return moves
     }
+    override fun copy() : Piece{
+        return Shield(posX,posY,texture,color,attacked)
+    }
 
 }

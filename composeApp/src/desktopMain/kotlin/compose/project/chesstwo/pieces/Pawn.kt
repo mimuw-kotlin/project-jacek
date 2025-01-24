@@ -83,4 +83,7 @@ class Pawn(
         posX=endX
         posY=endY
     }
+    override fun copy() : Piece{
+        return Pawn(posX,posY,texture,color,moved,turnOfDoubleMove)
+    }
 }

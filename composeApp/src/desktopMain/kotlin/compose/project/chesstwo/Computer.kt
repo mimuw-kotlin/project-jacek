@@ -1,7 +1,10 @@
 package compose.project.chesstwo
 
+import kotlin.math.max
+
 class Computer(val color : Int) {
-    fun makeMove(board : Board) : Move?{
+
+    private fun genAllMovesForColor(board : Board, color : Int) : List<Move>{
         val pieces = board.piecesPositions.toMap()
         val moves = mutableListOf<Move>()
         pieces.forEach{(_,piece)->
@@ -9,7 +12,11 @@ class Computer(val color : Int) {
                 moves.addAll(piece.getMoves(board))
             }
         }
-        return moves.randomOrNull()
+        return moves
+    }
+
+    fun makeMove(board : Board) : Move?{
+        return genAllMovesForColor(board,color).randomOrNull()
     }
     private fun countMaterial(board: Board, color : Int) : Int{
         var sum = 0
@@ -26,5 +33,31 @@ class Computer(val color : Int) {
             evaluation *= -1
         }
         return evaluation
+    }
+    fun search(board: Board, depth : Int, alpha : Int, beta : Int) : Int{
+        return searchRec(SearchBoard(board),depth,alpha,beta)
+    }
+    private fun searchRec(board: SearchBoard, depth : Int, alpha : Int, beta : Int) : Int{
+        if(depth==0){
+            return evaluate(board)
+        }
+        var newAlpha = alpha
+        val moves = genAllMovesForColor(board,board.turn%2)
+        if(moves.isEmpty()){
+            if(board.inCheck(board.turn%2)){
+                return Int.MIN_VALUE
+            }
+            return 0
+        }
+        for (move in moves){
+            board.move(move)
+            val evaluation = -searchRec(board,depth-1,-beta,-newAlpha)
+            board.unmakeMove()
+            if(evaluation >= beta){
+                return beta
+            }
+            newAlpha = max(alpha,evaluation)
+        }
+        return newAlpha
     }
 }

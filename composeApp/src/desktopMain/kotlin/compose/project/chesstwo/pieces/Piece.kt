@@ -74,5 +74,9 @@ interface Piece {
         }
         return moves
     }
+    fun copy() : Piece{
+        println("BRUH")
+        return this
+    }
 
 }

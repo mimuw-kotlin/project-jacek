@@ -36,4 +36,7 @@ class Necromancer(
         }
         return moves
     }
+    override fun copy() : Piece{
+        return Necromancer(posX,posY,texture,color)
+    }
 }

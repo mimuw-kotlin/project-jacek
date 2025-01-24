@@ -34,4 +34,7 @@ class Bishop(
         }
         return moves
     }
+    override fun copy() : Piece{
+        return Bishop(posX,posY,texture,color)
+    }
 }

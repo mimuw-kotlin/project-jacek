@@ -114,4 +114,7 @@ class King(
         }
         return true
     }
+    override fun copy() : Piece{
+        return King(posX,posY,texture,color,moved)
+    }
 }
