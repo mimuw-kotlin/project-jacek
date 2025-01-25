@@ -24,6 +24,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextAlign
 
 import androidx.compose.ui.unit.dp
 import chesstwo.composeapp.generated.resources.Res
@@ -49,6 +50,8 @@ import compose.project.chesstwo.composables.SideButton
 import compose.project.chesstwo.pieces.King
 import compose.project.chesstwo.pieces.Piece
 import org.jetbrains.compose.resources.DrawableResource
+import org.jetbrains.compose.resources.StringResource
+import org.jetbrains.compose.resources.stringResource
 import kotlin.random.Random
 import kotlin.system.exitProcess
 
@@ -317,6 +320,13 @@ fun setUpComputerSide(computerColor : Int, points : Int, board : Board) : Mutabl
 
 }
 
+fun textureToString(texture : DrawableResource) : Pair<StringResource,StringResource>{
+    var id = allTextures[0].indexOf(texture)
+    if(id==-1) id = allTextures[1].indexOf(texture)
+    return Pair(pieceDescriptions[0][id], pieceDescriptions[1][id])
+
+}
+
 @Composable
 fun SettingUpScene(onExitToMenu: () -> Unit, startGame : (MutableMap<Pair<Int,Int>,Piece>) -> Unit, newBoardSize : Int = 8, newPoints: Int = 38, computerGame : Boolean = false, computerColor : Int = 1){
     var choosingColor by remember { mutableStateOf(1-computerColor) }
@@ -347,6 +357,15 @@ fun SettingUpScene(onExitToMenu: () -> Unit, startGame : (MutableMap<Pair<Int,In
                     }
                     Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center){
                         SettingUpButton(onClick = onExitToMenu,text = "Main Menu", textColor = Color.White, buttonColor = ButtonDefaults.buttonColors(backgroundColor = Color.Red),width=150)
+                    }
+                    if(sideSelectedPiece){
+                        val desc = textureToString(selectedPiece)
+                        Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally){
+                            Text(text = stringResource(desc.first),style = MaterialTheme.typography.h5)
+                            Spacer(modifier = Modifier.height(10.dp))
+                            Text(text = stringResource(desc.second),style = MaterialTheme.typography.h6, textAlign = TextAlign.Center)
+                        }
+
                     }
 
                 }
@@ -434,6 +453,7 @@ fun SettingUpScene(onExitToMenu: () -> Unit, startGame : (MutableMap<Pair<Int,In
 
     }
 }
+
 
 
 
