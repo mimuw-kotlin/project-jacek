@@ -28,7 +28,7 @@ import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
-fun SideButton(choosingColor: Int, setChoosingColor: (Int)->Unit,width: Int) {
+fun SideButton(choosingColor: Int, setChoosingColor: (Int)->Unit,width: Int, enabled : Boolean = true) {
     //var choosingColor by remember { mutableStateOf(0) }
 
     val buttonColor = if (choosingColor == 1) Color.White else Color.Black
@@ -39,7 +39,8 @@ fun SideButton(choosingColor: Int, setChoosingColor: (Int)->Unit,width: Int) {
             setChoosingColor(1-choosingColor)
         },
         colors = ButtonDefaults.buttonColors(backgroundColor = buttonColor),
-        modifier = Modifier.padding(16.dp).width(width.dp)
+        modifier = Modifier.padding(16.dp).width(width.dp),
+        enabled = enabled
     ) {
         Text(
             text = if (choosingColor == 0) "Black Side" else "White Side",

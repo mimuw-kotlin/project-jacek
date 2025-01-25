@@ -290,14 +290,13 @@ fun MainMenuScene(onStartGame: () -> Unit, onStartComputerGame: () -> Unit) {
 }
 
 @Composable
-fun SettingUpScene(onExitToMenu: () -> Unit, startGame : (MutableMap<Pair<Int,Int>,Piece>) -> Unit, newBoardSize : Int = 8, newPoints: Int = 38){
-    var choosingColor by remember { mutableStateOf(0) }
+fun SettingUpScene(onExitToMenu: () -> Unit, startGame : (MutableMap<Pair<Int,Int>,Piece>) -> Unit, newBoardSize : Int = 8, newPoints: Int = 38, computerGame : Boolean = false, computerColor : Int = 1){
+    var choosingColor by remember { mutableStateOf(1-computerColor) }
     var selectedPiece by remember { mutableStateOf(Res.drawable.mmBackground)}
     val board by remember {mutableStateOf(SetUpBoard(newBoardSize))}
     val points = remember{ mutableStateListOf(newPoints,newPoints)}
     var sideSelectedPiece by remember{ mutableStateOf(false)}
     //val board = SetUpBoard(8)
-    println("Recompos $choosingColor")
     //println(numPieces)
     Image(
         painter = painterResource((Res.drawable.mmBackground)),
@@ -312,7 +311,7 @@ fun SettingUpScene(onExitToMenu: () -> Unit, startGame : (MutableMap<Pair<Int,In
             Box(modifier = Modifier.width(175.dp)){
                 Column{
                     Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center){
-                        SideButton(choosingColor=choosingColor, setChoosingColor =  {choosingColor=it; sideSelectedPiece = false},width = 150)
+                        SideButton(choosingColor=choosingColor, setChoosingColor =  {choosingColor=it; sideSelectedPiece = false},width = 150, enabled = !computerGame)
                     }
                     Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center){
                         SettingUpButton(onClick = { startGame(board.piecesPositions) },text = "Start", textColor = Color.Black, buttonColor = ButtonDefaults.buttonColors(backgroundColor = Color.Green),width=150)
@@ -371,7 +370,7 @@ fun SettingUpScene(onExitToMenu: () -> Unit, startGame : (MutableMap<Pair<Int,In
                                                     val pieceToDelete = board.piecesPositions[Pair(col,row)]!!
                                                     if(pieceToDelete !is King &&
                                                         !((pieceToDelete.color==0 && pieceToDelete.posY==board.size-2 && pieceToDelete.posX==board.size/2)
-                                                                ||(pieceToDelete.color==1 && pieceToDelete.posY==1 && pieceToDelete.posY==board.size/2))){
+                                                                ||(pieceToDelete.color==1 && pieceToDelete.posY==1 && pieceToDelete.posX==board.size/2))){
                                                         points[choosingColor]+=pieceToDelete.value
                                                         board.piecesPositions.remove(Pair(col,row))
                                                     }
@@ -440,7 +439,7 @@ fun App() {
             { currentScene = Scene.MainMenu }, gameWithComputer = computerGame, computerColor = computerColor)
 
             is Scene.SettingUp -> SettingUpScene(onExitToMenu =
-            { currentScene = Scene.MainMenu }, startGame = {pos -> board = Board(boardSize);board.piecesPositions=pos;currentScene=Scene.Gameplay}, newBoardSize = boardSize, newPoints = points)
+            { currentScene = Scene.MainMenu }, startGame = {pos -> board = Board(boardSize);board.piecesPositions=pos;currentScene=Scene.Gameplay}, newBoardSize = boardSize, newPoints = points, computerGame = computerGame, computerColor = computerColor)
 
             is Scene.BoardParameters -> BoardParametersScene(onSubmitParameters = {newBoardSize,newPoints, newComputerColor ->boardSize = newBoardSize; points = newPoints;computerColor=newComputerColor;currentScene=Scene.SettingUp},
                 onSelectedScenario = {pos, newBoardSize, newComputerColor -> board = Board(newBoardSize); board.piecesPositions=pos;computerColor=newComputerColor;currentScene = Scene.Gameplay},computerGame)
