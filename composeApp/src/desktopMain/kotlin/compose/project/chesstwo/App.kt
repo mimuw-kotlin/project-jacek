@@ -49,6 +49,7 @@ import compose.project.chesstwo.composables.SideButton
 import compose.project.chesstwo.pieces.King
 import compose.project.chesstwo.pieces.Piece
 import org.jetbrains.compose.resources.DrawableResource
+import kotlin.random.Random
 import kotlin.system.exitProcess
 
 val buttonColor = Color(0xff89d0e8)
@@ -288,6 +289,33 @@ fun MainMenuScene(onStartGame: () -> Unit, onStartComputerGame: () -> Unit) {
         )
     }
 }
+fun setUpComputerSide(computerColor : Int, points : Int, board : Board) : MutableMap<Pair<Int,Int>,Piece>{
+    val piecesPositions = board.piecesPositions.toMutableMap()
+    val rank = if(computerColor==1) listOf(0,1,2) else listOf(board.size-1,board.size-2,board.size-3)
+    var triesLeft = 7
+    var pointsLeft = points
+    while(points>0 && triesLeft>0){
+
+        val choosenPiece = board.textureToPiece(allTextures[computerColor].random(),0,0,computerColor)
+        if(choosenPiece.value>pointsLeft){
+            triesLeft-=1
+            continue
+        }
+        val posX = Random.nextInt(0,board.size-1)
+        val posY = if(choosenPiece.value<=4) rank[2] else if(choosenPiece.value<=8) rank[1] else rank[0]
+        if(Pair(posX,posY) in piecesPositions.keys){
+            triesLeft-=1
+            continue
+        }
+        choosenPiece.posX=posX
+        choosenPiece.posY=posY
+        piecesPositions[Pair(posX,posY)]=choosenPiece
+        triesLeft=7
+        pointsLeft-=choosenPiece.value
+    }
+    return piecesPositions
+
+}
 
 @Composable
 fun SettingUpScene(onExitToMenu: () -> Unit, startGame : (MutableMap<Pair<Int,Int>,Piece>) -> Unit, newBoardSize : Int = 8, newPoints: Int = 38, computerGame : Boolean = false, computerColor : Int = 1){
@@ -314,7 +342,8 @@ fun SettingUpScene(onExitToMenu: () -> Unit, startGame : (MutableMap<Pair<Int,In
                         SideButton(choosingColor=choosingColor, setChoosingColor =  {choosingColor=it; sideSelectedPiece = false},width = 150, enabled = !computerGame)
                     }
                     Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center){
-                        SettingUpButton(onClick = { startGame(board.piecesPositions) },text = "Start", textColor = Color.Black, buttonColor = ButtonDefaults.buttonColors(backgroundColor = Color.Green),width=150)
+                        SettingUpButton(onClick = { if(!computerGame)startGame(board.piecesPositions) else startGame(
+                            setUpComputerSide(computerColor,points[computerColor],board)) },text = "Start", textColor = Color.Black, buttonColor = ButtonDefaults.buttonColors(backgroundColor = Color.Green),width=150)
                     }
                     Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center){
                         SettingUpButton(onClick = onExitToMenu,text = "Main Menu", textColor = Color.White, buttonColor = ButtonDefaults.buttonColors(backgroundColor = Color.Red),width=150)
