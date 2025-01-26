@@ -21,10 +21,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import compose.project.chesstwo.Board
 import compose.project.chesstwo.GameResult
+import compose.project.chesstwo.PlayerColor
 import compose.project.chesstwo.buttonColor
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
@@ -101,7 +103,8 @@ fun EndGameButton(onExitToMenu: ()->Unit){
 fun RightPanel(promotionDisplay : Boolean,
                onEndDisplayChange : (Boolean)->Unit,
                onExitToMenu: ()->Unit,
-               board : Board, textures : List<List<DrawableResource>>){
+               board : Board, textures : List<List<DrawableResource>>,
+               computerGame : Boolean){
 
     Box {
 
@@ -138,10 +141,12 @@ fun RightPanel(promotionDisplay : Boolean,
 
                 }
             }
+
             // Button for ending the game
             Box(modifier = Modifier.fillMaxWidth().weight(1.0f)) {
                 EndGameButton(onExitToMenu)
             }
+
 
         }
     }

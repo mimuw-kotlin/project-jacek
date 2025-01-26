@@ -247,14 +247,40 @@ fun ChessBoard(board: Board, onExitToMenu: () -> Unit, gameWithComputer: Boolean
                 }
             }
             //Right panel
-            promotionDisplay = board.promotionChoice
-            RightPanel(
-                promotionDisplay = promotionDisplay,
-                onEndDisplayChange = {newValue ->  println("endDisplay change: $endDisplay -> $newValue");endDisplay =newValue},
-                onExitToMenu = onExitToMenu,
-                board = board,
-                textures = textures,
-            )
+            Column(horizontalAlignment = Alignment.CenterHorizontally){
+                if(!gameWithComputer){
+                    Spacer(modifier = Modifier.height(25.dp))
+                    val backgroundColor = if(PlayerColor.turnToColor(board.turn) == PlayerColor.WHITE)Color.White else Color.Black
+                    Box(modifier = Modifier.background(backgroundColor).width(300.dp).height(60.dp), contentAlignment = Alignment.Center) {
+                        if (PlayerColor.turnToColor(board.turn) == PlayerColor.WHITE) {
+                            Text(
+                                text = "White to move",
+                                textAlign = TextAlign.Center,
+                                color = Color.Black,
+                                style = MaterialTheme.typography.h6
+                            )
+                        } else {
+                            Text(
+                                text = "Black to move",
+                                textAlign = TextAlign.Center,
+                                color = Color.White,
+                                style = MaterialTheme.typography.h6
+                            )
+                        }
+                    }
+                }
+                promotionDisplay = board.promotionChoice
+                RightPanel(
+                    promotionDisplay = promotionDisplay,
+                    onEndDisplayChange = {newValue ->  println("endDisplay change: $endDisplay -> $newValue");endDisplay =newValue},
+                    onExitToMenu = onExitToMenu,
+                    board = board,
+                    textures = textures,
+                    computerGame = gameWithComputer
+                )
+
+            }
+
         }
         // Display of the result of the game
         if (endDisplay) {
