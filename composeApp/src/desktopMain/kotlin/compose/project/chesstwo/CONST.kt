@@ -54,9 +54,18 @@ val darkSquareColor = Color(0xffc7a25a)
 val fogLightSquareColor = Color(0xffa0a0a0)
 val fogDarkSquareColor = Color(0xff87621a)
 
-enum class Color(val value: Int) {
+enum class PlayerColor(val value: Int) {
     WHITE(0),
     BLACK(1);
+
+    companion object {
+        fun turnToColor(turn: Int): PlayerColor {
+            return if(turn%2==0) WHITE else BLACK
+        }
+        fun negateColor(color : PlayerColor):PlayerColor{
+            return if(color==WHITE) BLACK else WHITE
+        }
+    }
 }
 
 val textures = listOf(

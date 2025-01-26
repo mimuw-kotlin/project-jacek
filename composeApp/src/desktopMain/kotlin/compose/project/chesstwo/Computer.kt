@@ -4,9 +4,9 @@ import compose.project.chesstwo.pieces.Pawn
 import kotlin.math.max
 import kotlin.random.Random
 
-class Computer(val color : Int) {
+class Computer(val color : PlayerColor) {
 
-    private fun genAllMovesForColor(board : Board, color : Int) : List<Move>{
+    private fun genAllMovesForColor(board : Board, color : PlayerColor) : List<Move>{
         val pieces = board.piecesPositions.toMap()
         val moves = mutableListOf<Move>()
         pieces.forEach{(_,piece)->
@@ -31,11 +31,12 @@ class Computer(val color : Int) {
             score += 10*board.piecesPositions[Pair(move.endX,move.endY)]!!.value - 10*attackingPiece.value
         }
         if(attackingPiece is Pawn &&
-            (attackingPiece.color == 0 && attackingPiece.posY == 1) ||
-            (attackingPiece.color == 1 && attackingPiece.posY == board.size-2)){
+            (attackingPiece.color == PlayerColor.WHITE && attackingPiece.posY == 1) ||
+            (attackingPiece.color == PlayerColor.BLACK && attackingPiece.posY == board.size-2)){
             score+=9
         }
-        if(Pair(move.endX,move.endY) in board.getAllPseudoAttackedSquares(1-board.turn%2)){
+        if(Pair(move.endX,move.endY) in board.getAllPseudoAttackedSquares(PlayerColor.negateColor(
+                PlayerColor.turnToColor(board.turn)))){
             score -= attackingPiece.value
         }
         return score
@@ -73,7 +74,7 @@ class Computer(val color : Int) {
         }
         return bestMove
     }
-    private fun countMaterial(board: Board, color : Int) : Int{
+    private fun countMaterial(board: Board, color : PlayerColor) : Int{
         var sum = 0
         board.piecesPositions.forEach{(_,piece)->
             if(piece.color==color){
@@ -83,8 +84,9 @@ class Computer(val color : Int) {
         return sum
     }
     fun evaluate(board: Board) : Int{
-        var evaluation = countMaterial(board,0)-countMaterial(board,1)
-        if(board.inCheck(1-(board.turn%2))){
+        var evaluation = countMaterial(board,PlayerColor.WHITE)-countMaterial(board,PlayerColor.BLACK)
+        if(board.inCheck(PlayerColor.negateColor(
+                PlayerColor.turnToColor(board.turn)))){
             evaluation+=3
         }
         if (board.turn%2==1){
@@ -100,9 +102,9 @@ class Computer(val color : Int) {
             return evaluate(board)
         }
         var newAlpha = alpha
-        val moves = genAllMovesForColor(board,board.turn%2)
+        val moves = genAllMovesForColor(board, PlayerColor.turnToColor(board.turn))
         if(moves.isEmpty()){
-            if(board.inCheck(board.turn%2)){
+            if(board.inCheck(PlayerColor.turnToColor(board.turn))){
                 return -1000
             }
             return 0

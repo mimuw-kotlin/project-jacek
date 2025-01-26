@@ -2,6 +2,7 @@ package compose.project.chesstwo.pieces
 
 import compose.project.chesstwo.Board
 import compose.project.chesstwo.Move
+import compose.project.chesstwo.PlayerColor
 import org.jetbrains.compose.resources.DrawableResource
 import kotlin.math.abs
 
@@ -9,7 +10,7 @@ class Pawn(
     override var posX: Int,
     override var posY: Int,
     override var texture: DrawableResource,
-    override var color: Int,
+    override var color: PlayerColor,
     private var moved: Boolean = false,
     private var turnOfDoubleMove : Int = -1
 ) : Piece {
@@ -18,7 +19,7 @@ class Pawn(
         val moves:MutableList<Move> = mutableListOf()
 
         // Row that the pawn could go into
-        var nextRow = if (color==0) posY-1 else posY+1
+        var nextRow = if (color==PlayerColor.WHITE) posY-1 else posY+1
 
         for (d in listOf(-1,1)){
             //Attacking on diagonal
@@ -50,7 +51,7 @@ class Pawn(
 
         //Move two squares
         val oneSquare = nextRow
-        nextRow = if (color==0) posY-2 else posY+2
+        nextRow = if (color==PlayerColor.WHITE) posY-2 else posY+2
         if(!moved && nextRow in 0..<board.size && Pair(posX,nextRow) !in board.piecesPositions.keys
             && Pair(posX,oneSquare) !in board.piecesPositions.keys){
             moves.add(Move(posX,posY,posX,nextRow, attacking = false))
@@ -63,7 +64,7 @@ class Pawn(
         val moves:MutableList<Move> = mutableListOf()
 
         // Row that the pawn could go into
-        val nextRow = if (color==0) posY-1 else posY+1
+        val nextRow = if (color==PlayerColor.WHITE) posY-1 else posY+1
         for (d in listOf(-1,1)){
             //Attacking on diagonal
             if (board.inBounds(posX+d,nextRow)

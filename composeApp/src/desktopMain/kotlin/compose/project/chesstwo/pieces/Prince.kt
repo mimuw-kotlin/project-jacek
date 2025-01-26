@@ -2,12 +2,13 @@ package compose.project.chesstwo.pieces
 
 import compose.project.chesstwo.Board
 import compose.project.chesstwo.Move
+import compose.project.chesstwo.PlayerColor
 import org.jetbrains.compose.resources.DrawableResource
 
 class Prince (override var posX: Int,
               override var posY: Int,
               override var texture: DrawableResource,
-              override var color: Int,
+              override var color: PlayerColor,
               private var moved: Boolean = false
 ) : Piece{
     override val value = 2

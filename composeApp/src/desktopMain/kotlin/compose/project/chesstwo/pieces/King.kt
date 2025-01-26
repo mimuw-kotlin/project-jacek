@@ -2,13 +2,14 @@ package compose.project.chesstwo.pieces
 
 import compose.project.chesstwo.Board
 import compose.project.chesstwo.Move
+import compose.project.chesstwo.PlayerColor
 import org.jetbrains.compose.resources.DrawableResource
 
 class King(
     override var posX: Int,
     override var posY: Int,
     override var texture: DrawableResource,
-    override var color: Int,
+    override var color: PlayerColor,
     private var moved: Boolean = false
 ) : Piece {
     override val value = Int.MAX_VALUE
@@ -95,7 +96,7 @@ class King(
             }
             return true*/
             for (x in posX..posX+2){
-                if (Pair(x, posY) in board.getAllPseudoAttackedSquares(1 - color)) {
+                if (Pair(x, posY) in board.getAllPseudoAttackedSquares(PlayerColor.negateColor(color))) {
                     return false
                 }
             }
@@ -108,7 +109,7 @@ class King(
         }
         return true*/
         for (x in posX-2..posX){
-            if (Pair(x, posY) in board.getAllPseudoAttackedSquares(1 - color)) {
+            if (Pair(x, posY) in board.getAllPseudoAttackedSquares(PlayerColor.negateColor(color))) {
                 return false
             }
         }

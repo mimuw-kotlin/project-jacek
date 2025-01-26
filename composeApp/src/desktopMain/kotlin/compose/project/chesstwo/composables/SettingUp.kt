@@ -24,26 +24,27 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import chesstwo.composeapp.generated.resources.Res
 import compose.project.chesstwo.Board
+import compose.project.chesstwo.PlayerColor
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
-fun SideButton(choosingColor: Int, setChoosingColor: (Int)->Unit,width: Int, enabled : Boolean = true) {
+fun SideButton(choosingColor: PlayerColor, setChoosingColor: (PlayerColor)->Unit,width: Int, enabled : Boolean = true) {
     //var choosingColor by remember { mutableStateOf(0) }
 
-    val buttonColor = if (choosingColor == 1) Color.White else Color.Black
-    val textColor = if (choosingColor == 1) Color.Black else Color.White
+    val buttonColor = if (choosingColor == PlayerColor.BLACK) Color.White else Color.Black
+    val textColor = if (choosingColor == PlayerColor.BLACK) Color.Black else Color.White
 
     Button(
         onClick = {
-            setChoosingColor(1-choosingColor)
+            setChoosingColor(PlayerColor.negateColor(choosingColor))
         },
         colors = ButtonDefaults.buttonColors(backgroundColor = buttonColor),
         modifier = Modifier.padding(16.dp).width(width.dp),
         enabled = enabled
     ) {
         Text(
-            text = if (choosingColor == 0) "Black Side" else "White Side",
+            text = if (choosingColor == PlayerColor.WHITE) "Black Side" else "White Side",
             color = textColor,
             style = MaterialTheme.typography.h6
         )

@@ -68,7 +68,7 @@ fun textureToString(texture : DrawableResource) : Pair<StringResource,StringReso
 
 }
 @Composable
-fun ChessBoard(board: Board, onExitToMenu: () -> Unit, gameWithComputer: Boolean = false, computerColor : Int = 1) {
+fun ChessBoard(board: Board, onExitToMenu: () -> Unit, gameWithComputer: Boolean = false, computerColor : PlayerColor = PlayerColor.BLACK) {
 
     var isPieceSelected by remember { mutableStateOf(false) }
 
@@ -85,7 +85,7 @@ fun ChessBoard(board: Board, onExitToMenu: () -> Unit, gameWithComputer: Boolean
     //A need to display game result
     var endDisplay by remember { mutableStateOf(false) }
 
-    var computerToPlay by remember {mutableStateOf(gameWithComputer && computerColor==0)}//(!gameWithComputer || !computerToPlay
+    var computerToPlay by remember {mutableStateOf(gameWithComputer && computerColor==PlayerColor.WHITE)}//(!gameWithComputer || !computerToPlay
     val computer = Computer(computerColor)
     println("EWALUACJA: ${computer.evaluate(board)}")
 
@@ -193,7 +193,7 @@ fun ChessBoard(board: Board, onExitToMenu: () -> Unit, gameWithComputer: Boolean
                                                     //Selected another piece
 
                                                     else if (
-                                                        newPiece.color == (board.turn) % 2) {
+                                                        newPiece.color == PlayerColor.turnToColor(board.turn)) {
 
                                                         isPieceSelected = false
 
@@ -303,14 +303,14 @@ fun MainMenuScene(onStartGame: () -> Unit, onStartComputerGame: () -> Unit) {
         )
     }
 }
-fun setUpComputerSide(computerColor : Int, points : Int, board : Board) : MutableMap<Pair<Int,Int>,Piece>{
+fun setUpComputerSide(computerColor : PlayerColor, points : Int, board : Board) : MutableMap<Pair<Int,Int>,Piece>{
     val piecesPositions = board.piecesPositions.toMutableMap()
-    val rank = if(computerColor==1) listOf(0,1,2) else listOf(board.size-1,board.size-2,board.size-3)
+    val rank = if(computerColor==PlayerColor.BLACK) listOf(0,1,2) else listOf(board.size-1,board.size-2,board.size-3)
     var triesLeft = 7
     var pointsLeft = points
     while(points>0 && triesLeft>0){
 
-        val choosenPiece = board.textureToPiece(allTextures[computerColor].random(),0,0,computerColor)
+        val choosenPiece = board.textureToPiece(allTextures[computerColor.value].random(),0,0,computerColor)
         if(choosenPiece.value>pointsLeft){
             triesLeft-=1
             continue
@@ -333,8 +333,8 @@ fun setUpComputerSide(computerColor : Int, points : Int, board : Board) : Mutabl
 
 
 @Composable
-fun SettingUpScene(onExitToMenu: () -> Unit, startGame : (MutableMap<Pair<Int,Int>,Piece>) -> Unit, newBoardSize : Int = 8, newPoints: Int = 38, computerGame : Boolean = false, computerColor : Int = 1){
-    var choosingColor by remember { mutableStateOf(1-computerColor) }
+fun SettingUpScene(onExitToMenu: () -> Unit, startGame : (MutableMap<Pair<Int,Int>,Piece>) -> Unit, newBoardSize : Int = 8, newPoints: Int = 38, computerGame : Boolean = false, computerColor : PlayerColor = PlayerColor.BLACK){
+    var choosingColor by remember { mutableStateOf(PlayerColor.negateColor(computerColor)) }
     var selectedPiece by remember { mutableStateOf(Res.drawable.mmBackground)}
     val board by remember {mutableStateOf(SetUpBoard(newBoardSize))}
     val points = remember{ mutableStateListOf(newPoints,newPoints)}
@@ -358,7 +358,7 @@ fun SettingUpScene(onExitToMenu: () -> Unit, startGame : (MutableMap<Pair<Int,In
                     }
                     Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center){
                         SettingUpButton(onClick = { if(!computerGame)startGame(board.piecesPositions) else startGame(
-                            setUpComputerSide(computerColor,points[computerColor],board)) },text = "Start", textColor = Color.Black, buttonColor = ButtonDefaults.buttonColors(backgroundColor = Color.Green),width=150)
+                            setUpComputerSide(computerColor,points[computerColor.value],board)) },text = "Start", textColor = Color.Black, buttonColor = ButtonDefaults.buttonColors(backgroundColor = Color.Green),width=150)
                     }
                     Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center){
                         SettingUpButton(onClick = onExitToMenu,text = "Main Menu", textColor = Color.White, buttonColor = ButtonDefaults.buttonColors(backgroundColor = Color.Red),width=150)
@@ -400,9 +400,9 @@ fun SettingUpScene(onExitToMenu: () -> Unit, startGame : (MutableMap<Pair<Int,In
                                         )
                                         .clickable {
                                             if(sideSelectedPiece && Pair(col,row) !in board.piecesPositions.keys && board.inAvailableSpace(row,choosingColor)
-                                                && points[choosingColor] >=board.textureToPiece(selectedPiece,col,row,choosingColor).value){
+                                                && points[choosingColor.value] >=board.textureToPiece(selectedPiece,col,row,choosingColor).value){
                                                 board.placePiece(col,row,choosingColor)
-                                                points[choosingColor]-=board.textureToPiece(selectedPiece,col,row,choosingColor).value
+                                                points[choosingColor.value]-=board.textureToPiece(selectedPiece,col,row,choosingColor).value
                                             }
 
                                         }
@@ -422,9 +422,9 @@ fun SettingUpScene(onExitToMenu: () -> Unit, startGame : (MutableMap<Pair<Int,In
                                                 .clickable {
                                                     val pieceToDelete = board.piecesPositions[Pair(col,row)]!!
                                                     if(pieceToDelete !is King &&
-                                                        !((pieceToDelete.color==0 && pieceToDelete.posY==board.size-2 && pieceToDelete.posX==board.size/2)
-                                                                ||(pieceToDelete.color==1 && pieceToDelete.posY==1 && pieceToDelete.posX==board.size/2))){
-                                                        points[choosingColor]+=pieceToDelete.value
+                                                        !((pieceToDelete.color==PlayerColor.WHITE && pieceToDelete.posY==board.size-2 && pieceToDelete.posX==board.size/2)
+                                                                ||(pieceToDelete.color==PlayerColor.BLACK && pieceToDelete.posY==1 && pieceToDelete.posX==board.size/2))){
+                                                        points[choosingColor.value]+=pieceToDelete.value
                                                         board.piecesPositions.remove(Pair(col,row))
                                                     }
 
@@ -441,14 +441,14 @@ fun SettingUpScene(onExitToMenu: () -> Unit, startGame : (MutableMap<Pair<Int,In
             Box{
                 Column(modifier = Modifier.fillMaxWidth().wrapContentSize(Alignment.TopCenter)){
 
-                    PieceSelection(allTextures[choosingColor]) {
+                    PieceSelection(allTextures[choosingColor.value]) {
                         selectedPiece = it
                         board.selectedPieceTexture = it
                         sideSelectedPiece = true
                     }
-                    Text(text = "Points left: ${points[choosingColor]}",style = MaterialTheme.typography.h6, modifier = Modifier.padding(top=25.dp).width(200.dp))
+                    Text(text = "Points left: ${points[choosingColor.value]}",style = MaterialTheme.typography.h6, modifier = Modifier.padding(top=25.dp).width(200.dp))
                     if(sideSelectedPiece){
-                        Text(text = "Piece value: ${board.textureToPiece(selectedPiece,0,0,0).value}",style = MaterialTheme.typography.h6,
+                        Text(text = "Piece value: ${board.textureToPiece(selectedPiece,0,0,PlayerColor.WHITE).value}",style = MaterialTheme.typography.h6,
                             modifier = Modifier.width(200.dp))
                     }
                 }
@@ -481,13 +481,13 @@ fun App() {
     var boardSize = 8
     var points = 38
     var computerGame = false
-    var computerColor = 1
+    var computerColor = PlayerColor.BLACK
     //board.setupPieces()
     MaterialTheme {
         when (currentScene) {
             is Scene.MainMenu -> MainMenuScene(onStartGame =
-            { currentScene = Scene.BoardParameters; board = Board(size=10); board.setupPieces(); computerGame=false;},
-                {currentScene = Scene.BoardParameters; board = Board(size=10); board.setupPieces(); computerGame=true;})
+            { currentScene = Scene.BoardParameters;  computerGame=false;},//board = Board(size=10); board.setupPieces();
+                {currentScene = Scene.BoardParameters; computerGame=true;})// board = Board(size=10); board.setupPieces();
 
             is Scene.Gameplay -> ChessBoard(board, onExitToMenu =
             { currentScene = Scene.MainMenu }, gameWithComputer = computerGame, computerColor = computerColor)

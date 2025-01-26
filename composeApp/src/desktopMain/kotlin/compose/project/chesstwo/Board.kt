@@ -73,6 +73,7 @@ open class Board(val size : Int = 8) {
     }*/
 
     //Initial positioning of the pieces
+    /*
     fun setupPieces() {
         piecesPositions[Pair(0, 0)] = Rook(0, 0, Res.drawable.rookB, 1)
         piecesPositions[Pair(1, 0)] = Knight(1, 0, Res.drawable.knightB, 1)
@@ -97,10 +98,10 @@ open class Board(val size : Int = 8) {
             piecesPositions[Pair(i, 6)] = Pawn(i, 6, Res.drawable.pawnW, 0)
         }
 
-    }
+    }*/
 
     //Generating all squares attacked by pseudo-legal moves by 'color' player
-    fun getAllPseudoAttackedSquares(color: Int): MutableList<Pair<Int, Int>> {
+    fun getAllPseudoAttackedSquares(color: PlayerColor): MutableList<Pair<Int, Int>> {
         val moves = mutableListOf<Pair<Int, Int>>()
         piecesPositions.forEach { (_, piece) ->
             if (piece.color == color) {
@@ -139,12 +140,12 @@ open class Board(val size : Int = 8) {
 
         if (playedMove.isEnPassant) {
             val captured = piecesPositions[Pair(endX,startY)]!!
-            lastCapturedPiece[captured.color].addFirst(captured)
+            lastCapturedPiece[captured.color.value].addFirst(captured)
             piecesPositions.remove(Pair(endX, startY))
             lastActiveMove = turn
         } else if (Pair(endX, endY) in piecesPositions.keys) {
             val captured = piecesPositions[Pair(endX,endY)]!!
-            lastCapturedPiece[captured.color].addFirst(captured)
+            lastCapturedPiece[captured.color.value].addFirst(captured)
             lastActiveMove = turn
         }
 
@@ -172,9 +173,9 @@ open class Board(val size : Int = 8) {
         //Updating its information
         movedPiece.move(endX, endY, this)
 
-        if(movedPiece is Necromancer && lastActiveMove==turn && lastCapturedPiece[movedPiece.color].isNotEmpty()){
-            piecesPositions[Pair(endX, endY)] = lastCapturedPiece[movedPiece.color].first()
-            lastCapturedPiece[movedPiece.color].removeFirst()
+        if(movedPiece is Necromancer && lastActiveMove==turn && lastCapturedPiece[movedPiece.color.value].isNotEmpty()){
+            piecesPositions[Pair(endX, endY)] = lastCapturedPiece[movedPiece.color.value].first()
+            lastCapturedPiece[movedPiece.color.value].removeFirst()
             piecesPositions[Pair(endX, endY)]!!.move(endX,endY,this)
         }
 
@@ -205,7 +206,7 @@ open class Board(val size : Int = 8) {
 
     }
 
-    fun textureToPiece(texture: DrawableResource, posX : Int, posY : Int, color : Int) : Piece{
+    fun textureToPiece(texture: DrawableResource, posX : Int, posY : Int, color : PlayerColor) : Piece{
         val piece: Piece = when (texture) {
             Res.drawable.queenW, Res.drawable.queenB -> Queen(posX, posY, texture, color)
             Res.drawable.rookW, Res.drawable.rookB -> Rook(posX, posY, texture, color)
@@ -240,8 +241,8 @@ open class Board(val size : Int = 8) {
 
     //Function checking if the game should end
     private fun checkForEndGame() {
-        if (noSquaresToMove(turn % 2)) {
-            if (inCheck(turn % 2)) {
+        if (noSquaresToMove(PlayerColor.turnToColor(turn))) {
+            if (inCheck(PlayerColor.turnToColor(turn))) {
                 gameEnded = true
                 gameResult = if ((turn + 1) % 2 == 0) GameResult.WHITEWIN else GameResult.BLACKWIN
             } else {
@@ -271,9 +272,9 @@ open class Board(val size : Int = 8) {
     }
 
     // Checking if 'color' king is in check
-    fun inCheck(color: Int): Boolean {
+    fun inCheck(color: PlayerColor): Boolean {
 
-        getAllPseudoAttackedSquares(1 - color).forEach {
+        getAllPseudoAttackedSquares(PlayerColor.negateColor(color)).forEach {
             if (it in piecesPositions.keys && piecesPositions[it] is King
                 && piecesPositions[it]!!.color == color
             ) {
@@ -284,7 +285,7 @@ open class Board(val size : Int = 8) {
     }
 
     // Checking if 'color' king has no squares to move
-    private fun noSquaresToMove(color: Int): Boolean {
+    private fun noSquaresToMove(color: PlayerColor): Boolean {
         val pieces = piecesPositions.values.toList()
         for (piece in pieces) {
             if (piece.color == color && piece.getMoves(this).isNotEmpty()) {
@@ -300,7 +301,7 @@ open class Board(val size : Int = 8) {
         if (piece !is Pawn) {
             return false
         }
-        if ((piece.color == 0 && piece.posY == 0) || (piece.color == 1 && piece.posY == size-1)) {
+        if ((piece.color == PlayerColor.WHITE && piece.posY == 0) || (piece.color == PlayerColor.BLACK && piece.posY == size-1)) {
             return true
         }
         return false

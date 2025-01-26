@@ -29,17 +29,17 @@ import compose.project.chesstwo.pieces.Rook
 class SetUpBoard(size : Int = 8) : Board(size) {
     //override val piecesPositions = mutableMapOf<Pair<Int, Int>, Piece>()
     init{
-        piecesPositions[Pair(size/2,0)]=King(size/2,0,Res.drawable.kingB,1)
-        piecesPositions[Pair(size/2,1)]=Pawn(size/2,1,Res.drawable.pawnB,1)
-        piecesPositions[Pair(size/2,size-1)]=King(size/2,size-1,Res.drawable.kingW,0)
-        piecesPositions[Pair(size/2,size-2)]=Pawn(size/2,size-2,Res.drawable.pawnW,0)
+        piecesPositions[Pair(size/2,0)]=King(size/2,0,Res.drawable.kingB,PlayerColor.BLACK)
+        piecesPositions[Pair(size/2,1)]=Pawn(size/2,1,Res.drawable.pawnB,PlayerColor.BLACK)
+        piecesPositions[Pair(size/2,size-1)]=King(size/2,size-1,Res.drawable.kingW,PlayerColor.WHITE)
+        piecesPositions[Pair(size/2,size-2)]=Pawn(size/2,size-2,Res.drawable.pawnW,PlayerColor.WHITE)
     }
     lateinit var selectedPieceTexture : DrawableResource
-    fun placePiece(posX : Int, posY : Int, color : Int){
+    fun placePiece(posX : Int, posY : Int, color : PlayerColor){
         piecesPositions[Pair(posX,posY)] = textureToPiece(selectedPieceTexture,posX,posY,color)
     }
-    fun inAvailableSpace(posY : Int, color : Int) : Boolean{
-        if (color==0) return posY>=size/2+1
+    fun inAvailableSpace(posY : Int, color : PlayerColor) : Boolean{
+        if (color==PlayerColor.WHITE) return posY>=size/2+1
         return posY<size/2-1
     }
 }

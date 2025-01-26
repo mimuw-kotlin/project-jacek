@@ -88,12 +88,12 @@ class SearchBoard(board : Board) : Board() {
 
         if (move.isEnPassant) {
             val captured = piecesPositions[Pair(endX,startY)]!!
-            lastCapturedPiece[captured.color].addFirst(captured)
+            lastCapturedPiece[captured.color.value].addFirst(captured)
             piecesPositions.remove(Pair(endX, startY))
             lastActiveMove = turn
         } else if (Pair(endX, endY) in piecesPositions.keys) {
             val captured = piecesPositions[Pair(endX,endY)]!!
-            lastCapturedPiece[captured.color].addFirst(captured)
+            lastCapturedPiece[captured.color.value].addFirst(captured)
             lastActiveMove = turn
         }
 
@@ -121,15 +121,16 @@ class SearchBoard(board : Board) : Board() {
         //Updating its information
         movedPiece.move(endX, endY, this)
 
-        if(movedPiece is Necromancer && lastActiveMove==turn && lastCapturedPiece[movedPiece.color].isNotEmpty()){
-            piecesPositions[Pair(endX, endY)] = lastCapturedPiece[movedPiece.color].first()
-            lastCapturedPiece[movedPiece.color].removeFirst()
+        if(movedPiece is Necromancer && lastActiveMove==turn && lastCapturedPiece[movedPiece.color.value].isNotEmpty()){
+            piecesPositions[Pair(endX, endY)] = lastCapturedPiece[movedPiece.color.value].first()
+            lastCapturedPiece[movedPiece.color.value].removeFirst()
             piecesPositions[Pair(endX, endY)]!!.move(endX,endY,this)
         }
 
         //Checking for promotion
         if (isPawnOnLastRank(piecesPositions[Pair(endX, endY)]!!)) {
-            piecesPositions[Pair(endX, endY)] = Queen(endX,endY, if(turn%2==0) Res.drawable.queenW else Res.drawable.queenB,turn%2)
+            piecesPositions[Pair(endX, endY)] = Queen(endX,endY, if(turn%2==0) Res.drawable.queenW else Res.drawable.queenB,
+                PlayerColor.turnToColor(turn))
 
         }
         //Bomb explodes

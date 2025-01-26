@@ -33,6 +33,7 @@ import chesstwo.composeapp.generated.resources.mmBackground
 import chesstwo.composeapp.generated.resources.classic
 import chesstwo.composeapp.generated.resources.sandomierz
 import chesstwo.composeapp.generated.resources.lotr
+import compose.project.chesstwo.PlayerColor
 import compose.project.chesstwo.classicScenario
 import compose.project.chesstwo.lotrScenario
 import compose.project.chesstwo.pieces.Piece
@@ -42,8 +43,8 @@ import org.jetbrains.compose.resources.painterResource
 
 @Composable
 fun BoardParametersScene(
-    onSubmitParameters : (Int,Int, Int)->Unit,
-    onSelectedScenario : (MutableMap<Pair<Int,Int>,Piece>, Int, Int)-> Unit,
+    onSubmitParameters : (Int,Int, PlayerColor)->Unit,
+    onSelectedScenario : (MutableMap<Pair<Int,Int>,Piece>, Int, PlayerColor)-> Unit,
     computerGame : Boolean
     ) {
 
@@ -52,7 +53,7 @@ fun BoardParametersScene(
     val maxValue = if(computerGame) 12 else 30
     var boardSize by remember { mutableStateOf(initialValue.coerceIn(minValue, maxValue)) }
     var points by remember { mutableStateOf("38") }
-    var playerColor by remember { mutableStateOf(0)}
+    var playerColor by remember { mutableStateOf(PlayerColor.WHITE)}
     Image(
         painter = painterResource((Res.drawable.mmBackground)),
         contentDescription = "Board parameters background", alpha = 0.4f
@@ -93,21 +94,21 @@ fun BoardParametersScene(
             if(computerGame) {
                 Row {
                     Button(
-                        onClick = { playerColor = 0},
+                        onClick = { playerColor = PlayerColor.WHITE},
                         modifier = Modifier
                             .padding(vertical = 20.dp)
                             .width(250.dp),
-                        enabled = playerColor == 1
+                        enabled = playerColor == PlayerColor.BLACK
                     ) {
                         Text(text = "Play as white", style = MaterialTheme.typography.h6)
                     }
                     Spacer(modifier = Modifier.width(100.dp))
                     Button(
-                        onClick = { playerColor = 1},
+                        onClick = { playerColor = PlayerColor.BLACK},
                         modifier = Modifier
                             .padding(vertical = 20.dp)
                             .width(250.dp),
-                        enabled = playerColor == 0
+                        enabled = playerColor == PlayerColor.WHITE
                     ) {
                         Text(text = "Play as black", style = MaterialTheme.typography.h6)
                     }
@@ -115,7 +116,7 @@ fun BoardParametersScene(
                 Spacer(modifier = Modifier.height(16.dp))
             }
             Button(
-                onClick = { onSubmitParameters(boardSize, if(points.toIntOrNull()!=null) points.toInt() else 38, 1-playerColor) },
+                onClick = { onSubmitParameters(boardSize, if(points.toIntOrNull()!=null) points.toInt() else 38, PlayerColor.negateColor(playerColor)) },
                 modifier = Modifier
                     .padding(vertical = 20.dp)
                     .width(100.dp)
@@ -133,10 +134,10 @@ fun BoardParametersScene(
 }
 
 @Composable
-fun ScenarioButton(text : String, image : DrawableResource, scenarioSetup :  MutableMap<Pair<Int,Int>, Piece>, onSelectedScenario : (MutableMap<Pair<Int,Int>,Piece>,Int, Int)-> Unit,
-                   boardSize : Int = 8, enabled : Boolean = true, playerColor : Int = 0){
+fun ScenarioButton(text : String, image : DrawableResource, scenarioSetup :  MutableMap<Pair<Int,Int>, Piece>, onSelectedScenario : (MutableMap<Pair<Int,Int>,Piece>,Int, PlayerColor)-> Unit,
+                   boardSize : Int = 8, enabled : Boolean = true, playerColor : PlayerColor = PlayerColor.WHITE){
     Button(
-        onClick={onSelectedScenario(scenarioSetup,boardSize,1-playerColor)},
+        onClick={onSelectedScenario(scenarioSetup,boardSize,PlayerColor.negateColor(playerColor))},
         modifier = Modifier
             .height(4000.dp)
             .width(300.dp),

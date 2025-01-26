@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="common.example.search.ChessTwoUITests" tests="10" skipped="0" failures="0" errors="0" timestamp="2025-01-26T16:16:59" hostname="jacek-laptop" time="4.973">
+<testsuite name="common.example.search.ChessTwoUITests" tests="10" skipped="0" failures="0" errors="0" timestamp="2025-01-26T17:17:59" hostname="jacek-laptop" time="5.005">
   <properties/>
-  <testcase name="sceneNavigationScenario[desktop]" classname="common.example.search.ChessTwoUITests" time="1.268"/>
-  <testcase name="correctClassicScenarioSetup[desktop]" classname="common.example.search.ChessTwoUITests" time="0.459"/>
-  <testcase name="settingUpButtons[desktop]" classname="common.example.search.ChessTwoUITests" time="0.792"/>
-  <testcase name="sceneNavigationTwoPlayers[desktop]" classname="common.example.search.ChessTwoUITests" time="0.46"/>
-  <testcase name="mainMenuButtons[desktop]" classname="common.example.search.ChessTwoUITests" time="0.136"/>
-  <testcase name="correctRohanVsMordorScenarioSetup[desktop]" classname="common.example.search.ChessTwoUITests" time="0.415"/>
-  <testcase name="sceneNavigationOnePlayer[desktop]" classname="common.example.search.ChessTwoUITests" time="0.474"/>
-  <testcase name="boardParametersButtons[desktop]" classname="common.example.search.ChessTwoUITests" time="0.263"/>
-  <testcase name="chessboardButtons[desktop]" classname="common.example.search.ChessTwoUITests" time="0.291"/>
-  <testcase name="correctSandomierzGambitScenarioSetup[desktop]" classname="common.example.search.ChessTwoUITests" time="0.413"/>
+  <testcase name="sceneNavigationScenario[desktop]" classname="common.example.search.ChessTwoUITests" time="1.307"/>
+  <testcase name="correctClassicScenarioSetup[desktop]" classname="common.example.search.ChessTwoUITests" time="0.462"/>
+  <testcase name="settingUpButtons[desktop]" classname="common.example.search.ChessTwoUITests" time="0.778"/>
+  <testcase name="sceneNavigationTwoPlayers[desktop]" classname="common.example.search.ChessTwoUITests" time="0.469"/>
+  <testcase name="mainMenuButtons[desktop]" classname="common.example.search.ChessTwoUITests" time="0.149"/>
+  <testcase name="correctRohanVsMordorScenarioSetup[desktop]" classname="common.example.search.ChessTwoUITests" time="0.42"/>
+  <testcase name="sceneNavigationOnePlayer[desktop]" classname="common.example.search.ChessTwoUITests" time="0.465"/>
+  <testcase name="boardParametersButtons[desktop]" classname="common.example.search.ChessTwoUITests" time="0.264"/>
+  <testcase name="chessboardButtons[desktop]" classname="common.example.search.ChessTwoUITests" time="0.277"/>
+  <testcase name="correctSandomierzGambitScenarioSetup[desktop]" classname="common.example.search.ChessTwoUITests" time="0.411"/>
   <system-out><![CDATA[EWALUACJA: 0
 EWALUACJA: 0
 EWALUACJA: 0
 EWALUACJA: 23
-EWALUACJA: -36
+EWALUACJA: -37
 EWALUACJA: 0
 EWALUACJA: -11
 ]]></system-out>

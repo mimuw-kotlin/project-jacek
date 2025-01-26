@@ -2,13 +2,14 @@ package compose.project.chesstwo.pieces
 
 import compose.project.chesstwo.Board
 import compose.project.chesstwo.Move
+import compose.project.chesstwo.PlayerColor
 import org.jetbrains.compose.resources.DrawableResource
 
 interface Piece {
     var posX: Int
     var posY: Int
     var texture: DrawableResource
-    var color: Int
+    var color: PlayerColor
     val value: Int
 
     // Generate all pseudo-legal moves for a piece
@@ -44,7 +45,7 @@ interface Piece {
 
             //Check if the move didn't put its king in check
             var found = false
-            for (square in board.getAllPseudoAttackedSquares(1 - color)) {
+            for (square in board.getAllPseudoAttackedSquares(PlayerColor.negateColor(color))) {
                 if (square in board.piecesPositions.keys && board.piecesPositions[square] is King
                     && board.piecesPositions[square]!!.color == color
                 ) {
@@ -75,7 +76,6 @@ interface Piece {
         return moves
     }
     fun copy() : Piece{
-        println("BRUH")
         return this
     }
 
