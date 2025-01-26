@@ -24,6 +24,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.style.TextAlign
 
 import androidx.compose.ui.unit.dp
@@ -57,6 +58,15 @@ import kotlin.system.exitProcess
 
 val buttonColor = Color(0xff89d0e8)
 
+fun textureToString(texture : DrawableResource) : Pair<StringResource,StringResource>?{
+    var id = allTextures[0].indexOf(texture)
+    if(id==-1) id = allTextures[1].indexOf(texture)
+    if(id==-1){
+        return null
+    }
+    return Pair(pieceDescriptions[0][id], pieceDescriptions[1][id])
+
+}
 @Composable
 fun ChessBoard(board: Board, onExitToMenu: () -> Unit, gameWithComputer: Boolean = false, computerColor : Int = 1) {
 
@@ -100,7 +110,7 @@ fun ChessBoard(board: Board, onExitToMenu: () -> Unit, gameWithComputer: Boolean
     //Background image
     Image(
         painter = painterResource((Res.drawable.mmBackground)),
-        contentDescription = "Background", alpha = 0.4f
+        contentDescription = "Chessboard background", alpha = 0.4f
     )
 
     Box(
@@ -150,14 +160,15 @@ fun ChessBoard(board: Board, onExitToMenu: () -> Unit, gameWithComputer: Boolean
                                 ) {
                                     if (Pair(col, row) in board.piecesPositions.keys) {
                                         // Image of a piece on that square
+                                        val currentTexture = board.piecesPositions[Pair(
+                                            col,
+                                            row
+                                        )]!!.texture
                                         Image(
                                             painter = painterResource(
-                                                board.piecesPositions[Pair(
-                                                    col,
-                                                    row
-                                                )]!!.texture
+                                                currentTexture
                                             ),
-                                            contentDescription = null,
+                                            contentDescription = if(textureToString(currentTexture)!=null) stringResource(textureToString(currentTexture)!!.first) else null,
                                             modifier = Modifier.clickable {
                                                 if (!board.promotionChoice && !(gameWithComputer && computerToPlay)) {
                                                     val newPiece = board
@@ -261,7 +272,7 @@ fun MainMenuScene(onStartGame: () -> Unit, onStartComputerGame: () -> Unit) {
     //Background
     Image(
         painter = painterResource((Res.drawable.mmBackground)),
-        contentDescription = "Background",
+        contentDescription = "Main Menu background",
         alpha = 0.7f
     )
 
@@ -282,7 +293,7 @@ fun MainMenuScene(onStartGame: () -> Unit, onStartComputerGame: () -> Unit) {
         )
 
         MainMenuButton(
-            onStartComputerGame, "Play the computer W.I.P.", Color.Black,
+            onStartComputerGame, "Play the computer", Color.Black,
             ButtonDefaults.buttonColors(backgroundColor = buttonColor)
         )
 
@@ -320,12 +331,6 @@ fun setUpComputerSide(computerColor : Int, points : Int, board : Board) : Mutabl
 
 }
 
-fun textureToString(texture : DrawableResource) : Pair<StringResource,StringResource>{
-    var id = allTextures[0].indexOf(texture)
-    if(id==-1) id = allTextures[1].indexOf(texture)
-    return Pair(pieceDescriptions[0][id], pieceDescriptions[1][id])
-
-}
 
 @Composable
 fun SettingUpScene(onExitToMenu: () -> Unit, startGame : (MutableMap<Pair<Int,Int>,Piece>) -> Unit, newBoardSize : Int = 8, newPoints: Int = 38, computerGame : Boolean = false, computerColor : Int = 1){
@@ -338,7 +343,7 @@ fun SettingUpScene(onExitToMenu: () -> Unit, startGame : (MutableMap<Pair<Int,In
     //println(numPieces)
     Image(
         painter = painterResource((Res.drawable.mmBackground)),
-        contentDescription = "Background", alpha = 0.4f
+        contentDescription = "Setting up background", alpha = 0.4f
     )
 
     Box(
@@ -359,7 +364,7 @@ fun SettingUpScene(onExitToMenu: () -> Unit, startGame : (MutableMap<Pair<Int,In
                         SettingUpButton(onClick = onExitToMenu,text = "Main Menu", textColor = Color.White, buttonColor = ButtonDefaults.buttonColors(backgroundColor = Color.Red),width=150)
                     }
                     if(sideSelectedPiece){
-                        val desc = textureToString(selectedPiece)
+                        val desc = textureToString(selectedPiece)!!
                         Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally){
                             Text(text = stringResource(desc.first),style = MaterialTheme.typography.h5)
                             Spacer(modifier = Modifier.height(10.dp))
@@ -404,17 +409,17 @@ fun SettingUpScene(onExitToMenu: () -> Unit, startGame : (MutableMap<Pair<Int,In
 
                                 ){
                                     if(Pair(col,row) in board.piecesPositions.keys && board.piecesPositions[Pair(col,row)]!!.color==choosingColor){
+                                        val currentTexture = board.piecesPositions[Pair(
+                                            col,
+                                            row
+                                        )]!!.texture
                                         Image(
                                             painter = painterResource(
-                                                board.piecesPositions[Pair(
-                                                    col,
-                                                    row
-                                                )]!!.texture
+                                                currentTexture
                                             ),
-                                            contentDescription = null,
+                                            contentDescription = if(textureToString(currentTexture)!=null) stringResource(textureToString(currentTexture)!!.first) else null,
                                             modifier = Modifier
                                                 .clickable {
-
                                                     val pieceToDelete = board.piecesPositions[Pair(col,row)]!!
                                                     if(pieceToDelete !is King &&
                                                         !((pieceToDelete.color==0 && pieceToDelete.posY==board.size-2 && pieceToDelete.posX==board.size/2)

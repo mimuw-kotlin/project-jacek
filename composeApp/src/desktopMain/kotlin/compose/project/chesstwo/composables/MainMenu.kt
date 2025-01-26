@@ -40,7 +40,8 @@ fun MainMenuButton(
             .width(300.dp)
             .height(100.dp)
             .padding(vertical = 20.dp),
-        colors = buttonColor
+        colors = buttonColor,
+
     ) {
         Text(text = text, color = textColor, style = MaterialTheme.typography.h6)
     }

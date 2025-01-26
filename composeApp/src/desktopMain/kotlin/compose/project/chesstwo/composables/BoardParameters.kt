@@ -55,7 +55,7 @@ fun BoardParametersScene(
     var playerColor by remember { mutableStateOf(0)}
     Image(
         painter = painterResource((Res.drawable.mmBackground)),
-        contentDescription = "Background", alpha = 0.4f
+        contentDescription = "Board parameters background", alpha = 0.4f
     )
 
     Box(
@@ -122,7 +122,7 @@ fun BoardParametersScene(
             ) {
                 Text(text = "Play", style = MaterialTheme.typography.h6)
             }
-            Spacer(Modifier.height(100.dp))
+            Spacer(Modifier.height(200.dp))
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly){
                 ScenarioButton("Classic",Res.drawable.classic, classicScenario(), onSelectedScenario, playerColor = playerColor)
                 ScenarioButton("Sandomierz Gambit", Res.drawable.sandomierz, sandomierzScenario(), onSelectedScenario,playerColor = playerColor)

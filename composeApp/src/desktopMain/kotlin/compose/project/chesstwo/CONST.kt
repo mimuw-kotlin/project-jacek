@@ -54,6 +54,11 @@ val darkSquareColor = Color(0xffc7a25a)
 val fogLightSquareColor = Color(0xffa0a0a0)
 val fogDarkSquareColor = Color(0xff87621a)
 
+enum class Color(val value: Int) {
+    WHITE(0),
+    BLACK(1);
+}
+
 val textures = listOf(
     listOf(
         Res.drawable.queenW, Res.drawable.rookW,
