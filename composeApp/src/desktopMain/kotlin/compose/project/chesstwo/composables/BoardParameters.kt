@@ -123,7 +123,7 @@ fun BoardParametersScene(
             ) {
                 Text(text = "Play", style = MaterialTheme.typography.h6)
             }
-            Spacer(Modifier.height(200.dp))
+            Spacer(Modifier.height(if(!computerGame)200.dp else 100.dp))
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly){
                 ScenarioButton("Classic",Res.drawable.classic, classicScenario(), onSelectedScenario, playerColor = playerColor)
                 ScenarioButton("Sandomierz Gambit", Res.drawable.sandomierz, sandomierzScenario(), onSelectedScenario,playerColor = playerColor)
