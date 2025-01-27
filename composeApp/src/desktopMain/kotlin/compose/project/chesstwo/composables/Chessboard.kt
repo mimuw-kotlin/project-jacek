@@ -20,7 +20,6 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -103,8 +102,9 @@ fun EndDisplay(board: Board, onExitToMenu: () -> Unit) {
 
     }
 }
+
 @Composable
-fun EndGameButton(onExitToMenu: ()->Unit){
+fun EndGameButton(onExitToMenu: () -> Unit) {
     Button(
         modifier = Modifier.fillMaxWidth().height(60.dp),
         onClick = { onExitToMenu() },
@@ -114,23 +114,23 @@ fun EndGameButton(onExitToMenu: ()->Unit){
     }
 
 }
+
 @Composable
-fun RightPanel(promotionDisplay : Boolean,
-               onEndDisplayChange : (Boolean)->Unit,
-               onExitToMenu: ()->Unit,
-               board : Board, textures : List<List<DrawableResource>>,
-               computerGame : Boolean){
+fun RightPanel(
+    promotionDisplay: Boolean,
+    onEndDisplayChange: (Boolean) -> Unit,
+    onExitToMenu: () -> Unit,
+    board: Board, textures: List<List<DrawableResource>>
+) {
 
     Box {
 
         Column(modifier = Modifier.fillMaxSize().padding(25.dp)) {
 
-            //Space for displaying pieces for promotion
+            // Space for displaying pieces for promotion
             Box(modifier = Modifier.fillMaxWidth().weight(5.0f)) {
-                //promotionDisplayPanel = board.promotionChoice
 
-                //if (promotionDisplay.value) {
-                if(promotionDisplay){
+                if (promotionDisplay) {
                     Column(modifier = Modifier.fillMaxSize()) {
                         Text(
                             "Choose a piece for promotion",
@@ -145,9 +145,6 @@ fun RightPanel(promotionDisplay : Boolean,
                                     .align(alignment = Alignment.CenterHorizontally)
                                     .clickable {
                                         board.finishPromotionMove(t)
-                                        //promotionDisplayPanel = board.promotionChoice
-                                        //onPromotionDisplayChange(board.promotionChoice)
-                                        //endDisplayPanel = board.gameEnded
                                         onEndDisplayChange(board.gameEnded)
                                     })
                         }
@@ -168,35 +165,45 @@ fun RightPanel(promotionDisplay : Boolean,
 }
 
 @Composable
-fun ChessBoard(board: Board, onExitToMenu: () -> Unit, gameWithComputer: Boolean = false, computerColor : PlayerColor = PlayerColor.BLACK) {
+fun ChessBoard(
+    board: Board,
+    onExitToMenu: () -> Unit,
+    gameWithComputer: Boolean = false,
+    computerColor: PlayerColor = PlayerColor.BLACK
+) {
 
     var isPieceSelected by remember { mutableStateOf(false) }
 
-    //Position of the selected piece
+    // Position of the selected piece
     var selectedPieceX by remember { mutableStateOf(0) }
     var selectedPieceY by remember { mutableStateOf(0) }
 
-    //List of squares attacked by the selected piece
+    // List of squares attacked by the selected piece
     val attackedSquares = remember { mutableStateListOf<Pair<Int, Int>>() }
 
-    //A need to display pieces for promotion
+    // A need to display pieces for promotion
     var promotionDisplay by remember { mutableStateOf(false) }
 
-    //A need to display game result
+    // A need to display game result
     var endDisplay by remember { mutableStateOf(false) }
 
-    var computerToPlay by remember {mutableStateOf(gameWithComputer && computerColor==PlayerColor.WHITE)}//(!gameWithComputer || !computerToPlay
+    var computerToPlay by remember {
+        mutableStateOf(gameWithComputer && computerColor == PlayerColor.WHITE)
+    }
     val computer = Computer(computerColor)
-    println("EWALUACJA: ${computer.evaluate(board)}")
 
-
-    if(gameWithComputer && computerToPlay && !board.promotionChoice){
-        //println("SEARCH: ${computer.search(board,3, -1001,1001)}")
+    // Computer logic
+    if (gameWithComputer && computerToPlay && !board.promotionChoice) {
         val move = computer.makeMove(board)
-        if(move!=null){
+        if (move != null) {
             board.possibleMoves.clear()
-            board.possibleMoves.addAll(board.piecesPositions[Pair(move.startX,move.startY)]!!.getMoves(board))
-            board.move(move.startX,move.startY,move.endX,move.endY, computerMove = true)
+            board.possibleMoves.addAll(
+                board.piecesPositions[Pair(
+                    move.startX,
+                    move.startY
+                )]!!.getMoves(board)
+            )
+            board.move(move.startX, move.startY, move.endX, move.endY, computerMove = true)
 
         }
 
@@ -204,10 +211,10 @@ fun ChessBoard(board: Board, onExitToMenu: () -> Unit, gameWithComputer: Boolean
         computerToPlay = false
     }
 
-    //Textures of pieces available for promotion
+    // Textures of pieces available for promotion
 
 
-    //Background image
+    // Background image
     Image(
         painter = painterResource((Res.drawable.mmBackground)),
         contentDescription = "Chessboard background", alpha = 0.4f
@@ -221,14 +228,14 @@ fun ChessBoard(board: Board, onExitToMenu: () -> Unit, gameWithComputer: Boolean
 
             Box(modifier = Modifier.padding(25.dp)) {
 
-                //Construction of the chessboard
+                // Construction of the chessboard
                 Column {
                     for (row in 0 until board.size) {
                         Row {
                             for (col in 0 until board.size) {
                                 Box(
                                     modifier = Modifier
-                                        .size((800/board.size).dp)
+                                        .size((800 / board.size).dp)
                                         .background(
                                             if ((row + col) % 2 == 0) lightSquareColor
                                             else darkSquareColor
@@ -236,9 +243,11 @@ fun ChessBoard(board: Board, onExitToMenu: () -> Unit, gameWithComputer: Boolean
                                         )
                                         .clickable {
 
-                                            //Clicked empty square
-                                            if (isPieceSelected && !board.promotionChoice && !(gameWithComputer && computerToPlay)) {
-                                                //Move if available
+                                            // Clicked empty square
+                                            if (isPieceSelected && !board.promotionChoice
+                                                && !(gameWithComputer && computerToPlay)
+                                            ) {
+                                                // Move if available
                                                 if (Pair(col, row) in attackedSquares.toList()) {
                                                     board.move(
                                                         selectedPieceX,
@@ -266,13 +275,19 @@ fun ChessBoard(board: Board, onExitToMenu: () -> Unit, gameWithComputer: Boolean
                                             painter = painterResource(
                                                 currentTexture
                                             ),
-                                            contentDescription = if(textureToString(currentTexture) !=null) stringResource(
-                                                textureToString(currentTexture)!!.first) else null,
+                                            contentDescription =
+                                            if (textureToString(currentTexture) != null)
+                                                stringResource(
+                                                    textureToString(currentTexture)!!.first
+                                                )
+                                            else null,
                                             modifier = Modifier.clickable {
-                                                if (!board.promotionChoice && !(gameWithComputer && computerToPlay)) {
+                                                if (!board.promotionChoice
+                                                    && !(gameWithComputer && computerToPlay)
+                                                ) {
                                                     val newPiece = board
                                                         .piecesPositions[Pair(col, row)]!!
-                                                    //Attacked another piece
+                                                    // Attacked another piece
                                                     if (isPieceSelected && Pair(
                                                             col,
                                                             row
@@ -289,27 +304,30 @@ fun ChessBoard(board: Board, onExitToMenu: () -> Unit, gameWithComputer: Boolean
                                                         computerToPlay = true
 
                                                     }
-                                                    //Selected another piece
+                                                    // Selected another piece
 
                                                     else if (
-                                                        newPiece.color == PlayerColor.turnToColor(board.turn)) {
+                                                        newPiece.color == PlayerColor.turnToColor(
+                                                            board.turn
+                                                        )
+                                                    ) {
 
                                                         isPieceSelected = false
 
-                                                        //Getting all possible moves
-                                                        //for newly selected piece
+                                                        // Getting all possible moves
+                                                        // for newly selected piece
                                                         board.possibleMoves.clear()
                                                         board.possibleMoves.addAll(
                                                             newPiece.getMoves(board)
                                                         )
 
-                                                        //Getting all attacked squares
-                                                        //for newly selected piece
+                                                        // Getting all attacked squares
+                                                        // for newly selected piece
                                                         attackedSquares.clear()
                                                         attackedSquares
                                                             .addAll(board.getAttackedSquares())
 
-                                                        //Update selected piece information
+                                                        // Update selected piece information
                                                         if (selectedPieceX != col
                                                             || selectedPieceY != row
                                                             || !isPieceSelected
@@ -326,13 +344,13 @@ fun ChessBoard(board: Board, onExitToMenu: () -> Unit, gameWithComputer: Boolean
 
                                     }
 
-                                    //Drawing squares attacked by selected piece
+                                    // Drawing squares attacked by selected piece
                                     if (isPieceSelected && Pair(col, row)
                                         in board.getAttackedSquares()
                                     ) {
                                         Canvas(
                                             modifier = Modifier
-                                                .size((400/board.size).dp)
+                                                .size((400 / board.size).dp)
                                                 .align(Alignment.Center),
                                             onDraw = {
                                                 drawCircle(color = Color.Green, alpha = 0.5f)
@@ -345,12 +363,20 @@ fun ChessBoard(board: Board, onExitToMenu: () -> Unit, gameWithComputer: Boolean
                     }
                 }
             }
-            //Right panel
-            Column(horizontalAlignment = Alignment.CenterHorizontally){
-                if(!gameWithComputer){
+            // Right panel
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                if (!gameWithComputer) {
                     Spacer(modifier = Modifier.height(25.dp))
-                    val backgroundColor = if(PlayerColor.turnToColor(board.turn) == PlayerColor.WHITE)Color.White else Color.Black
-                    Box(modifier = Modifier.background(backgroundColor).width(300.dp).height(60.dp), contentAlignment = Alignment.Center) {
+                    val backgroundColor =
+                        if (PlayerColor.turnToColor(board.turn) == PlayerColor.WHITE)
+                            Color.White else Color.Black
+                    Box(
+                        modifier = Modifier
+                            .background(backgroundColor)
+                            .width(300.dp)
+                            .height(60.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
                         if (PlayerColor.turnToColor(board.turn) == PlayerColor.WHITE) {
                             Text(
                                 text = "White to move",
@@ -371,11 +397,12 @@ fun ChessBoard(board: Board, onExitToMenu: () -> Unit, gameWithComputer: Boolean
                 promotionDisplay = board.promotionChoice
                 RightPanel(
                     promotionDisplay = promotionDisplay,
-                    onEndDisplayChange = {newValue ->  println("endDisplay change: $endDisplay -> $newValue");endDisplay =newValue},
+                    onEndDisplayChange = { newValue ->
+                        endDisplay = newValue
+                    },
                     onExitToMenu = onExitToMenu,
                     board = board,
-                    textures = textures,
-                    computerGame = gameWithComputer
+                    textures = textures
                 )
 
             }

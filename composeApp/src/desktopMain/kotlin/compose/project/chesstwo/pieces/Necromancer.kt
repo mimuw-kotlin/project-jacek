@@ -13,7 +13,7 @@ class Necromancer(
 ) : Piece {
     override val value = 11
     override fun getPseudoMoves(board: Board): List<Move> {
-        //Directions in which queen can move
+        // Directions in which necromancer can move
         val directions = listOf(
             Pair(0, 1), Pair(0, -1), Pair(1, 0), Pair(-1, 0),
             Pair(1, 1), Pair(1, -1), Pair(-1, 1), Pair(-1, -1)
@@ -24,8 +24,8 @@ class Necromancer(
             var x = posX + dir.first
             var y = posY + dir.second
             while (x in 0..<board.size && y in 0..<board.size) {
-                if (Pair(x, y) in board.piecesPositions.keys) { //Found a piece in the way
-                    if (ableToCapture(board,x,y)) {
+                if (Pair(x, y) in board.piecesPositions.keys) { // Found a piece in the way
+                    if (ableToCapture(board, x, y)) {
                         moves.add(Move(posX, posY, x, y))
                     }
                     break
@@ -37,7 +37,8 @@ class Necromancer(
         }
         return moves
     }
-    override fun copy() : Piece{
-        return Necromancer(posX,posY,texture,color)
+
+    override fun copy(): Piece {
+        return Necromancer(posX, posY, texture, color)
     }
 }

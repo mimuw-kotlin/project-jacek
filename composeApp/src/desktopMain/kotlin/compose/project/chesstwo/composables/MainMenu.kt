@@ -51,7 +51,7 @@ fun MainMenuButton(
             .padding(vertical = 20.dp),
         colors = buttonColor,
 
-    ) {
+        ) {
         Text(text = text, color = textColor, style = MaterialTheme.typography.h6)
     }
 }
@@ -59,14 +59,14 @@ fun MainMenuButton(
 @Composable
 fun MainMenuScene(onStartGame: () -> Unit, onStartComputerGame: () -> Unit) {
 
-    //Background
+    // Background
     Image(
         painter = painterResource((Res.drawable.mmBackground)),
         contentDescription = "Main Menu background",
         alpha = 0.7f
     )
 
-    //Buttons
+    // Buttons
     Column(
         modifier = Modifier
             .fillMaxSize()

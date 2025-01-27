@@ -2,7 +2,6 @@ package compose.project.chesstwo
 
 import androidx.compose.ui.graphics.Color
 import chesstwo.composeapp.generated.resources.Res
-import chesstwo.composeapp.generated.resources.allDrawableResources
 import chesstwo.composeapp.generated.resources.bishopB
 import chesstwo.composeapp.generated.resources.bishopDesc
 import chesstwo.composeapp.generated.resources.bishopName
@@ -60,10 +59,11 @@ enum class PlayerColor(val value: Int) {
 
     companion object {
         fun turnToColor(turn: Int): PlayerColor {
-            return if(turn%2==0) WHITE else BLACK
+            return if (turn % 2 == 0) WHITE else BLACK
         }
-        fun negateColor(color : PlayerColor):PlayerColor{
-            return if(color==WHITE) BLACK else WHITE
+
+        fun negateColor(color: PlayerColor): PlayerColor {
+            return if (color == WHITE) BLACK else WHITE
         }
     }
 }
@@ -83,17 +83,17 @@ val allTextures = listOf(
     listOf(
         Res.drawable.queenW, Res.drawable.rookW,
         Res.drawable.bishopW, Res.drawable.knightW,
-        Res.drawable.pawnW,Res.drawable.princeW,
+        Res.drawable.pawnW, Res.drawable.princeW,
         Res.drawable.unicornW, Res.drawable.portalW,
-        Res.drawable.bombW,Res.drawable.shieldW,
+        Res.drawable.bombW, Res.drawable.shieldW,
         Res.drawable.necromancerW
     ),
     listOf(
         Res.drawable.queenB, Res.drawable.rookB,
         Res.drawable.bishopB, Res.drawable.knightB,
-        Res.drawable.pawnB,Res.drawable.princeB,
+        Res.drawable.pawnB, Res.drawable.princeB,
         Res.drawable.unicornB, Res.drawable.portalB,
-        Res.drawable.bombB,Res.drawable.shieldB,
+        Res.drawable.bombB, Res.drawable.shieldB,
         Res.drawable.necromancerB
     )
 )
@@ -101,17 +101,17 @@ val pieceDescriptions = listOf(
     listOf(
         Res.string.queenName, Res.string.rookName,
         Res.string.bishopName, Res.string.knightName,
-        Res.string.pawnName,Res.string.princeName,
+        Res.string.pawnName, Res.string.princeName,
         Res.string.unicornName, Res.string.portalName,
-        Res.string.bombName,Res.string.shieldName,
+        Res.string.bombName, Res.string.shieldName,
         Res.string.necromancerName
     ),
     listOf(
         Res.string.queenDesc, Res.string.rookDesc,
         Res.string.bishopDesc, Res.string.knightDesc,
-        Res.string.pawnDesc,Res.string.princeDesc,
+        Res.string.pawnDesc, Res.string.princeDesc,
         Res.string.unicornDesc, Res.string.portalDesc,
-        Res.string.bombDesc,Res.string.shieldDesc,
+        Res.string.bombDesc, Res.string.shieldDesc,
         Res.string.necromancerDesc
     )
 )

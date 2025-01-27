@@ -5,7 +5,7 @@ data class Move(
     val startX: Int,
     val startY: Int,
 
-    //Piece's ending position
+    // Piece's ending position
     val endX: Int,
     val endY: Int,
 

@@ -34,6 +34,7 @@ class ChessTwoUITests {
 
 
     }
+
     @Test
     fun sceneNavigationOnePlayer() {
         composeTestRule.setContent {
@@ -52,6 +53,7 @@ class ChessTwoUITests {
 
 
     }
+
     @Test
     fun sceneNavigationScenario() {
         composeTestRule.setContent {
@@ -68,6 +70,7 @@ class ChessTwoUITests {
 
 
     }
+
     @Test
     fun correctClassicScenarioSetup() {
         composeTestRule.setContent {
@@ -129,6 +132,7 @@ class ChessTwoUITests {
         composeTestRule.onNodeWithText("Play the computer").assertExists()
         composeTestRule.onNodeWithText("Exit").assertExists()
     }
+
     @Test
     fun boardParametersButtons() {
         composeTestRule.setContent {
@@ -140,6 +144,7 @@ class ChessTwoUITests {
         composeTestRule.onNodeWithText("Sandomierz Gambit").assertExists()
         composeTestRule.onNodeWithText("Rohan vs Mordor").assertExists()
     }
+
     @Test
     fun settingUpButtons() {
         composeTestRule.setContent {
@@ -153,6 +158,7 @@ class ChessTwoUITests {
         composeTestRule.onNodeWithText("Start").assertExists()
         composeTestRule.onNodeWithText("Main Menu").assertExists()
     }
+
     @Test
     fun chessboardButtons() {
         composeTestRule.setContent {

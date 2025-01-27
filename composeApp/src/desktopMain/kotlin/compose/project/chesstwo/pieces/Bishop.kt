@@ -14,15 +14,15 @@ class Bishop(
     override val value = 3
 
     override fun getPseudoMoves(board: Board): List<Move> {
-        //Directions in which bishop can move
+        // Directions in which bishop can move
         val directions = listOf(Pair(1, 1), Pair(1, -1), Pair(-1, 1), Pair(-1, -1))
         val moves: MutableList<Move> = mutableListOf()
         for (dir in directions) {
             var x = posX + dir.first
             var y = posY + dir.second
             while (x in 0..<board.size && y in 0..<board.size) {
-                if (Pair(x, y) in board.piecesPositions.keys) { //Found a piece in the way
-                    if (ableToCapture(board,x,y)) {
+                if (Pair(x, y) in board.piecesPositions.keys) { // Found a piece in the way
+                    if (ableToCapture(board, x, y)) {
                         moves.add(Move(posX, posY, x, y))
                     }
                     break
@@ -35,7 +35,8 @@ class Bishop(
         }
         return moves
     }
-    override fun copy() : Piece{
-        return Bishop(posX,posY,texture,color)
+
+    override fun copy(): Piece {
+        return Bishop(posX, posY, texture, color)
     }
 }

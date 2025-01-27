@@ -12,79 +12,88 @@ class Pawn(
     override var texture: DrawableResource,
     override var color: PlayerColor,
     private var moved: Boolean = false,
-    private var turnOfDoubleMove : Int = -1
+    private var turnOfDoubleMove: Int = -1
 ) : Piece {
     override val value = 1
     override fun getPseudoMoves(board: Board): List<Move> {
-        val moves:MutableList<Move> = mutableListOf()
+        val moves: MutableList<Move> = mutableListOf()
 
         // Row that the pawn could go into
-        var nextRow = if (color==PlayerColor.WHITE) posY-1 else posY+1
+        var nextRow = if (color == PlayerColor.WHITE) posY - 1 else posY + 1
 
-        for (d in listOf(-1,1)){
-            //Attacking on diagonal
-            if (board.inBounds(posX+d,nextRow)
-                && Pair(posX+d,nextRow) in board.piecesPositions.keys
-                && ableToCapture(board,posX+d,nextRow)){
+        for (d in listOf(-1, 1)) {
+            // Attacking on diagonal
+            if (board.inBounds(posX + d, nextRow)
+                && Pair(posX + d, nextRow) in board.piecesPositions.keys
+                && ableToCapture(board, posX + d, nextRow)
+            ) {
 
-                moves.add(Move(posX,posY,posX+d,nextRow))
+                moves.add(Move(posX, posY, posX + d, nextRow))
             }
-            //En passant
+            // En passant
 
-            if(board.inBounds(posX+d,nextRow)
-                && Pair(posX+d,posY) in board.piecesPositions.keys){
-                val potentialEnPassantPawn = board.piecesPositions[Pair(posX+d,posY)]!!
+            if (board.inBounds(posX + d, nextRow)
+                && Pair(posX + d, posY) in board.piecesPositions.keys
+            ) {
+                val potentialEnPassantPawn = board.piecesPositions[Pair(posX + d, posY)]!!
 
-                if(potentialEnPassantPawn.color!=color
+                if (potentialEnPassantPawn.color != color
                     && potentialEnPassantPawn is Pawn
-                    && potentialEnPassantPawn.turnOfDoubleMove==board.turn-1){
-                    moves.add(Move(posX,posY,posX+d,nextRow,true))
+                    && potentialEnPassantPawn.turnOfDoubleMove == board.turn - 1
+                ) {
+                    moves.add(Move(posX, posY, posX + d, nextRow, true))
                 }
             }
 
         }
 
-        //Move one square
-        if(nextRow in 0..<board.size && Pair(posX,nextRow) !in board.piecesPositions.keys){
-            moves.add(Move(posX,posY,posX,nextRow,attacking = false))
+        // Move one square
+        if (nextRow in 0..<board.size && Pair(posX, nextRow) !in board.piecesPositions.keys) {
+            moves.add(Move(posX, posY, posX, nextRow, attacking = false))
         }
 
-        //Move two squares
+        // Move two squares
         val oneSquare = nextRow
-        nextRow = if (color==PlayerColor.WHITE) posY-2 else posY+2
-        if(!moved && nextRow in 0..<board.size && Pair(posX,nextRow) !in board.piecesPositions.keys
-            && Pair(posX,oneSquare) !in board.piecesPositions.keys){
-            moves.add(Move(posX,posY,posX,nextRow, attacking = false))
+        nextRow = if (color == PlayerColor.WHITE) posY - 2 else posY + 2
+        if (!moved && nextRow in 0..<board.size && Pair(
+                posX,
+                nextRow
+            ) !in board.piecesPositions.keys
+            && Pair(posX, oneSquare) !in board.piecesPositions.keys
+        ) {
+            moves.add(Move(posX, posY, posX, nextRow, attacking = false))
         }
         return moves
     }
 
-    //Generate pawn attacking moves that could check the king
-    fun getPotentialAttacks(board : Board) : List<Move> {
-        val moves:MutableList<Move> = mutableListOf()
+    // Generate pawn attacking moves that could check the king
+    fun getPotentialAttacks(board: Board): List<Move> {
+        val moves: MutableList<Move> = mutableListOf()
 
         // Row that the pawn could go into
-        val nextRow = if (color==PlayerColor.WHITE) posY-1 else posY+1
-        for (d in listOf(-1,1)){
-            //Attacking on diagonal
-            if (board.inBounds(posX+d,nextRow)
-                && Pair(posX+d,nextRow) !in board.piecesPositions.keys){
-                moves.add(Move(posX,posY,posX+d,nextRow))
+        val nextRow = if (color == PlayerColor.WHITE) posY - 1 else posY + 1
+        for (d in listOf(-1, 1)) {
+            // Attacking on diagonal
+            if (board.inBounds(posX + d, nextRow)
+                && Pair(posX + d, nextRow) !in board.piecesPositions.keys
+            ) {
+                moves.add(Move(posX, posY, posX + d, nextRow))
             }
 
         }
         return moves
     }
 
-    override fun move(endX : Int,endY : Int, board : Board){
+    override fun move(endX: Int, endY: Int, board: Board) {
         moved = true
-        if(abs(endY-posY)==2){
+        if (abs(endY - posY) == 2) {
             turnOfDoubleMove = board.turn
         }
-        posX=endX
-        posY=endY
+        posX = endX
+        posY = endY
     }
-    override fun copy() : Piece{
-        return Pawn(posX,posY,texture,color,moved,turnOfDoubleMove)
+
+    override fun copy(): Piece {
+        return Pawn(posX, posY, texture, color, moved, turnOfDoubleMove)
     }
 }

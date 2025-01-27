@@ -13,7 +13,7 @@ class Knight(
 ) : Piece {
     override val value = 3
     override fun getPseudoMoves(board: Board): List<Move> {
-        //All possible knight moves
+        // All possible knight moves
         val allMoves = listOf(
             Pair(1, 2), Pair(1, -2), Pair(-1, 2),
             Pair(-1, -2), Pair(2, 1), Pair(2, -1), Pair(-2, 1), Pair(-2, -1)
@@ -24,8 +24,8 @@ class Knight(
             val x = posX + move.first
             val y = posY + move.second
 
-            //Square occupied by same color piece
-            if (x < 0 || x > board.size-1 || y < 0 || y > board.size-1
+            // Square occupied by same color piece
+            if (x < 0 || x > board.size - 1 || y < 0 || y > board.size - 1
                 || (Pair(x, y) in board.piecesPositions.keys
                         && board.piecesPositions[Pair(x, y)]!!.color == color)
             ) {
@@ -34,12 +34,17 @@ class Knight(
             moves.add(Move(posX, posY, x, y))
 
         }
-        moves.removeIf{
-            Pair(it.endX,it.endY) in board.piecesPositions.keys && !ableToCapture(board,it.endX,it.endY)
+        moves.removeIf {
+            Pair(it.endX, it.endY) in board.piecesPositions.keys && !ableToCapture(
+                board,
+                it.endX,
+                it.endY
+            )
         }
         return moves
     }
-    override fun copy() : Piece{
-        return Knight(posX,posY,texture,color)
+
+    override fun copy(): Piece {
+        return Knight(posX, posY, texture, color)
     }
 }

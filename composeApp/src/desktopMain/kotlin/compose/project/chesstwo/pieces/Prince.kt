@@ -5,12 +5,13 @@ import compose.project.chesstwo.Move
 import compose.project.chesstwo.PlayerColor
 import org.jetbrains.compose.resources.DrawableResource
 
-class Prince (override var posX: Int,
-              override var posY: Int,
-              override var texture: DrawableResource,
-              override var color: PlayerColor,
-              private var moved: Boolean = false
-) : Piece{
+class Prince(
+    override var posX: Int,
+    override var posY: Int,
+    override var texture: DrawableResource,
+    override var color: PlayerColor,
+    private var moved: Boolean = false
+) : Piece {
     override val value = 2
     override fun getPseudoMoves(board: Board): List<Move> {
         val allMoves = listOf(
@@ -22,8 +23,8 @@ class Prince (override var posX: Int,
             val x = posX + move.first
             val y = posY + move.second
 
-            //Square occupied by same color piece
-            if (x < 0 || x >=board.size || y < 0 || y >= board.size ||
+            // Square occupied by same color piece
+            if (x < 0 || x >= board.size || y < 0 || y >= board.size ||
                 (Pair(x, y) in board.piecesPositions.keys
                         && board.piecesPositions[Pair(x, y)]!!.color == color)
             ) {
@@ -32,12 +33,17 @@ class Prince (override var posX: Int,
             moves.add(Move(posX, posY, x, y))
 
         }
-        moves.removeIf{
-            Pair(it.endX,it.endY) in board.piecesPositions.keys && !ableToCapture(board,it.endX,it.endY)
+        moves.removeIf {
+            Pair(it.endX, it.endY) in board.piecesPositions.keys && !ableToCapture(
+                board,
+                it.endX,
+                it.endY
+            )
         }
         return moves
     }
-    override fun copy() : Piece{
-        return Prince(posX,posY,texture,color,moved)
+
+    override fun copy(): Piece {
+        return Prince(posX, posY, texture, color, moved)
     }
 }

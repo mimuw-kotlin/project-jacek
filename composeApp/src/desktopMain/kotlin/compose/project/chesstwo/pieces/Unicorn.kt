@@ -5,20 +5,21 @@ import compose.project.chesstwo.Move
 import compose.project.chesstwo.PlayerColor
 import org.jetbrains.compose.resources.DrawableResource
 
-class Unicorn (override var posX: Int,
-              override var posY: Int,
-              override var texture: DrawableResource,
-              override var color: PlayerColor,
-              private var moved: Boolean = false
-) : Piece{
+class Unicorn(
+    override var posX: Int,
+    override var posY: Int,
+    override var texture: DrawableResource,
+    override var color: PlayerColor,
+    private var moved: Boolean = false
+) : Piece {
     override val value = 5
     override fun getPseudoMoves(board: Board): List<Move> {
-        //All possible knight moves
+        // All possible unicorn moves
         val allMoves = listOf(
             Pair(1, 2), Pair(1, -2), Pair(-1, 2),
             Pair(-1, -2), Pair(2, 1), Pair(2, -1), Pair(-2, 1), Pair(-2, -1),
-            Pair(0,1), Pair(0,2), Pair(0,-1), Pair(0,-2), Pair(1,0), Pair(2,0),
-            Pair(-1,0),Pair(-2,0)
+            Pair(0, 1), Pair(0, 2), Pair(0, -1), Pair(0, -2), Pair(1, 0), Pair(2, 0),
+            Pair(-1, 0), Pair(-2, 0)
         )
 
         val moves: MutableList<Move> = mutableListOf()
@@ -26,8 +27,8 @@ class Unicorn (override var posX: Int,
             val x = posX + move.first
             val y = posY + move.second
 
-            //Square occupied by same color piece
-            if (x < 0 || x > board.size-1 || y < 0 || y > board.size-1
+            // Square occupied by same color piece
+            if (x < 0 || x > board.size - 1 || y < 0 || y > board.size - 1
                 || (Pair(x, y) in board.piecesPositions.keys
                         && board.piecesPositions[Pair(x, y)]!!.color == color)
             ) {
@@ -36,13 +37,18 @@ class Unicorn (override var posX: Int,
             moves.add(Move(posX, posY, x, y))
 
         }
-        moves.removeIf{
-            Pair(it.endX,it.endY) in board.piecesPositions.keys && !ableToCapture(board,it.endX,it.endY)
+        moves.removeIf {
+            Pair(it.endX, it.endY) in board.piecesPositions.keys && !ableToCapture(
+                board,
+                it.endX,
+                it.endY
+            )
         }
         return moves
     }
-    override fun copy() : Piece{
-        return Unicorn(posX,posY,texture,color,moved)
+
+    override fun copy(): Piece {
+        return Unicorn(posX, posY, texture, color, moved)
     }
 
 }

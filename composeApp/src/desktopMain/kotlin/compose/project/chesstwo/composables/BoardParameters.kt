@@ -29,10 +29,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import chesstwo.composeapp.generated.resources.Res
-import chesstwo.composeapp.generated.resources.mmBackground
 import chesstwo.composeapp.generated.resources.classic
-import chesstwo.composeapp.generated.resources.sandomierz
 import chesstwo.composeapp.generated.resources.lotr
+import chesstwo.composeapp.generated.resources.mmBackground
+import chesstwo.composeapp.generated.resources.sandomierz
 import compose.project.chesstwo.PlayerColor
 import compose.project.chesstwo.classicScenario
 import compose.project.chesstwo.lotrScenario
@@ -43,17 +43,17 @@ import org.jetbrains.compose.resources.painterResource
 
 @Composable
 fun BoardParametersScene(
-    onSubmitParameters : (Int,Int, PlayerColor)->Unit,
-    onSelectedScenario : (MutableMap<Pair<Int,Int>,Piece>, Int, PlayerColor)-> Unit,
-    computerGame : Boolean
-    ) {
+    onSubmitParameters: (Int, Int, PlayerColor) -> Unit,
+    onSelectedScenario: (MutableMap<Pair<Int, Int>, Piece>, Int, PlayerColor) -> Unit,
+    computerGame: Boolean
+) {
 
     val initialValue = 8
     val minValue = 8
-    val maxValue = if(computerGame) 12 else 30
+    val maxValue = if (computerGame) 12 else 30
     var boardSize by remember { mutableStateOf(initialValue.coerceIn(minValue, maxValue)) }
     var points by remember { mutableStateOf("38") }
-    var playerColor by remember { mutableStateOf(PlayerColor.WHITE)}
+    var playerColor by remember { mutableStateOf(PlayerColor.WHITE) }
     Image(
         painter = painterResource((Res.drawable.mmBackground)),
         contentDescription = "Board parameters background", alpha = 0.4f
@@ -91,10 +91,10 @@ fun BoardParametersScene(
             )
 
             Spacer(modifier = Modifier.height(16.dp))
-            if(computerGame) {
+            if (computerGame) {
                 Row {
                     Button(
-                        onClick = { playerColor = PlayerColor.WHITE},
+                        onClick = { playerColor = PlayerColor.WHITE },
                         modifier = Modifier
                             .padding(vertical = 20.dp)
                             .width(250.dp),
@@ -104,7 +104,7 @@ fun BoardParametersScene(
                     }
                     Spacer(modifier = Modifier.width(100.dp))
                     Button(
-                        onClick = { playerColor = PlayerColor.BLACK},
+                        onClick = { playerColor = PlayerColor.BLACK },
                         modifier = Modifier
                             .padding(vertical = 20.dp)
                             .width(250.dp),
@@ -116,35 +116,86 @@ fun BoardParametersScene(
                 Spacer(modifier = Modifier.height(16.dp))
             }
             Button(
-                onClick = { onSubmitParameters(boardSize, if(points.toIntOrNull()!=null) points.toInt() else 38, PlayerColor.negateColor(playerColor)) },
+                onClick = {
+                    onSubmitParameters(
+                        boardSize,
+                        if (points.toIntOrNull() != null) points.toInt() else 38,
+                        PlayerColor.negateColor(playerColor)
+                    )
+                },
                 modifier = Modifier
                     .padding(vertical = 20.dp)
                     .width(100.dp)
             ) {
                 Text(text = "Play", style = MaterialTheme.typography.h6)
             }
-            Spacer(Modifier.height(if(!computerGame)200.dp else 100.dp))
-            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly){
-                ScenarioButton("Classic",Res.drawable.classic, classicScenario(), onSelectedScenario, playerColor = playerColor)
-                ScenarioButton("Sandomierz Gambit", Res.drawable.sandomierz, sandomierzScenario(), onSelectedScenario,playerColor = playerColor)
-                ScenarioButton("Rohan vs Mordor", Res.drawable.lotr, lotrScenario(), onSelectedScenario, boardSize = 12, enabled = !computerGame, playerColor=playerColor)
+            Spacer(Modifier.height(if (!computerGame) 200.dp else 100.dp))
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceEvenly
+            ) {
+                ScenarioButton(
+                    "Classic",
+                    Res.drawable.classic,
+                    classicScenario(),
+                    onSelectedScenario,
+                    playerColor = playerColor
+                )
+                ScenarioButton(
+                    "Sandomierz Gambit",
+                    Res.drawable.sandomierz,
+                    sandomierzScenario(),
+                    onSelectedScenario,
+                    playerColor = playerColor
+                )
+                ScenarioButton(
+                    "Rohan vs Mordor",
+                    Res.drawable.lotr,
+                    lotrScenario(),
+                    onSelectedScenario,
+                    boardSize = 12,
+                    enabled = !computerGame,
+                    playerColor = playerColor
+                )
             }
         }
     }
 }
 
 @Composable
-fun ScenarioButton(text : String, image : DrawableResource, scenarioSetup :  MutableMap<Pair<Int,Int>, Piece>, onSelectedScenario : (MutableMap<Pair<Int,Int>,Piece>,Int, PlayerColor)-> Unit,
-                   boardSize : Int = 8, enabled : Boolean = true, playerColor : PlayerColor = PlayerColor.WHITE){
+fun ScenarioButton(
+    text: String,
+    image: DrawableResource,
+    scenarioSetup: MutableMap<Pair<Int, Int>, Piece>,
+    onSelectedScenario: (MutableMap<Pair<Int, Int>, Piece>, Int, PlayerColor) -> Unit,
+    boardSize: Int = 8,
+    enabled: Boolean = true,
+    playerColor: PlayerColor = PlayerColor.WHITE
+) {
     Button(
-        onClick={onSelectedScenario(scenarioSetup,boardSize,PlayerColor.negateColor(playerColor))},
+        onClick = {
+            onSelectedScenario(
+                scenarioSetup,
+                boardSize,
+                PlayerColor.negateColor(playerColor)
+            )
+        },
         modifier = Modifier
             .height(4000.dp)
             .width(300.dp),
         content = {
-            Column(modifier = Modifier.wrapContentSize(Alignment.Center)){
-                Image(painter = painterResource(image), contentDescription = null, modifier = Modifier.height(300.dp).fillMaxWidth())
-                Text(text=text, modifier = Modifier.height(100.dp).fillMaxWidth(), textAlign = TextAlign.Center,style=MaterialTheme.typography.h5)
+            Column(modifier = Modifier.wrapContentSize(Alignment.Center)) {
+                Image(
+                    painter = painterResource(image),
+                    contentDescription = null,
+                    modifier = Modifier.height(300.dp).fillMaxWidth()
+                )
+                Text(
+                    text = text,
+                    modifier = Modifier.height(100.dp).fillMaxWidth(),
+                    textAlign = TextAlign.Center,
+                    style = MaterialTheme.typography.h5
+                )
             }
 
         },

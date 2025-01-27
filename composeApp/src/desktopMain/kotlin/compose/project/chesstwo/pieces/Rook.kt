@@ -14,15 +14,15 @@ class Rook(
 ) : Piece {
     override val value = 5
     override fun getPseudoMoves(board: Board): List<Move> {
-        //Directions in which rook can move
+        // Directions in which rook can move
         val directions = listOf(Pair(0, 1), Pair(0, -1), Pair(1, 0), Pair(-1, 0))
         val moves: MutableList<Move> = mutableListOf()
         for (dir in directions) {
             var x = posX + dir.first
             var y = posY + dir.second
             while (x in 0..<board.size && y in 0..<board.size) {
-                if (Pair(x, y) in board.piecesPositions.keys) { //Found a piece in the way
-                    if (ableToCapture(board,x,y)) {
+                if (Pair(x, y) in board.piecesPositions.keys) { // Found a piece in the way
+                    if (ableToCapture(board, x, y)) {
                         moves.add(Move(posX, posY, x, y))
                     }
                     break
@@ -40,7 +40,8 @@ class Rook(
         super.move(endX, endY, board)
         moved = true
     }
-    override fun copy() : Piece{
-        return Rook(posX,posY,texture,color,moved)
+
+    override fun copy(): Piece {
+        return Rook(posX, posY, texture, color, moved)
     }
 }

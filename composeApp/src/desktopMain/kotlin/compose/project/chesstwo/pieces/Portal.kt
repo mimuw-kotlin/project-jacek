@@ -5,15 +5,16 @@ import compose.project.chesstwo.Move
 import compose.project.chesstwo.PlayerColor
 import org.jetbrains.compose.resources.DrawableResource
 
-class Portal (override var posX: Int,
-               override var posY: Int,
-               override var texture: DrawableResource,
-               override var color: PlayerColor,
-               private var moved: Boolean = false
-) : Piece{
+class Portal(
+    override var posX: Int,
+    override var posY: Int,
+    override var texture: DrawableResource,
+    override var color: PlayerColor,
+    private var moved: Boolean = false
+) : Piece {
     override val value = 12
     override fun getPseudoMoves(board: Board): List<Move> {
-        //Directions in which queen can move
+        // Directions in which portal can move
         val directions = listOf(
             Pair(0, 1), Pair(0, -1), Pair(1, 0), Pair(-1, 0),
             Pair(1, 1), Pair(1, -1), Pair(-1, 1), Pair(-1, -1)
@@ -24,8 +25,8 @@ class Portal (override var posX: Int,
             var x = posX + dir.first
             var y = posY + dir.second
             while (x in 0..<board.size && y in 0..<board.size) {
-                if (Pair(x, y) in board.piecesPositions.keys) { //Found a piece in the way
-                    if (ableToCapture(board,x,y)) {
+                if (Pair(x, y) in board.piecesPositions.keys) { // Found a piece in the way
+                    if (ableToCapture(board, x, y)) {
                         moves.add(Move(posX, posY, x, y))
                     }
                     break
@@ -34,23 +35,25 @@ class Portal (override var posX: Int,
                 x += dir.first
 
                 y += dir.second
-                if (dir == Pair(1,0) || dir == Pair(-1,0)){
-                    x = wrapMovement(x,board)
-                    y = wrapMovement(y,board)
+                if (dir == Pair(1, 0) || dir == Pair(-1, 0)) {
+                    x = wrapMovement(x, board)
+                    y = wrapMovement(y, board)
                 }
 
             }
         }
         return moves
     }
-    private fun wrapMovement(pos : Int, board : Board) : Int{
-        if(pos==-1)
-            return board.size-1
-        if(pos==board.size)
+
+    private fun wrapMovement(pos: Int, board: Board): Int {
+        if (pos == -1)
+            return board.size - 1
+        if (pos == board.size)
             return 0
         return pos
     }
-    override fun copy() : Piece{
-        return Portal(posX,posY,texture,color,moved)
+
+    override fun copy(): Piece {
+        return Portal(posX, posY, texture, color, moved)
     }
 }

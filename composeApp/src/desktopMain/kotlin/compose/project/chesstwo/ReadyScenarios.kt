@@ -21,8 +21,8 @@ import compose.project.chesstwo.pieces.Piece
 import compose.project.chesstwo.pieces.Queen
 import compose.project.chesstwo.pieces.Rook
 
-fun classicScenario() : MutableMap<Pair<Int,Int>, Piece> {
-    val piecesPositions = mutableMapOf<Pair<Int,Int>,Piece>()
+fun classicScenario(): MutableMap<Pair<Int, Int>, Piece> {
+    val piecesPositions = mutableMapOf<Pair<Int, Int>, Piece>()
     piecesPositions[Pair(0, 0)] = Rook(0, 0, Res.drawable.rookB, PlayerColor.BLACK)
     piecesPositions[Pair(1, 0)] = Knight(1, 0, Res.drawable.knightB, PlayerColor.BLACK)
     piecesPositions[Pair(2, 0)] = Bishop(2, 0, Res.drawable.bishopB, PlayerColor.BLACK)
@@ -48,8 +48,8 @@ fun classicScenario() : MutableMap<Pair<Int,Int>, Piece> {
     return piecesPositions
 }
 
-fun sandomierzScenario() : MutableMap<Pair<Int,Int>, Piece> {
-    val piecesPositions = mutableMapOf<Pair<Int,Int>,Piece>()
+fun sandomierzScenario(): MutableMap<Pair<Int, Int>, Piece> {
+    val piecesPositions = mutableMapOf<Pair<Int, Int>, Piece>()
     piecesPositions[Pair(0, 0)] = Rook(0, 0, Res.drawable.rookB, PlayerColor.BLACK)
     piecesPositions[Pair(1, 0)] = Knight(1, 0, Res.drawable.knightB, PlayerColor.BLACK)
     piecesPositions[Pair(2, 0)] = Bishop(2, 0, Res.drawable.bishopB, PlayerColor.BLACK)
@@ -72,8 +72,8 @@ fun sandomierzScenario() : MutableMap<Pair<Int,Int>, Piece> {
     return piecesPositions
 }
 
-fun lotrScenario() : MutableMap<Pair<Int,Int>, Piece> {
-    val piecesPositions = mutableMapOf<Pair<Int,Int>,Piece>()
+fun lotrScenario(): MutableMap<Pair<Int, Int>, Piece> {
+    val piecesPositions = mutableMapOf<Pair<Int, Int>, Piece>()
     piecesPositions[Pair(0, 0)] = Rook(0, 0, Res.drawable.rookB, PlayerColor.BLACK)
     piecesPositions[Pair(6, 0)] = King(6, 0, Res.drawable.kingB, PlayerColor.BLACK)
     piecesPositions[Pair(11, 0)] = Rook(11, 0, Res.drawable.rookB, PlayerColor.BLACK)
@@ -86,7 +86,8 @@ fun lotrScenario() : MutableMap<Pair<Int,Int>, Piece> {
         piecesPositions[Pair(i, 3)] = Pawn(i, 3, Res.drawable.pawnB, PlayerColor.BLACK)
 
 
-        if(i!=6)piecesPositions[Pair(i, 11)] = Knight(i, 11, Res.drawable.knightW, PlayerColor.WHITE)
+        if (i != 6) piecesPositions[Pair(i, 11)] =
+            Knight(i, 11, Res.drawable.knightW, PlayerColor.WHITE)
         piecesPositions[Pair(i, 10)] = Knight(i, 10, Res.drawable.knightW, PlayerColor.WHITE)
 
     }

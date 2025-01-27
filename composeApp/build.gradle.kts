@@ -29,8 +29,6 @@ kotlin {
         commonTest.dependencies {
             implementation(libs.kotlin.test)
 
-            //implementation(libs.androidx.ui.test.junit4.android)
-            //implementation(libs.androidx.ui.test.junit4.manifest)
             implementation(libs.jetbrains.ui.test.junit4)
 
         }
