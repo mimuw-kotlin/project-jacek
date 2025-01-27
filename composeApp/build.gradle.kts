@@ -26,8 +26,19 @@ kotlin {
             implementation(compose.desktop.currentOs)
             implementation(libs.kotlinx.coroutines.swing)
         }
+        commonTest.dependencies {
+            implementation(libs.kotlin.test)
+
+            implementation(libs.jetbrains.ui.test.junit4)
+
+        }
+
     }
+
 }
+
+
+
 
 
 compose.desktop {

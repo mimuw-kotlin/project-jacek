@@ -2,13 +2,15 @@ package compose.project.chesstwo.pieces
 
 import compose.project.chesstwo.Board
 import compose.project.chesstwo.Move
+import compose.project.chesstwo.PlayerColor
 import org.jetbrains.compose.resources.DrawableResource
 
 interface Piece {
     var posX: Int
     var posY: Int
     var texture: DrawableResource
-    var color: Int
+    var color: PlayerColor
+    val value: Int
 
     // Generate all pseudo-legal moves for a piece
     fun getPseudoMoves(board: Board): List<Move>
@@ -17,6 +19,13 @@ interface Piece {
     fun move(endX: Int, endY: Int, board: Board) {
         posX = endX
         posY = endY
+    }
+
+    fun ableToCapture(board: Board, x: Int, y: Int): Boolean {
+        return board.piecesPositions[Pair(x, y)]!!.color != color
+                && (board.piecesPositions[Pair(x, y)] !is Shield
+                || (board.piecesPositions[Pair(x, y)] is Shield
+                && !(board.piecesPositions[Pair(x, y)] as Shield).attacked))
     }
 
     // Generates all legal moves for a piece
@@ -28,15 +37,15 @@ interface Piece {
             val startPiece: Piece = board.piecesPositions[Pair(move.startX, move.startY)]!!
             val endPiece: Piece? = board.piecesPositions[Pair(move.endX, move.endY)]
 
-            //Move attacking piece to its destination
+            // Move attacking piece to its destination
             board.piecesPositions[Pair(move.endX, move.endY)] = startPiece
 
-            //Remove piece from its former position
+            // Remove piece from its former position
             board.piecesPositions.remove(Pair(move.startX, move.startY))
 
-            //Check if the move didn't put its king in check
+            // Check if the move didn't put its king in check
             var found = false
-            for (square in board.getAllPseudoAttackedSquares(1 - color)) {
+            for (square in board.getAllPseudoAttackedSquares(PlayerColor.negateColor(color))) {
                 if (square in board.piecesPositions.keys && board.piecesPositions[square] is King
                     && board.piecesPositions[square]!!.color == color
                 ) {
@@ -51,20 +60,24 @@ interface Piece {
 
             }
 
-            //Undo the move
-            //Put the attacking piece on its original square
+            // Undo the move
+            // Put the attacking piece on its original square
             board.piecesPositions[Pair(move.startX, move.startY)] = startPiece
 
-            //Place the taken piece on its place if ther was one
+            // Place the taken piece on its place if ther was one
             if (endPiece != null) {
                 board.piecesPositions.replace(Pair(move.endX, move.endY), endPiece)
             }
-            //Otherwise remove the attacking piece
+            // Otherwise remove the attacking piece
             else {
                 board.piecesPositions.remove(Pair(move.endX, move.endY))
             }
         }
         return moves
+    }
+
+    fun copy(): Piece {
+        return this
     }
 
 }

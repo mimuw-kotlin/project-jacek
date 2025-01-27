@@ -1,0 +1,27 @@
+<resources>
+    <string name="queenName">Queen</string>
+    <string name="kingName">King</string>
+    <string name="knightName">Knight</string>
+    <string name="bishopName">Bishop</string>
+    <string name="rookName">Rook</string>
+    <string name="pawnName">Pawn</string>
+    <string name="bombName">Bomb</string>
+    <string name="necromancerName">Necromancer</string>
+    <string name="portalName">Portal</string>
+    <string name="princeName">Prince</string>
+    <string name="shieldName">Shield</string>
+    <string name="unicornName">Unicorn</string>
+
+    <string name="queenDesc"> </string>
+    <string name="kingDesc"> </string>
+    <string name="knightDesc"> </string>
+    <string name="bishopDesc"> </string>
+    <string name="rookDesc"> </string>
+    <string name="pawnDesc"> </string>
+    <string name="bombDesc">Moves like a rook. Arter a capture explodes - disappears from the game.</string>
+    <string name="necromancerDesc">Moves like a queen. After a capture transforms into the last piece lost by the player.</string>
+    <string name="portalDesc">Moves like a queen, however can wrap along x-axis borders of the board.</string>
+    <string name="princeDesc">Moves like a king.</string>
+    <string name="shieldDesc">Moves like a queen. After capturing is no longer able to move and to be captured by an opponent.</string>
+    <string name="unicornDesc">Can move to any square that knight can and to the squares that knight "jumps over".</string>
+</resources>

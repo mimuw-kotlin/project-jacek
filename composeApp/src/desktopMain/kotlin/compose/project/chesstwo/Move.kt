@@ -5,7 +5,7 @@ data class Move(
     val startX: Int,
     val startY: Int,
 
-    //Piece's ending position
+    // Piece's ending position
     val endX: Int,
     val endY: Int,
 
@@ -14,5 +14,6 @@ data class Move(
 
     // Is the piece attacking a square
     // (The only exception is pawn pushing forward)
-    val attacking: Boolean = true
+    val attacking: Boolean = true,
+    val bombAttack: Boolean = false
 )
