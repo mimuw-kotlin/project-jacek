@@ -173,11 +173,11 @@ fun ChessBoard(board: Board, onExitToMenu: () -> Unit, gameWithComputer: Boolean
     var isPieceSelected by remember { mutableStateOf(false) }
 
     //Position of the selected piece
-    var selectedPieceX by remember { mutableIntStateOf(-1) }
-    var selectedPieceY by remember { mutableIntStateOf(-1) }
+    var selectedPieceX by remember { mutableStateOf(0) }
+    var selectedPieceY by remember { mutableStateOf(0) }
 
     //List of squares attacked by the selected piece
-    var attackedSquares = remember { mutableStateListOf<Pair<Int, Int>>() }
+    val attackedSquares = remember { mutableStateListOf<Pair<Int, Int>>() }
 
     //A need to display pieces for promotion
     var promotionDisplay by remember { mutableStateOf(false) }

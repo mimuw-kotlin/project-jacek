@@ -101,20 +101,29 @@ open class Board(val size : Int = 8) {
     }*/
 
     //Generating all squares attacked by pseudo-legal moves by 'color' player
-    fun getAllPseudoAttackedSquares(color: PlayerColor): MutableList<Pair<Int, Int>> {
+    fun getAllPseudoAttackedSquares(color: PlayerColor, noCastles : Boolean = false): MutableList<Pair<Int, Int>> {
         val moves = mutableListOf<Pair<Int, Int>>()
         piecesPositions.forEach { (_, piece) ->
             if (piece.color == color) {
-                piece.getPseudoMoves(this).forEach {
-                    if (it.attacking) {
-                        moves.add(Pair(it.endX, it.endY))
+                if(piece is King && noCastles){
+                    piece.getPseudoMovesWithoutCastle(this).forEach{
+                        if (it.attacking) {
+                            moves.add(Pair(it.endX, it.endY))
+                        }
                     }
-
                 }
-                //Check for a potential pawn diagonal attack
-                if (piece is Pawn) {
-                    piece.getPotentialAttacks(this).forEach {
-                        moves.add(Pair(it.endX, it.endY))
+                else {
+                    piece.getPseudoMoves(this).forEach {
+                        if (it.attacking) {
+                            moves.add(Pair(it.endX, it.endY))
+                        }
+
+                    }
+                    //Check for a potential pawn diagonal attack
+                    if (piece is Pawn) {
+                        piece.getPotentialAttacks(this).forEach {
+                            moves.add(Pair(it.endX, it.endY))
+                        }
                     }
                 }
             }

@@ -12,7 +12,7 @@ import compose.project.chesstwo.pieces.Shield
 data class BoardState(val positions : MutableMap<Pair<Int,Int>,Piece>, val lastCapturedPiece : List<ArrayDeque<Piece>>, val lastActiveMove : Int)
 
 class SearchBoard(board : Board) : Board() {
-    val boardStates = ArrayDeque<BoardState>()
+    private val boardStates = ArrayDeque<BoardState>()
     init{
 
         //piecesPositions=board.piecesPositions.toMutableMap()

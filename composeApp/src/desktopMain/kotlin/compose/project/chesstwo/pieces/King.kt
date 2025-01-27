@@ -12,7 +12,17 @@ class King(
     override var color: PlayerColor,
     private var moved: Boolean = false
 ) : Piece {
+    private var checkForCastling = true
     override val value = Int.MAX_VALUE
+
+    fun getPseudoMovesWithoutCastle(board: Board): List<Move> {
+        checkForCastling = false
+        val moves = getPseudoMoves(board)
+        checkForCastling = true
+        return moves
+
+    }
+
     override fun getPseudoMoves(board: Board): List<Move> {
         //All possible knight moves
         val allMoves = listOf(
@@ -37,12 +47,12 @@ class King(
         moves.removeIf{
             Pair(it.endX,it.endY) in board.piecesPositions.keys && !ableToCapture(board,it.endX,it.endY)
         }
-        if (!moved) {
+        if (!moved && checkForCastling) {
             //Long castle
             if (Pair(0, posY) in board.piecesPositions.keys
                 && board.piecesPositions[Pair(0, posY)] is Rook
                 && !(board.piecesPositions[Pair(0, posY)] as Rook).moved
-                && isLineFree(board, false) //&& isLineNotAttacked(board, false)
+                && isLineFree(board, false) && isLineNotAttacked(board, false)
             ) {
 
                 moves.add(Move(posX, posY, posX-2, posY, isCastling = true, attacking = false))
@@ -52,7 +62,7 @@ class King(
             if (Pair(board.size-1, posY) in board.piecesPositions.keys
                 && board.piecesPositions[Pair(board.size-1, posY)] is Rook
                 && !(board.piecesPositions[Pair(board.size-1, posY)] as Rook).moved
-                && isLineFree(board) //&& isLineNotAttacked(board)
+                && isLineFree(board) && isLineNotAttacked(board)
             ) {
 
                 moves.add(Move(posX, posY, posX+2, posY, isCastling = true, attacking = false))
@@ -96,7 +106,7 @@ class King(
             }
             return true*/
             for (x in posX..posX+2){
-                if (Pair(x, posY) in board.getAllPseudoAttackedSquares(PlayerColor.negateColor(color))) {
+                if (Pair(x, posY) in board.getAllPseudoAttackedSquares(PlayerColor.negateColor(color), noCastles = true)) {
                     return false
                 }
             }
@@ -109,7 +119,7 @@ class King(
         }
         return true*/
         for (x in posX-2..posX){
-            if (Pair(x, posY) in board.getAllPseudoAttackedSquares(PlayerColor.negateColor(color))) {
+            if (Pair(x, posY) in board.getAllPseudoAttackedSquares(PlayerColor.negateColor(color), noCastles = true)) {
                 return false
             }
         }
